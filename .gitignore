@@ -29,3 +29,6 @@ $RECYCLE.BIN/
 
 # Visual Studio Code project settings
 .vscode/
+
+# Envrionment variables
+.env
