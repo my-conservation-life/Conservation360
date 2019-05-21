@@ -1,7 +1,13 @@
 <template>
-    <header>Required</header>
+    <header>Required Properties</header>
     <c-create-asset-property></c-create-asset-property>
-    <header>Custom</header>
-    <div id="properties"></div>
-    <lightning-button variant="Neutral" label="Add Property" icon-name="utility:add"></lightning-button>
+    
+    <header>Custom Properties</header>
+    <template for:each={properties} for:item="property">
+        <c-create-asset-property
+            key={property}>
+        </c-create-asset-property>
+    </template>
+
+    <lightning-button variant="Neutral" label="Add Property" icon-name="utility:add" onclick={addCustomProperty}></lightning-button>
 </template>
