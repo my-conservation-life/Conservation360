@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(express.static("./"));
 
 const client = new Client({
-    connectionString: process.env.DB_URI,
+    connectionString: process.env.DATABASE_URL,
     ssl: true,
 });
 
