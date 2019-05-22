@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.use(express.static("./"));
+app.use(express.static("./client"));
 
 const client = new Client({
     connectionString: process.env.DATABASE_URL,
@@ -51,17 +51,17 @@ app.get("/getAssetsLocations", async (req, res) => {
 });
 
 // example endpoint
-app.get("/getAssetById", async (req, res) => {
-    const id = req.query.id;
+// app.get("/getAssetById", async (req, res) => {
+//     const id = req.query.id;
 
-    const query = `
-        SELECT *
-        FROM asset
-        WHERE id = ${id}
-    `;
+//     const query = `
+//         SELECT *
+//         FROM asset
+//         WHERE id = ${id}
+//     `;
 
-    queryDB(res, query);
-});
+//     queryDB(res, query);
+// });
 
 async function queryDB(res, query) {
     try {
