@@ -37,6 +37,33 @@ app.get("/getDataTypes", async (req, res) => {
         FROM data_type
     `;
 
+    queryDB(res, query);
+});
+
+// example endpoint
+app.get("/getAssetsLocations", async (req, res) => {
+    const query = `
+        SELECT location
+        FROM asset
+    `;
+
+    queryDB(res, query);
+});
+
+// example endpoint
+app.get("/getAssetById", async (req, res) => {
+    const id = req.query.id;
+
+    const query = `
+        SELECT *
+        FROM asset
+        WHERE id = ${id}
+    `;
+
+    queryDB(res, query);
+});
+
+async function queryDB(res, query) {
     try {
         const db = await client.query(query);
         const data = db.rows;
@@ -50,7 +77,7 @@ app.get("/getDataTypes", async (req, res) => {
         console.error(e.stack);
         res.status(500).send(msg);
     }
-});
+}
 
 // Start server
 app.listen(port, () => console.log("Listening on port", port));
