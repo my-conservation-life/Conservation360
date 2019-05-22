@@ -43,7 +43,7 @@ app.get("/getDataTypes", async (req, res) => {
 // example endpoint
 app.get("/getAssetsLocations", async (req, res) => {
     const query = `
-        SELECT id, ST_X(location), ST_Y(location)
+        SELECT id, ST_X(location) AS x, ST_Y(location) AS y
         FROM asset
     `;
 
