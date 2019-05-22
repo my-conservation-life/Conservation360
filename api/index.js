@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors')
 const {Client} = require("pg");
 const bodyParser = require("body-parser");
 require('dotenv').config()
@@ -7,7 +6,11 @@ require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use(cors());
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -28,7 +31,7 @@ client.connect()
         client.end();
     });
 
-app.get("/getDataTypes", cors(), async (req, res) => {
+app.get("/getDataTypes", async (req, res) => {
     const query = `
         SELECT name
         FROM data_type
