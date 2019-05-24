@@ -6,17 +6,39 @@ import leaflet from '@salesforce/resourceUrl/leaflet';
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
 
+/**
+ * Returns a Leaflet marker at the location of the asset
+ * 
+ * precondition: L is an initialized leaflet object
+ */
+const markerFromAsset = (asset) => L.marker(L.latLng(asset.latitude, asset.longitude));
+
 export default class Map extends LightningElement {
 
+    assets;
+
+    /**
+     * When the Map LWC is ready, start downloading Leaflet and project assets.
+     * 
+     * When this is complete, call initializeleaflet()
+     */
     connectedCallback() {
         Promise.all([
+            fetch('https://cidb-dev-experimental-1.herokuapp.com/getAssetsLocations')
+            .then((response) => response.json())
+            .then((responseJson) => (this.assets = responseJson)),
             loadScript(this, leaflet + '/leaflet.js'),
             loadStyle(this, leaflet + '/leaflet.css')
         ]).then(() => {
-                this.initializeleaflet();
+            this.initializeleaflet();
         });
     }
 
+    /**
+     * Constructs the Leaflet map on the page and initializes it with the OSM map tiles and asset markers.
+     * 
+     * precondition: this.asset contains an array of assets (with properties x and y))
+     */
     initializeleaflet() {
         const mapRoot = this.template.querySelector(".map-root");
         const map = L.map(mapRoot).setView([-19.3, 46.7], 6);
@@ -26,6 +48,9 @@ export default class Map extends LightningElement {
             {
                 attribution: '&copy; ' + mapLink + ' Contributors',
                 maxZoom: 18
-            }).addTo(map);
+            })
+        .addTo(map);
+
+        L.featureGroup(this.assets.map(asset => markerFromAsset(asset))).addTo(map);
     }
 }
