@@ -1,4 +1,5 @@
 import { LightningElement, track } from 'lwc';
+import { api } from 'c/utils'
 
 export default class CreateAssetList extends LightningElement {
     id = 1;
@@ -7,14 +8,8 @@ export default class CreateAssetList extends LightningElement {
 
     // Fires when this component is inserted into the DOM
     connectedCallback() {
-        fetch("https://my-conservation-life.herokuapp.com/getDataTypes",
-        {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
+        const dataTypesURL = api.URL + "getDataTypes"
+        api.get(dataTypesURL)
         .then(data => {
             const dataTypeList = [];
             for (let type of data) {
