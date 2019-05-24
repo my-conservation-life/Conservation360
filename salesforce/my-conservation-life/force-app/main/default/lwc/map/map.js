@@ -34,7 +34,7 @@ export default class Map extends LightningElement {
             fetch('https://cidb-dev-experimental-1.herokuapp.com/getAssetsLocations')
             .then((response) => response.json())
             .then((responseJson) => (this.assets = responseJson))])
-        .then(() => L.featureGroup(this.assets.map(asset => markerFromAsset(asset))).addTo(this.map) );
+        .then(() => L.featureGroup(this.assets.map(asset => markerFromAsset(asset))).addTo(this.map));
     }
 
     /**
