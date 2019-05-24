@@ -15,6 +15,7 @@ const markerFromAsset = (asset) => L.marker(L.latLng(asset.latitude, asset.longi
 
 export default class Map extends LightningElement {
 
+    map; // L.map, a leaflet map. constructed in initializeleaflet
     assets;
 
     /**
@@ -24,14 +25,16 @@ export default class Map extends LightningElement {
      */
     connectedCallback() {
         Promise.all([
+            Promise.all([
+                loadScript(this, leaflet + '/leaflet.js'),
+                loadStyle(this, leaflet + '/leaflet.css')
+            ]).then(() => {
+                this.initializeleaflet();
+            }),
             fetch('https://cidb-dev-experimental-1.herokuapp.com/getAssetsLocations')
             .then((response) => response.json())
-            .then((responseJson) => (this.assets = responseJson)),
-            loadScript(this, leaflet + '/leaflet.js'),
-            loadStyle(this, leaflet + '/leaflet.css')
-        ]).then(() => {
-            this.initializeleaflet();
-        });
+            .then((responseJson) => (this.assets = responseJson))])
+        .then(() => L.featureGroup(this.assets.map(asset => markerFromAsset(asset))).addTo(this.map) );
     }
 
     /**
@@ -41,7 +44,7 @@ export default class Map extends LightningElement {
      */
     initializeleaflet() {
         const mapRoot = this.template.querySelector(".map-root");
-        const map = L.map(mapRoot).setView([-19.3, 46.7], 6);
+        this.map = L.map(mapRoot).setView([-19.3, 46.7], 6);
         const mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
         L.tileLayer(
             'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -49,8 +52,6 @@ export default class Map extends LightningElement {
                 attribution: '&copy; ' + mapLink + ' Contributors',
                 maxZoom: 18
             })
-        .addTo(map);
-
-        L.featureGroup(this.assets.map(asset => markerFromAsset(asset))).addTo(map);
+        .addTo(this.map);
     }
 }
