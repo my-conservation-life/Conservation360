@@ -104,7 +104,14 @@ app.post("/createAssetDefinition", async (req, res) => {
             }
 
             // Add to promises list so we can tell when they all finish
-            queryPromises.push(client.query(createPropertyQuery));
+            queryPromises.push(
+                client.query(createPropertyQuery)
+                .then(res => console.log(res))
+                .catch(e => {
+                    console.error("adding property:")
+                    console.error(e)
+                })
+            );
         }
 
         // When all properties are finished creating, send success message
@@ -115,6 +122,10 @@ app.post("/createAssetDefinition", async (req, res) => {
                 }
                 res.status(201).send(msg)
             })
+            .catch(e => {
+                console.error("promise all:");
+                console.error(e);
+            });
     } catch (e) {
         const msg = {
             message: "Unable to query database",
