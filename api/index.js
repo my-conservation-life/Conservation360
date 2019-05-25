@@ -79,6 +79,16 @@ app.post("/createAssetDefinition", async (req, res) => {
         ]
     };
 
+    // TODO: extract
+    function handleErrors(res, e) {
+        const msg = {
+            message: "Unable to query database",
+            error: e.message
+        };
+        console.error(e.stack);
+        res.status(500).send(msg);
+    }
+
     try {
         const db = await client.query(createAssetTypeQuery);
         const assetTypeId = db.rows[0].id; // Id of newly created asset type
@@ -108,7 +118,7 @@ app.post("/createAssetDefinition", async (req, res) => {
                 client.query(createPropertyQuery)
                     .then(res => console.log(res))
                     .catch(e => {
-                        throw e;
+                        handleErrors(res, e);
                     })
             );
         }
@@ -122,16 +132,11 @@ app.post("/createAssetDefinition", async (req, res) => {
                 res.status(201).send(msg)
             })
             .catch(e => {
-                throw e;
+                handleErrors(res, e);
             });
-            
+
     } catch (e) {
-        const msg = {
-            message: "Unable to query database",
-            error: e.message
-        };
-        console.error(e.stack);
-        res.status(500).send(msg);
+        handleErrors(res, e);
     }
 })
 
