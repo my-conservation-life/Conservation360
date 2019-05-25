@@ -116,7 +116,7 @@ app.post("/createAssetDefinition", async (req, res) => {
             // Add to promises list so we can tell when they all finish
             queryPromises.push(
                 client.query(createPropertyQuery)
-                    .then(res => console.log(res))
+                    .then(res => console.log("createAssetDefinition Successful"))
                     .catch(e => {
                         handleErrors(res, e);
                     })

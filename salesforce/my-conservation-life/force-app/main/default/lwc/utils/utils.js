@@ -1,3 +1,5 @@
+//rename and split functionality
+
 function handleFetchErrors(response) {
     if (!response.ok) {
         throw response.statusText;
@@ -14,6 +16,15 @@ export const api = {
             headers: {
                 'Content-Type': 'application/json'
             }
+        }).then(handleFetchErrors);
+    },
+    "post": (url, data) => {
+        return fetch(url, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
         }).then(handleFetchErrors);
     }
 }

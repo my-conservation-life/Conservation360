@@ -1,14 +1,31 @@
 <template>
-    <lightning-input type="text" name="propertyName" label="Name" ></lightning-input>
+    <lightning-input
+        type="text"
+        name="name"
+        label="Name"
+        onchange={saveAttribute}>
+    </lightning-input>
 
     <lightning-combobox
-        name="dataType"
+        name="data_type"
         label="Data Type"
         placeholder="Select DataType"
-        options={options}>
+        options={options}
+        onchange={saveAttribute}>
     </lightning-combobox>
 
-    <lightning-input type="checkbox" name="propertyRequired" label="Required" ></lightning-input>
-    <lightning-input type="checkbox" name="propertyPrivate" label="Private" ></lightning-input>
+    <lightning-input
+        type="checkbox"
+        name="required"
+        label="Required"
+        onchange={saveCheckboxAttribute}>
+    </lightning-input>
+
+    <lightning-input
+        type="checkbox"
+        name="is_private"
+        label="Private"
+        onchange={saveCheckboxAttribute}>
+    </lightning-input>
     <hr>
 </template>
