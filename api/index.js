@@ -106,11 +106,10 @@ app.post("/createAssetDefinition", async (req, res) => {
             // Add to promises list so we can tell when they all finish
             queryPromises.push(
                 client.query(createPropertyQuery)
-                .then(res => console.log(res))
-                .catch(e => {
-                    console.error("adding property:")
-                    console.error(e)
-                })
+                    .then(res => console.log(res))
+                    .catch(e => {
+                        throw e;
+                    })
             );
         }
 
@@ -123,9 +122,9 @@ app.post("/createAssetDefinition", async (req, res) => {
                 res.status(201).send(msg)
             })
             .catch(e => {
-                console.error("promise all:");
-                console.error(e);
+                throw e;
             });
+            
     } catch (e) {
         const msg = {
             message: "Unable to query database",
