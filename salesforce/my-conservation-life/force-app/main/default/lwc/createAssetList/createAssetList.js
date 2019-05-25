@@ -10,15 +10,15 @@ export default class CreateAssetList extends LightningElement {
     connectedCallback() {
         const dataTypesURL = api.URL + "getDataTypes"
         api.get(dataTypesURL)
-        .then(data => {
-            const dataTypeList = [];
-            for (let type of data) {
-                dataTypeList.push(type.name);
-            }
+            .then(data => {
+                const dataTypeList = [];
+                for (let type of data) {
+                    dataTypeList.push(type.name);
+                }
 
-            // Must stringify because LWC must use primitives, no support for lists/objects
-            this.propertyDataTypes = JSON.stringify(dataTypeList);
-        });
+                // Must stringify because LWC must use primitives, no support for lists/objects
+                this.propertyDataTypes = JSON.stringify(dataTypeList);
+            });
     }
 
     // Takes advantage of template's for:each by appending new createAssetProperty per value in list

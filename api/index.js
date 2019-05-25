@@ -40,6 +40,91 @@ app.get("/getDataTypes", async (req, res) => {
     queryDB(res, query);
 });
 
+app.get("/getAllAssetProperties", async (req, res) => {
+    const query = `        
+        SELECT 
+            asset_type.name as asset_type,
+            asset_type.description,
+            property.name,
+            property.data_type,
+            property.required,
+            property.is_private
+        FROM
+            property
+        JOIN
+            asset_type
+        on
+            property.asset_type_id = asset_type.id
+    `;
+
+    queryDB(res, query);
+});
+
+app.post("/createAssetDefinition", async (req, res) => {
+    // Body of data sent by the client's post request
+    const body = req.body;
+
+    // Create parameterized query
+    const createAssetTypeQuery = {
+        text: `
+            INSERT INTO asset_type
+                (name, description)
+            VALUES
+                ($1, $2)
+            RETURNING id
+        `,
+        values: [
+            body.name,
+            body.description
+        ]
+    };
+
+    try {
+        const db = await client.query(createAssetTypeQuery);
+        const assetTypeId = db.rows[0].id; // Id of newly created asset type
+
+        const queryPromises = [];
+
+        // Asset type created, now for properties
+        for (let property of body.properties) {
+            const createPropertyQuery = {
+                text: `
+                    INSERT INTO property
+                        (asset_type_id, name, data_type, required, is_private)
+                    VALUES
+                        ($1, $2, $3, $4, $5)
+                `,
+                values: [
+                    assetTypeId,
+                    property.name,
+                    property.data_type,
+                    property.required,
+                    property.is_private
+                ]
+            }
+
+            // Add to promises list so we can tell when they all finish
+            queryPromises.push(client.query(createPropertyQuery));
+        }
+
+        // When all properties are finished creating, send success message
+        Promise.all(queryPromises)
+            .then(() => {
+                const msg = {
+                    message: "Asset definition successfuly created"
+                }
+                res.status(201).send(msg)
+            })
+    } catch (e) {
+        const msg = {
+            message: "Unable to query database",
+            error: e.message
+        };
+        console.error(e.stack);
+        res.status(500).send(msg);
+    }
+})
+
 // example endpoint
 app.get("/getAssetsLocations", async (req, res) => {
     const query = `
@@ -63,9 +148,11 @@ app.get("/getAssetsLocations", async (req, res) => {
 //     queryDB(res, query);
 // });
 
-async function queryDB(res, query) {
+async function queryDB(res, query, values) {
     try {
-        const db = await client.query(query);
+        // values are for parameterized queries to prevents sql injection
+        const db = await client.query(query, values);
+
         const data = db.rows;
 
         res.send(JSON.stringify(data));

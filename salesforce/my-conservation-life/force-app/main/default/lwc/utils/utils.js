@@ -6,8 +6,6 @@ function handleFetchErrors(response) {
     return response.json();
 }
 
-
-
 export const api = {
     "URL": "https://my-conservation-life.herokuapp.com/",
     "get": url => {
