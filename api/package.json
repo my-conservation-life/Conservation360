@@ -14,5 +14,8 @@
     "express": "^4.17.0",
     "body-parser": "^1.19.0",
     "dotenv": "^8.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
   }
 }
