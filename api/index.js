@@ -23,15 +23,6 @@ const client = new Pool({
     ssl: true,
 });
 
-app.get("/getDataTypes", async (req, res) => {
-    const query = `
-        SELECT name
-        FROM data_type
-    `;
-
-    queryDB(res, query);
-});
-
 // example endpoint
 app.get("/getAssetsLocations", async (req, res) => {
     const query = `
@@ -41,19 +32,6 @@ app.get("/getAssetsLocations", async (req, res) => {
 
     queryDB(res, query);
 });
-
-// example endpoint
-// app.get("/getAssetById", async (req, res) => {
-//     const id = req.query.id;
-
-//     const query = `
-//         SELECT *
-//         FROM asset
-//         WHERE id = ${id}
-//     `;
-
-//     queryDB(res, query);
-// });
 
 async function queryDB(res, query) {
     try {
