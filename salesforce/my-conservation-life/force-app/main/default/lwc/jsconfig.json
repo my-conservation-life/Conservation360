@@ -8,6 +8,9 @@
             ],
             "c/leaflet": [
                 "../staticresources/leaflet/leaflet.js"
+            ],
+            "c/mapprojectassets": [
+                "mapprojectassets/mapprojectassets.js"
             ]
         }
     },
