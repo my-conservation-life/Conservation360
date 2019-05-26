@@ -29,7 +29,7 @@ export default class Map extends LightningElement {
                 loadScript(this, leaflet + '/leaflet.js'),
                 loadStyle(this, leaflet + '/leaflet.css')
             ]).then(() => {
-                this.initializeleaflet();
+                this.initializeLeaflet();
             }),
             fetch('https://cidb-dev-experimental-1.herokuapp.com/getAssetsLocations')
             .then((response) => response.json())
@@ -42,7 +42,7 @@ export default class Map extends LightningElement {
      * 
      * precondition: this.asset contains an array of assets (with properties x and y))
      */
-    initializeleaflet() {
+    initializeLeaflet() {
         const mapRoot = this.template.querySelector(".map-root");
         this.map = L.map(mapRoot).setView([-19.3, 46.7], 6);
         const mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
