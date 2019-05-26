@@ -81,8 +81,8 @@ process.on('SIGTERM', () => {
     server.close(() => {
         console.log('HTTP server has shut down');
         client.end().then(() => {
-            console.log('PostgreSQL connections have shut down. Exiting this process...');
-            process.exit(0);
+            console.log('PostgreSQL connections have shut down. This process will exit shortly...');
+            process.exitCode = 0;
         });
     });
 });
