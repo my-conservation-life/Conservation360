@@ -3,7 +3,9 @@
         type="text"
         name="name"
         label="Name"
-        onchange={saveAttribute}>
+        onchange={saveAttribute}
+        maxlength="50"
+        required>
     </lightning-input>
 
     <lightning-combobox
@@ -11,7 +13,8 @@
         label="Data Type"
         placeholder="Select DataType"
         options={options}
-        onchange={saveAttribute}>
+        onchange={saveAttribute}
+        required>
     </lightning-combobox>
 
     <lightning-input

@@ -32,6 +32,20 @@ export default class CreateAssetList extends LightningElement {
     }
 
     @api
+    validateProperties() {
+        const propertyElements = this.template.querySelectorAll("c-create-asset-property");
+        const validities = [];
+        for (let property of propertyElements) {
+            let validity = property.validateAttributes();
+            validities.push(validity)
+        }
+
+        // Return true if all properties returned true
+        return validities
+            .every(validity => validity === true);
+    }
+
+    @api
     getProperties() {
         const propertyElements = this.template.querySelectorAll("c-create-asset-property");
         const properties = []

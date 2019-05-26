@@ -26,6 +26,21 @@ export default class CreateAssetProperty extends LightningElement {
         return optionList;
     }
 
+    // TODO: Extract to shared
+    @api
+    validateAttributes() {
+        const inputElements = this.template.querySelectorAll("lightning-input, lightning-combobox");
+        const validities = [];
+        for (let input of inputElements) {
+            let validity = input.reportValidity();
+            validities.push(validity)
+        }
+
+        // Return true if all attributes returned true
+        return validities
+            .every(validity => validity === true);
+    }
+
     @api
     getAttributes() {
         return {
