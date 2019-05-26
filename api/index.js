@@ -1,5 +1,5 @@
 const express = require('express');
-const {Client} = require("pg");
+const { Pool } = require("pg");
 const bodyParser = require("body-parser");
 require('dotenv').config()
 
@@ -17,19 +17,10 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static("./client"));
 
-const client = new Client({
+const client = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: true,
 });
-
-client.connect()
-    .then(() => {
-        console.log("Successfully connected to database");
-    })
-    .catch(e => {
-        console.error(e.stack);
-        client.end();
-    });
 
 app.get("/getDataTypes", async (req, res) => {
     const query = `
@@ -81,3 +72,4 @@ async function queryDB(res, query) {
 
 // Start server
 app.listen(port, () => console.log("Listening on port", port));
+console.log('Server is shutting down');
