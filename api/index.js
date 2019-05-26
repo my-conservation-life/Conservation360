@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static("./client"));
 
-const client = new Pool({
+const dbPool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: true,
 });
@@ -35,7 +35,7 @@ app.get("/getAssetsLocations", async (req, res) => {
 
 async function queryDB(res, query) {
     try {
-        const db = await client.query(query);
+        const db = await dbPool.query(query);
         const data = db.rows;
 
         res.send(JSON.stringify(data));
@@ -58,7 +58,7 @@ process.on('SIGTERM', () => {
     console.log('SIGTERM received. Shutting down...');
     server.close(() => {
         console.log('HTTP server has shut down');
-        client.end().then(() => {
+        dbPool.end().then(() => {
             console.log('PostgreSQL connections have shut down. This process will exit shortly...');
             process.exitCode = 0;
         });
