@@ -1,7 +1,15 @@
 <template>
     <lightning-card title="Create an Asset" icon-name="custom:custom12">
         <div class="slds-m-around_medium">
-            <lightning-input label="Asset Type" value={greeting} onchange={changeHandler}></lightning-input>
+            <lightning-combobox
+                name="asset-type"
+                label="Asset Type"
+                value={value}
+                placeholder="Select an Asset Type"
+                options={options}
+                onchange={handleChange}>
+            </lightning-combobox>
+    <p>Selected value is: {value}</p>
         </div>
     </lightning-card>
 </template>
