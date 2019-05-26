@@ -30,6 +30,8 @@ export default class Map extends LightningElement {
                 loadStyle(this, leaflet + '/leaflet.css')
             ]).then(() => {
                 this.initializeLeaflet();
+                this.setupDefaultView();
+                this.setupBaseTiles();
             }),
             fetch('https://cidb-dev-experimental-1.herokuapp.com/getAssetsLocations')
             .then((response) => response.json())
@@ -38,14 +40,21 @@ export default class Map extends LightningElement {
     }
 
     /**
-     * Constructs the Leaflet map on the page and initializes it with the OSM map tiles and asset markers.
+     * Constructs the Leaflet map on the page and initializes this.map
      * 
      * precondition: this.asset contains an array of assets (with properties x and y))
      */
     initializeLeaflet() {
         const mapRoot = this.template.querySelector(".map-root");
-        this.map = L.map(mapRoot).setView([-19.3, 46.7], 6);
+        this.map = L.map(mapRoot);
+    }
+
+    /**
+     * Setup the base OpenStreetMap tile layer
+     */
+    setupBaseTiles() {
         const mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+
         L.tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
@@ -53,5 +62,12 @@ export default class Map extends LightningElement {
                 maxZoom: 18
             })
         .addTo(this.map);
+    }
+
+    /**
+     * Setup the initial map view
+     */
+    setupDefaultView() {
+        this.map.setView([-19.3, 46.7], 6);
     }
 }
