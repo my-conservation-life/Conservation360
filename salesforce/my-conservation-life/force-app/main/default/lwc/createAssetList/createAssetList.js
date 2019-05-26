@@ -3,11 +3,13 @@ import * as utils from 'c/utils'
 
 export default class CreateAssetList extends LightningElement {
     id = 1;
-    @track properties = [this.id];
-    @track propertyDataTypes; //properties starting with data are reserved
+    @track properties = [];
+    @track propertyDataTypes; //attributes starting with data are reserved
 
     // Fires when this component is inserted into the DOM
     connectedCallback() {
+        this.addCustomProperty();
+
         const dataTypesURL = utils.api.URL + "getDataTypes"
         utils.api.get(dataTypesURL)
             .then(data => {
@@ -27,8 +29,16 @@ export default class CreateAssetList extends LightningElement {
 
     // Takes advantage of template's for:each by appending new createAssetProperty per value in list
     addCustomProperty() {
-        this.id++;
         this.properties.push(this.id);
+        this.id++;
+    }
+
+    handleRemoveProperty(e) {
+        const id = e.detail;
+        const idx = this.properties.indexOf(id);
+        if (idx > -1) {
+            this.properties.splice(idx, 1);
+        }
     }
 
     @api

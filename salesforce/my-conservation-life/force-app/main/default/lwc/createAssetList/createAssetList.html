@@ -7,7 +7,9 @@
     <template for:each={properties} for:item="property">
         <c-create-asset-property
             key={property}
-            property-data-types={propertyDataTypes}>
+            property-key={property}
+            property-data-types={propertyDataTypes}
+            onremoveproperty={handleRemoveProperty}>
         </c-create-asset-property>
     </template>
 

@@ -1,8 +1,8 @@
 import { LightningElement, api } from 'lwc';
 
 export default class CreateAssetProperty extends LightningElement {
-    @api
-    propertyDataTypes;
+    @api propertyDataTypes;
+    @api propertyKey;
 
     name = "";
     data_type = "";
@@ -61,5 +61,10 @@ export default class CreateAssetProperty extends LightningElement {
         const name = e.srcElement.name;
         const value = e.srcElement.checked;
         this[name] = value;
+    }
+
+    handleRemoveProperty() {
+        const event = new CustomEvent('removeproperty', {detail: this.propertyKey});
+        this.dispatchEvent(event);
     }
 }

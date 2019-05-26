@@ -33,6 +33,8 @@ export default class CreateAsset extends LightningElement {
                 .catch(e => {
                     console.error(e)
                 });
+        } else {
+            console.log("Failed Validation");
         }
     }
 
