@@ -1,3 +1,4 @@
+const http = require('http');
 const express = require('express');
 const { Pool } = require("pg");
 const bodyParser = require("body-parser");
@@ -71,5 +72,17 @@ async function queryDB(res, query) {
 }
 
 // Start server
-app.listen(port, () => console.log("Listening on port", port));
-console.log('Server is shutting down');
+const server = http.createServer(app);
+server.listen(port, () => console.log('Listening on port', port));
+
+// Handle graceful server shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received. Shutting down...');
+    server.close(() => {
+        console.log('HTTP server has shut down');
+        client.end().then(() => {
+            console.log('PostgreSQL connections have shut down. Exiting this process...');
+            process.exit(0);
+        });
+    });
+});
