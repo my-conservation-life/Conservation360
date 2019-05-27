@@ -1,42 +1,50 @@
 <template>
-    <lightning-input
-        type="text"
-        name="name"
-        label="Name"
-        onchange={saveAttribute}
-        maxlength="50"
-        required>
-    </lightning-input>
-
-    <lightning-combobox
-        name="data_type"
-        label="Data Type"
-        placeholder="Select DataType"
-        options={options}
-        onchange={saveAttribute}
-        required>
-    </lightning-combobox>
-
-    <lightning-input
-        type="checkbox"
-        name="required"
-        label="Required"
-        onchange={saveAttribute}>
-    </lightning-input>
-
-    <lightning-input
-        type="checkbox"
-        name="is_private"
-        label="Private"
-        onchange={saveAttribute}>
-    </lightning-input>
-
-    <lightning-button
-        variant="destructive"
-        icon-name="utility:dash"
-        label="Remove"
-        onclick={handleRemoveProperty}
-        if:true={isCustomProperty}>
-    </lightning-button>
+    <div class="slds-grid slds-gutters slds-grid_vertical-align-center slds-wrap">
+        <div class="slds-col slds-medium-size_3-of-12 slds-small-size_1-of-1">
+            <lightning-input
+                type="text"
+                name="name"
+                label="Name"
+                onchange={saveAttribute}
+                maxlength="50"
+                required>
+            </lightning-input>
+        </div> 
+        <div class="slds-col slds-medium-size_3-of-12 slds-small-size_1-of-1">
+            <lightning-combobox
+                name="data_type"
+                label="Data Type"
+                placeholder="Select DataType"
+                options={options}
+                onchange={saveAttribute}
+                required>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-medium-size_2-of-12 slds-small-size_1-of-1">
+            <lightning-input
+                type="checkbox"
+                name="required"
+                label="Required"
+                onchange={saveAttribute}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-medium-size_2-of-12 slds-small-size_1-of-1">
+            <lightning-input
+                type="checkbox"
+                name="is_private"
+                label="Private"
+                onchange={saveAttribute}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-medium-size_2-of-12 slds-small-size_1-of-1">
+            <lightning-button
+                variant="destructive"
+                label="Remove Property"
+                icon-name="utility:dash"
+                onclick={handleRemoveProperty}
+                if:true={isCustomProperty}>
+            </lightning-button>
+        </div>
+    </div>
     <hr>
 </template>

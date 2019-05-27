@@ -1,19 +1,23 @@
 <template>
     <header>Required Properties</header>
-    <c-create-asset-property
-        property-data-types={propertyDataTypes}
-        property-data={requiredPropertyLocation}>
-    </c-create-asset-property>
+    <div class="create-asset-property">
+        <c-create-asset-property
+            property-data-types={propertyDataTypes}
+            property-data={requiredPropertyLocation}>
+        </c-create-asset-property>
+    </div>
     
     <header>Custom Properties</header>
-    <template for:each={properties} for:item="property">
-        <c-create-asset-property
-            key={property}
-            property-key={property}
-            property-data-types={propertyDataTypes}
-            onremoveproperty={handleRemoveProperty}>
-        </c-create-asset-property>
-    </template>
+    <div class="create-asset-property">
+        <template for:each={properties} for:item="property">
+            <c-create-asset-property
+                key={property}
+                property-key={property}
+                property-data-types={propertyDataTypes}
+                onremoveproperty={handleRemoveProperty}>
+            </c-create-asset-property>
+        </template>
+    </div>
 
     <lightning-button variant="Neutral" label="Add Property" icon-name="utility:add" onclick={addCustomProperty}></lightning-button>
 </template>
