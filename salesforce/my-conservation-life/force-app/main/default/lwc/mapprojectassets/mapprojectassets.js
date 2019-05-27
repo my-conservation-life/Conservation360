@@ -16,7 +16,7 @@ export default class MapProjectAssets extends LightningElement {
     constructor() {
         super();
 
-        this.assetsPromise = fetch('https://cidb-dev-experimental-1.herokuapp.com/getAssetsLocations');
+        this.assetsPromise = fetch('https://cidb-dev-experimental-1.herokuapp.com/assets');
     }
 
     onMapInitialized(event) {

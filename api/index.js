@@ -23,19 +23,25 @@ const dbPool = new Pool({
     ssl: true,
 });
 
-// example endpoint
-app.get("/getAssetsLocations", async (req, res) => {
-    const query = `
-        SELECT id, ST_X(location) AS latitude, ST_Y(location) AS longitude
-        FROM asset
-    `;
+// query string parameters:
+// project_id (type: number, optional): filter to assets belonging to the given project_id
+app.get('/assets', async (req, res) => {
+    const projectId = req.query['project_id'];
 
-    queryDB(res, query);
+    const query = `
+        SELECT id, project_id AS projectId, asset_type_id AS assetTypeId, ST_X(location) AS latitude, ST_Y(location) AS longitude
+        FROM asset`;
+
+    if (typeof projectId === 'number') {
+        queryDB(res, query + ' WHERE project_id = $1', [projectId]);
+    } else {
+        queryDB(res, query);
+    }
 });
 
-async function queryDB(res, query) {
+async function queryDB(res, query, values) {
     try {
-        const db = await dbPool.query(query);
+        const db = await dbPool.query(query, values);
         const data = db.rows;
 
         res.send(JSON.stringify(data));
