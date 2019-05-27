@@ -32,8 +32,12 @@ app.get('/assets', async (req, res) => {
         SELECT id, project_id, asset_type_id, ST_X(location) AS latitude, ST_Y(location) AS longitude
         FROM asset`;
 
-    if (typeof projectId === 'number') {
-        queryDB(res, query + ' WHERE project_id = $1', [projectId]);
+    if (projectId) {
+        if (typeof projectId === 'number') {
+            queryDB(res, query + ' WHERE project_id = $1', [projectId]);
+        } else {
+            res.status(500).send({ error: 'Invalid argument to the project_id parameter. Expected a number but got ' + typeof projectId });
+        }
     } else {
         queryDB(res, query);
     }
