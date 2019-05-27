@@ -34,7 +34,7 @@ app.get('/assets', async (req, res) => {
 
     if (projectIdString) {
         const projectId = Number.parseInt(projectIdString, 10);
-        if (projectId) {
+        if (projectId && projectId > 0) {
             queryDB(res, query + ' WHERE project_id = $1', [projectId]);
         } else {
             res.status(500).send({ error: 'Invalid argument for the project_id parameter. Expected a positive integer.' });
