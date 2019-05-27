@@ -4,6 +4,18 @@ const { Pool } = require("pg");
 const bodyParser = require("body-parser");
 require('dotenv').config()
 
+/**
+ * Maximum value supported by the PostgreSQL integer type.
+ */
+const DB_INTEGER_MAX = 2147483647;
+
+/**
+ * Test a given number if it is in the bounds of the PostgreSQL integer type.
+ * 
+ * @param {number} id - number to check
+ */
+const isValidDbInteger = (id) => id > 0 && id <= DB_INTEGER_MAX;
+
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -34,7 +46,7 @@ app.get('/assets', async (req, res) => {
 
     if (projectIdString) {
         const projectId = Number.parseInt(projectIdString, 10);
-        if (projectId && projectId > 0) {
+        if (projectId && isValidDbInteger(projectId)) {
             queryDB(res, query + ' WHERE project_id = $1', [projectId]);
         } else {
             res.status(500).send({ error: 'Invalid argument for the project_id parameter. Expected a positive integer.' });
