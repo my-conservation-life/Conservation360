@@ -1,20 +1,48 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, track, api } from 'lwc';
 
 export default class CreateAssetProperty extends LightningElement {
+    // Passed in for pre-filled properties (Such as the required location property)
+    @api propertyData; 
+    @track isCustomProperty = true;
+
+    // Handles option list and remove property button
     @api propertyDataTypes;
     @api propertyKey;
 
+    // Property attributes
     name = "";
     data_type = "";
     required = false;
     is_private = false;
 
+    renderedCallback() {
+        if (this.propertyData && !this.hasRendered) {
+            this.isCustomProperty = false; //hide remove property button
+            this.hasRendered = true; //prevent re-rendering
+            const propertyData = JSON.parse(this.propertyData)
+
+            const inputs = this.template.querySelectorAll("lightning-input, lightning-combobox");
+            for (let input of inputs) {
+                const name = input.name;
+                const value = propertyData[name];
+
+                if (input.type === "checkbox") {
+                    input.checked = value;
+                } else {
+                    input.value = value;
+                }
+
+                input.disabled = true;
+            }
+        }
+    }
+
     // Getter that converts the stringified propertyDataTypes received from parent lwc into an option list
     get options() {
         const optionList = []
         if (this.propertyDataTypes) {
-            const dataTypes = JSON.parse(this.propertyDataTypes);
-            for(let type of dataTypes) {
+            const propertyDataTypes = JSON.parse(this.propertyDataTypes);
+            for(let type of propertyDataTypes) {
                 const option = {
                     "label": type,
                     "value": type
@@ -52,14 +80,18 @@ export default class CreateAssetProperty extends LightningElement {
     }
 
     saveAttribute(e) {
-        const name = e.srcElement.name;
-        const value = e.srcElement.value;
-        this[name] = value.toLowerCase();
-    }
+        const ele = e.srcElement;
 
-    saveCheckboxAttribute(e) {
-        const name = e.srcElement.name;
-        const value = e.srcElement.checked;
+        const type = ele.type;
+        const name = ele.name;
+
+        let value;
+        if (type === "checkbox") {
+            value = ele.checked;
+        } else {
+            value = ele.value.toLowerCase();
+        }
+
         this[name] = value;
     }
 

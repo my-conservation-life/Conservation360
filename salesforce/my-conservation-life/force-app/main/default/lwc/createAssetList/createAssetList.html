@@ -1,7 +1,9 @@
 <template>
     <header>Required Properties</header>
-    <!-- TODO: support disabled prefilled properties -->
-    <!-- <c-create-asset-property></c-create-asset-property> -->
+    <c-create-asset-property
+        property-data-types={propertyDataTypes}
+        property-data={requiredPropertyLocation}>
+    </c-create-asset-property>
     
     <header>Custom Properties</header>
     <template for:each={properties} for:item="property">

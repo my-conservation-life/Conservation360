@@ -21,21 +21,22 @@
         type="checkbox"
         name="required"
         label="Required"
-        onchange={saveCheckboxAttribute}>
+        onchange={saveAttribute}>
     </lightning-input>
 
     <lightning-input
         type="checkbox"
         name="is_private"
         label="Private"
-        onchange={saveCheckboxAttribute}>
+        onchange={saveAttribute}>
     </lightning-input>
 
     <lightning-button
         variant="destructive"
         icon-name="utility:dash"
         label="Remove"
-        onclick={handleRemoveProperty}>
+        onclick={handleRemoveProperty}
+        if:true={isCustomProperty}>
     </lightning-button>
     <hr>
 </template>

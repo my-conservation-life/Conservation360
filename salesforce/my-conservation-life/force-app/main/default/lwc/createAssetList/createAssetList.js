@@ -4,11 +4,22 @@ import * as utils from 'c/utils'
 export default class CreateAssetList extends LightningElement {
     id = 1;
     @track properties = [];
-    @track propertyDataTypes; //attributes starting with data are reserved
+    @track propertyDataTypes; //names starting with data are reserved :(
+    @track requiredPropertyLocation;
 
     // Fires when this component is inserted into the DOM
     connectedCallback() {
         this.addCustomProperty();
+
+        // Hardcoded; May need to be grabbed form DB later on
+        const locationProperty = {
+            name: "location",
+            description: "the location of this asset",
+            data_type: "location",
+            required: false,
+            is_private: false
+        };
+        this.requiredPropertyLocation = JSON.stringify(locationProperty);
 
         const dataTypesURL = utils.api.URL + "getDataTypes"
         utils.api.get(dataTypesURL)
@@ -43,7 +54,7 @@ export default class CreateAssetList extends LightningElement {
 
     @api
     validateProperties() {
-        const propertyElements = this.template.querySelectorAll("c-create-asset-property");
+        const propertyElements = this.template.querySelectorAll("c-create-asset-property:not([disabled])");
         const validities = [];
         for (let property of propertyElements) {
             let validity = property.validateAttributes();
@@ -57,7 +68,7 @@ export default class CreateAssetList extends LightningElement {
 
     @api
     getProperties() {
-        const propertyElements = this.template.querySelectorAll("c-create-asset-property");
+        const propertyElements = this.template.querySelectorAll("c-create-asset-property:not([disabled])");
         const properties = []
         for (let property of propertyElements) {
             const attributes = property.getAttributes();
