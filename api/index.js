@@ -29,7 +29,7 @@ app.get('/assets', async (req, res) => {
     const projectId = req.query['project_id'];
 
     const query = `
-        SELECT id, project_id AS projectId, asset_type_id AS assetTypeId, ST_X(location) AS latitude, ST_Y(location) AS longitude
+        SELECT id, project_id, asset_type_id, ST_X(location) AS latitude, ST_Y(location) AS longitude
         FROM asset`;
 
     if (typeof projectId === 'number') {
