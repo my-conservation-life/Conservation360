@@ -8,6 +8,9 @@
             ],
             "c/generatePropertyList": [
                 "generatePropertyList/generatePropertyList.js"
+            ],
+            "c/generateProperty": [
+                "generateProperty/generateProperty.js"
             ]
         }
     },

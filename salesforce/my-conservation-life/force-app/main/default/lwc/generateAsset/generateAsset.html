@@ -5,16 +5,27 @@
             <lightning-combobox
                 name="asset-type"
                 label="Asset Type"
-                value={value}
+                value={typeValue}
                 placeholder="Select an Asset Type"
                 options={options}
-                onchange={handleChange}>
-            </lightning-combobox>
-            
-            <p>Description</p>
+                onchange={handleChange}
+            ></lightning-combobox>
 
+            <lightning-input
+                name="asset-description"
+                label="Asset Description"
+                type="text"
+                value={descriptionValue}
+                placeholder="No description"
+                readonly
+            ></lightning-input>
+
+            <br>
+            
             <header>Properties</header>
             <c-generate-property-list></c-generate-property-list>
+
+            <br>
 
             <div class="slds-list_inline">
                 <lightning-button variant="destructive" label="Cancel"></lightning-button>
