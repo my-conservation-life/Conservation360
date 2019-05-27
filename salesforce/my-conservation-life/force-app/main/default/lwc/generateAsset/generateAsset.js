@@ -1,13 +1,13 @@
 import { LightningElement, track } from 'lwc';
 
 export default class ComboboxBasic extends LightningElement {
-    @track value = 'tree';
+    @track value = 'baum';
 
     get options() {
         return [
-            { label: 'Tree', value: 'tree' },
-            { label: 'Monkey', value: 'monkey' },
-            { label: 'Banana', value: 'banana' },
+            { label: 'Baum', value: 'baum' },
+            { label: 'Bär', value: 'bär' },
+            { label: 'Eichhörnchen', value: 'eichhörnchen' },
         ];
     }
 

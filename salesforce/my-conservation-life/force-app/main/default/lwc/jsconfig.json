@@ -5,6 +5,9 @@
         "paths": {
             "c/generateAsset": [
                 "generateAsset/generateAsset.js"
+            ],
+            "c/generatePropertyList": [
+                "generatePropertyList/generatePropertyList.js"
             ]
         }
     },
