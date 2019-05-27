@@ -1,4 +1,4 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
@@ -11,12 +11,13 @@ import { LightningElement } from 'lwc';
 const markerFromAsset = (asset) => L.marker(L.latLng(asset.latitude, asset.longitude));
 
 export default class MapProjectAssets extends LightningElement {
+    @api
+    projectId;
+
     assetsPromise;
 
-    constructor() {
-        super();
-
-        this.assetsPromise = fetch('https://cidb-dev-experimental-1.herokuapp.com/assets');
+    connectedCallback() {
+        this.assetsPromise = fetch('https://cidb-dev-experimental-1.herokuapp.com/assets?project_id=' + this.projectId);
     }
 
     onMapInitialized(event) {
