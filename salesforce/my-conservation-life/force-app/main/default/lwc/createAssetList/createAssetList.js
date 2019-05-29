@@ -72,7 +72,7 @@ export default class CreateAssetList extends LightningElement {
         const properties = []
         for (let property of propertyElements) {
             const attributes = property.getAttributes();
-            properties.push(attributes);
+            if (attributes) properties.push(attributes);
         }
 
         return properties;

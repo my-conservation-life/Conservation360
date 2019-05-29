@@ -17,8 +17,9 @@ export default class CreateAssetProperty extends LightningElement {
 
     renderedCallback() {
         if (this.propertyData && !this.hasRendered) {
-            this.isCustomProperty = false; //hide remove property button
             this.hasRendered = true; //prevent re-rendering
+
+            this.isCustomProperty = false; //hide remove property button
             const propertyData = JSON.parse(this.propertyData)
 
             const inputs = this.template.querySelectorAll("lightning-input, lightning-combobox");
@@ -71,11 +72,13 @@ export default class CreateAssetProperty extends LightningElement {
 
     @api
     getAttributes() {
-        return {
-            name: this.name,
-            data_type: this.data_type,
-            required: this.required === "true" || this.required === true,
-            is_private: this.is_private === "true" || this.is_private === true
+        if (this.isCustomProperty) {
+            return {
+                name: this.name,
+                data_type: this.data_type,
+                required: this.required === "true" || this.required === true,
+                is_private: this.is_private === "true" || this.is_private === true
+            }
         }
     }
 
