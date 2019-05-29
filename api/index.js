@@ -125,7 +125,7 @@ app.get('/bbox-assets', async (req, res) => {
             queryDbResult(res, query, [projectId], withResult);
         },
         () => {
-            queryDbResult(res, query, withResult);
+            queryDbResult(res, query, [], withResult);
         });
 });
 
@@ -137,10 +137,10 @@ app.get('/bbox-assets', async (req, res) => {
  * 
  * @param {Response} res
  * @param {string} query Database query to execute
- * @param {string[]} [values=[]] Substitution parameters for the query
+ * @param {string[]} values Substitution parameters for the query
  * @param {*} onSuccess
  */
-const queryDbResult = async (res, query, values = [], onSuccess) => {
+const queryDbResult = async (res, query, values, onSuccess) => {
     try {
         const result = await dbPool.query(query, values);
         onSuccess(result);
