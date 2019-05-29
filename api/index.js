@@ -107,7 +107,7 @@ app.get('/bbox-assets', async (req, res) => {
     const query = `
         SELECT ST_XMin(bbox) AS latitude_min, ST_XMax(bbox) AS latitude_max, ST_YMin(bbox) AS longitude_min, ST_YMax(bbox) AS longitude_max
         FROM (SELECT ST_Extent(location) AS bbox from asset)
-        AS tbbox)
+        AS tbbox
     `;
 
     const withResult = (result) => {
