@@ -1,12 +1,12 @@
 import { LightningElement } from 'lwc';
 import * as utils from 'c/utils'
 
-export default class CreateAsset extends LightningElement {
+export default class CreateAssetDefinition extends LightningElement {
     name = "";
     description = "";
 
     validateAssetDefinition() {
-        const assetListElement = this.template.querySelector("c-create-asset-list");
+        const assetListElement = this.template.querySelector("c-create-asset-definition-list");
         const propertiesValid = assetListElement.validateProperties();
         const attributesValid = this.validateAttributes();
 
@@ -19,7 +19,7 @@ export default class CreateAsset extends LightningElement {
         const formValid = this.validateAssetDefinition();
 
         if (formValid) {
-            let assetList = this.template.querySelector("c-create-asset-list");
+            let assetList = this.template.querySelector("c-create-asset-definition-list");
             let properties = assetList.getProperties()
 
             const data = {

@@ -1,7 +1,7 @@
 import { LightningElement, track, api } from 'lwc';
 import * as utils from 'c/utils'
 
-export default class CreateAssetList extends LightningElement {
+export default class CreateAssetDefinitionList extends LightningElement {
     id = 1;
     @track properties = [];
     @track propertyDataTypes; //names starting with data are reserved :(
@@ -33,12 +33,12 @@ export default class CreateAssetList extends LightningElement {
                 this.propertyDataTypes = JSON.stringify(dataTypeList);
             })
             .catch(e => {
-                console.error("createAssetList.js")
+                console.error("createAssetDefinitionList.js")
                 console.error(e)
             });
     }
 
-    // Takes advantage of template's for:each by appending new createAssetProperty per value in list
+    // Takes advantage of template's for:each by appending new createAssetDefinitionProperty per value in list
     addCustomProperty() {
         this.properties.push(this.id);
         this.id++;
@@ -54,7 +54,7 @@ export default class CreateAssetList extends LightningElement {
 
     @api
     validateProperties() {
-        const propertyElements = this.template.querySelectorAll("c-create-asset-property:not([disabled])");
+        const propertyElements = this.template.querySelectorAll("c-create-asset-definition-property");
         const validities = [];
         for (let property of propertyElements) {
             let validity = property.validateAttributes();
@@ -68,7 +68,7 @@ export default class CreateAssetList extends LightningElement {
 
     @api
     getProperties() {
-        const propertyElements = this.template.querySelectorAll("c-create-asset-property:not([disabled])");
+        const propertyElements = this.template.querySelectorAll("c-create-asset-definition-property");
         const properties = []
         for (let property of propertyElements) {
             const attributes = property.getAttributes();

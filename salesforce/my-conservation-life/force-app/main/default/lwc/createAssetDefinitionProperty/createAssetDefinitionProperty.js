@@ -1,6 +1,6 @@
 import { LightningElement, track, api } from 'lwc';
 
-export default class CreateAssetProperty extends LightningElement {
+export default class CreateAssetDefinitionProperty extends LightningElement {
     // Passed in for pre-filled properties (Such as the required location property)
     @api propertyData; 
     @track isCustomProperty = true;
