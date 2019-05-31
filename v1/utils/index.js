@@ -1,23 +1,23 @@
 const isObject = (x) => {
-    return typeof(x) === 'object';
-}
+    return typeof x === 'object';
+};
 
 const hasProperties = (x) => {
     return isObject(x) && Object.keys(x).length > 0;
-}
+};
 
 const isNull = (x) => {
     return x === null;
-    }
-    
+};
+
 const isUndefined = (x) => {
-    return typeof(x) === 'undefined';
-}
+    return typeof x === 'undefined';
+};
 
 // Returns string with n characters chopped off the end
 const trimString = (str, n) => {
     return str.substring(0, str.length - n);
-}
+};
 
 const createDBErrorMessage = (error) => {
     const errorMessage = {
@@ -26,7 +26,7 @@ const createDBErrorMessage = (error) => {
         stack: error.stack //TODO: not in prod?
     };
     return errorMessage;
-}
+};
 
 // TODO: explore other options to AND
 const createWhereClause = (predicates) => {
@@ -41,31 +41,31 @@ const createWhereClause = (predicates) => {
 
             // TODO: Susceptible to SQL injection
             whereClause += `${parameter} = $${id++}`;
-            whereClause += ' AND '
+            whereClause += ' AND ';
 
             values.push(value);
         }
 
-        whereClause = trimString(whereClause, 5) //remove last ' AND ' from whereClause
+        whereClause = trimString(whereClause, 5); //remove last ' AND ' from whereClause
     }
 
     return {
         whereClause,
         values
-    }
-}
+    };
+};
 
 const beginTransaction = async (client) => {
     return client.query('BEGIN TRANSACTION');
-}
+};
 
 const commitTransaction = async (client) => {
     return client.query('END TRANSACTION');
-}
+};
 
 const rollbackTransaction = async (client) => {
     return client.query('ROLLBACK');
-}
+};
 
 // TODO: may want to separate into each's folder if this index.js gets too large
 module.exports = {
@@ -80,4 +80,4 @@ module.exports = {
         commitTransaction,
         rollbackTransaction
     }
-}
+};

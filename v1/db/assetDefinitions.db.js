@@ -11,7 +11,7 @@ const createAssetType = async (client, name, description) => {
     const values = [name, description];
 
     return client.query(query, values);
-}
+};
 
 const createProperty = async (client, assetTypeId, property) => {
     const query = `
@@ -23,7 +23,7 @@ const createProperty = async (client, assetTypeId, property) => {
     const values = [assetTypeId, property.name, property.data_type, property.required, property.is_private];
 
     return client.query(query, values);
-}
+};
 
 const create = async (assetDefinition) => {
     const client = await pool.connect();
@@ -44,7 +44,7 @@ const create = async (assetDefinition) => {
         await utils.db.commitTransaction(client);
 
         const msg = {
-            message: "Asset definition successfuly created"
+            message: 'Asset definition successfuly created'
         };
 
         return msg;
@@ -54,8 +54,8 @@ const create = async (assetDefinition) => {
     } finally {
         client.release();
     }
-}
+};
 
 module.exports = {
     create
-}
+};
