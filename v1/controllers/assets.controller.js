@@ -12,8 +12,7 @@ const getOne = async (req, res, next) => {
     const id = req.params.id;
     const predicates = req.query;
 
-    const data = await db.assets.getOne(id, predicates);
-    const asset = data[0];
+    const asset = await db.assets.getOne(id, predicates);
     
     res.send(JSON.stringify(asset));
 }

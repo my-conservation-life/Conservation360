@@ -12,7 +12,7 @@ const getAll = async (predicates) => {
         const db = await pool.query(query);
         return db.rows;
     } catch (error) {
-        return utils.db.createErrorMessage(error)
+        return utils.db.createErrorMessage(error);
     }
 }
 

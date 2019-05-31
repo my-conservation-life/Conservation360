@@ -18,19 +18,23 @@ const get = async (predicates) => {
 
         return pool.query(query, values);
     } catch (error) {
-        return utils.db.createErrorMessage(error)
+        return utils.db.createErrorMessage(error);
     }
 }
 
 const getAll = async (predicates) => {
-    data = await get(predicates)
-    return data;
+    const db = await get(predicates);
+    return db.rows;
 }
 
 const getOne = async (id, predicates) => {
     predicates['id'] = id;
-    data = await get(predicates)
-    return data;
+    const db = await get(predicates);
+
+    let asset = null;
+    if (db.rows.length > 0) asset = db.rows[0];
+
+    return asset;
 }
 
 module.exports = {
