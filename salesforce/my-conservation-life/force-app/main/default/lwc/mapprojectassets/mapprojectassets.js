@@ -10,19 +10,30 @@ import { LightningElement, api } from 'lwc';
  */
 const markerFromAsset = (asset) => L.marker(L.latLng(asset.latitude, asset.longitude));
 
+const API_URL = 'https://cidb-dev-experimental-1.herokuapp.com/';
+
 export default class MapProjectAssets extends LightningElement {
     @api
     projectId;
 
     assetsPromise;
+    assetsBboxPromise;
 
     connectedCallback() {
-        this.assetsPromise = fetch('https://cidb-dev-experimental-1.herokuapp.com/assets?project_id=' + this.projectId);
+        this.assetsPromise = fetch(API_URL + 'assets?project_id=' + this.projectId);
+        this.assetsBboxPromise =
+            fetch(API_URL + 'bbox-assets?project_id=' + this.projectId)
+            .then((response) => response.json());
     }
 
     onMapInitialized(event) {
         const map = event.detail;
-        map.setView([-19.3, 46.7], 6);
+
+        this.assetsBboxPromise.then((bbox) => {
+            map.fitBounds([
+                [bbox.latitude_min, bbox.longitude_min],
+                [bbox.latitude_max, bbox.longitude_max]]);
+        });
 
         this.assetsPromise
         .then((response) => response.json())
