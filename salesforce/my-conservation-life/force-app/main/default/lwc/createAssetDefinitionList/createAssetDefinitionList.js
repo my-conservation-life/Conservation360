@@ -13,27 +13,22 @@ export default class CreateAssetDefinitionList extends LightningElement {
 
         // Hardcoded; May need to be grabbed form DB later on
         const locationProperty = {
-            name: "location",
-            description: "the location of this asset",
-            data_type: "location",
+            name: 'location',
+            description: 'the location of this asset',
+            data_type: 'location',
             required: false,
             is_private: false
         };
         this.requiredPropertyLocation = JSON.stringify(locationProperty);
 
-        const dataTypesURL = utils.api.URL + "getDataTypes"
+        const dataTypesURL = utils.api.URL + 'dataTypes/'
         utils.api.get(dataTypesURL)
-            .then(data => {
-                const dataTypeList = [];
-                for (let type of data) {
-                    dataTypeList.push(type.name);
-                }
-
+            .then(dataTypes => {
                 // Must stringify because LWC must use primitives, no support for lists/objects
-                this.propertyDataTypes = JSON.stringify(dataTypeList);
+                this.propertyDataTypes = JSON.stringify(dataTypes);
             })
             .catch(e => {
-                console.error("createAssetDefinitionList.js")
+                console.error('createAssetDefinitionList.js')
                 console.error(e)
             });
     }
@@ -54,7 +49,7 @@ export default class CreateAssetDefinitionList extends LightningElement {
 
     @api
     validateProperties() {
-        const propertyElements = this.template.querySelectorAll("c-create-asset-definition-property");
+        const propertyElements = this.template.querySelectorAll('c-create-asset-definition-property');
         const validities = [];
         for (let property of propertyElements) {
             let validity = property.validateAttributes();
@@ -68,7 +63,7 @@ export default class CreateAssetDefinitionList extends LightningElement {
 
     @api
     getProperties() {
-        const propertyElements = this.template.querySelectorAll("c-create-asset-definition-property");
+        const propertyElements = this.template.querySelectorAll('c-create-asset-definition-property');
         const properties = []
         for (let property of propertyElements) {
             const attributes = property.getAttributes();

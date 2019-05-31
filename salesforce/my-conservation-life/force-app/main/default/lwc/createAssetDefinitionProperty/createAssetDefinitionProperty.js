@@ -10,8 +10,8 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
     @api propertyKey;
 
     // Property attributes
-    name = "";
-    data_type = "";
+    name = '';
+    data_type = '';
     required = false;
     is_private = false;
 
@@ -22,12 +22,12 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
             this.isCustomProperty = false; //hide remove property button
             const propertyData = JSON.parse(this.propertyData)
 
-            const inputs = this.template.querySelectorAll("lightning-input, lightning-combobox");
+            const inputs = this.template.querySelectorAll('lightning-input, lightning-combobox');
             for (let input of inputs) {
                 const name = input.name;
                 const value = propertyData[name];
 
-                if (input.type === "checkbox") {
+                if (input.type === 'checkbox') {
                     input.checked = value;
                 } else {
                     input.value = value;
@@ -45,8 +45,8 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
             const propertyDataTypes = JSON.parse(this.propertyDataTypes);
             for(let type of propertyDataTypes) {
                 const option = {
-                    "label": type,
-                    "value": type
+                    label: type,
+                    value: type
                 }
                 optionList.push(option)
             }
@@ -58,7 +58,7 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
     // TODO: Extract to shared
     @api
     validateAttributes() {
-        const inputElements = this.template.querySelectorAll("lightning-input, lightning-combobox");
+        const inputElements = this.template.querySelectorAll('lightning-input, lightning-combobox');
         const validities = [];
         for (let input of inputElements) {
             let validity = input.reportValidity();
@@ -76,8 +76,8 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
             return {
                 name: this.name,
                 data_type: this.data_type,
-                required: this.required === "true" || this.required === true,
-                is_private: this.is_private === "true" || this.is_private === true
+                required: this.required === 'true' || this.required === true,
+                is_private: this.is_private === 'true' || this.is_private === true
             }
         }
     }
@@ -89,7 +89,7 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
         const name = ele.name;
 
         let value;
-        if (type === "checkbox") {
+        if (type === 'checkbox') {
             value = ele.checked;
         } else {
             value = ele.value.toLowerCase();

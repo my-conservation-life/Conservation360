@@ -9,18 +9,18 @@ function handleFetchErrors(response) {
 }
 
 export const api = {
-    "URL": "https://my-conservation-life.herokuapp.com/",
-    "get": url => {
+    URL: 'https://my-conservation-life.herokuapp.com/api/v1/',
+    get: url => {
         return fetch(url, {
-            method: "GET",
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(handleFetchErrors);
     },
-    "post": (url, data) => {
+    post: (url, data) => {
         return fetch(url, {
-            method: "POST",
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },

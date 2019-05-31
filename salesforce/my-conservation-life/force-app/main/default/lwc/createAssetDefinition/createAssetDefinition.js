@@ -2,11 +2,11 @@ import { LightningElement } from 'lwc';
 import * as utils from 'c/utils'
 
 export default class CreateAssetDefinition extends LightningElement {
-    name = "";
-    description = "";
+    name = '';
+    description = '';
 
     validateAssetDefinition() {
-        const assetListElement = this.template.querySelector("c-create-asset-definition-list");
+        const assetListElement = this.template.querySelector('c-create-asset-definition-list');
         const propertiesValid = assetListElement.validateProperties();
         const attributesValid = this.validateAttributes();
 
@@ -15,11 +15,11 @@ export default class CreateAssetDefinition extends LightningElement {
     }
 
     saveAssetDefinition() {
-        console.log("SAVING");
+        console.log('Saving asset definition');
         const formValid = this.validateAssetDefinition();
 
         if (formValid) {
-            let assetList = this.template.querySelector("c-create-asset-definition-list");
+            let assetList = this.template.querySelector('c-create-asset-definition-list');
             let properties = assetList.getProperties()
 
             const data = {
@@ -28,18 +28,22 @@ export default class CreateAssetDefinition extends LightningElement {
                 properties: properties
             }
 
-            utils.api.post(utils.api.URL + "createAssetDefinition", data)
-                .then(json => console.log(json))
+            utils.api.post(utils.api.URL + 'assetDefinitions/', data)
+                .then(json => {
+                    // TODO: notify success
+                    console.log(json)
+                })
                 .catch(e => {
+                    // TODO: notify failure
                     console.error(e)
                 });
         } else {
-            console.log("Failed Validation");
+            console.log('Asset definition failed validation');
         }
     }
 
     validateAttributes() {
-        const inputElements = this.template.querySelectorAll("lightning-input");
+        const inputElements = this.template.querySelectorAll('lightning-input');
         const validities = [];
         for (let input of inputElements) {
             let validity = input.reportValidity();
