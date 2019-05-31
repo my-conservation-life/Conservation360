@@ -121,8 +121,8 @@ app.get('/bbox-assets', async (req, res) => {
 
     withQueryParam(req, res, 'project_id', dbKeyParser,
         (projectId) => {
-            const query = query + ' WHERE project_id = $1';
-            queryDbResult(res, query, [projectId], withResult);
+            const queryByProject = query + ' WHERE project_id = $1';
+            queryDbResult(res, queryByProject, [projectId], withResult);
         },
         () => {
             queryDbResult(res, query, [], withResult);
