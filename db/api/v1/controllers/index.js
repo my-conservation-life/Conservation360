@@ -6,4 +6,4 @@ module.exports = {
     assets,
     assetDefinitions,
     dataTypes
-}
+};

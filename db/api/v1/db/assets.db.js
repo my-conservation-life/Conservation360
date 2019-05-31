@@ -1,6 +1,6 @@
 const utils = require('../utils');
 
-const get = async (predicates) => {
+const get = async predicates => {
     try {
         let query = `
             SELECT
@@ -20,12 +20,12 @@ const get = async (predicates) => {
     } catch (error) {
         return utils.db.createErrorMessage(error);
     }
-}
+};
 
-const getAll = async (predicates) => {
+const getAll = async predicates => {
     const db = await get(predicates);
     return db.rows;
-}
+};
 
 const getOne = async (id, predicates) => {
     predicates['id'] = id;
@@ -35,9 +35,9 @@ const getOne = async (id, predicates) => {
     if (db.rows.length > 0) asset = db.rows[0];
 
     return asset;
-}
+};
 
 module.exports = {
     getAll,
     getOne
-}
+};

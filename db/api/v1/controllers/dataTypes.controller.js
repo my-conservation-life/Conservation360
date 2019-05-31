@@ -1,6 +1,6 @@
 const db = require('../db');
 
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
     const data = await db.dataTypes.getAll();
 
     // Transform data
@@ -10,9 +10,9 @@ const getAll = async (req, res, next) => {
     }
     
     res.send(JSON.stringify(dataTypes));
-}
+};
 
 
 module.exports = {
     getAll
-}
+};
