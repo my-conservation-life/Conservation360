@@ -1,12 +1,24 @@
 const db = require("../db");
+const utils = require("../utils");
 
-const getAll = (req, res, next) => {
-    const query = req.query;
-    console.log(query);
-    const assets = db.assets.getAll();
-    res.send(assets);
+const getAll = async (req, res, next) => {
+    const predicates = req.query;
+
+    const assets = await db.assets.getAll(predicates);
+    
+    res.send(JSON.stringify(assets));
+}
+
+const getOne = async (req, res, next) => {
+    const id = req.params.id;
+    const predicates = req.query;
+
+    const assets = await db.assets.getOne(id, predicates);
+    
+    res.send(JSON.stringify(assets));
 }
 
 module.exports = {
-    getAll
+    getAll,
+    getOne
 }
