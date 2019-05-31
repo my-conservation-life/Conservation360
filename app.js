@@ -1,6 +1,6 @@
 const express = require('express');
-const {Client} = require("pg");
 const bodyParser = require("body-parser");
+const { Pool } = require("pg");
 const routes = {
     v1: require("./v1/routes")
 };
@@ -16,28 +16,52 @@ app.use(function(req, res, next) {
 });
 
 app.use(bodyParser.urlencoded({
-    extended: true
+    extended: true  
 }));
 
 app.use(bodyParser.json());
 
 app.use(express.static("./client"));
 
-app.use("/api/v1", routes.v1);
-
-const client = new Client({
+// TODO: remove global val, using global with this to prevent blocking task
+global.pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: true,
 });
 
-client.connect()
-    .then(() => {
-        console.log("Successfully connected to database");
-    })
-    .catch(e => {
-        console.error(e.stack);
-        client.end();
-    });
+app.use("/api/v1", routes.v1);
+
+// db.setup(process.env.DATABASE_URL);
+
+// app.get("/test", async (req, res) => {
+//     try {
+//         console.log(db);
+//         const r = await db.pool.query("SELECT * FROM property");
+//         console.log(r.rows);
+//         res.send(JSON.stringify(r.rows));
+//     } catch (e) {
+//         const msg = {
+//             message: "Unable to query database",
+//             error: e.message
+//         };
+//         console.error(e.stack);
+//         res.status(500).send(msg);
+//     }
+// })
+
+// const client = new Client({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: true,
+// });
+
+// client.connect()
+//     .then(() => {
+//         console.log("Successfully connected to database");
+//     })
+//     .catch(e => {
+//         console.error(e.stack);
+//         client.end();
+//     });
 
 // app.get("/getDataTypes", async (req, res) => {
 //     const query = `

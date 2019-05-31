@@ -6,5 +6,7 @@ const {
 } = require('../controllers')
 
 router.get('/assets', assets.getAll);
+router.get('/assets/:id', assets.getOne);
+
 
 module.exports = router
