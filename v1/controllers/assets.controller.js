@@ -1,5 +1,4 @@
-const db = require("../db");
-const utils = require("../utils");
+const db = require('../db');
 
 const getAll = async (req, res, next) => {
     const predicates = req.query;
@@ -13,9 +12,10 @@ const getOne = async (req, res, next) => {
     const id = req.params.id;
     const predicates = req.query;
 
-    const assets = await db.assets.getOne(id, predicates);
+    const data = await db.assets.getOne(id, predicates);
+    const asset = data[0];
     
-    res.send(JSON.stringify(assets));
+    res.send(JSON.stringify(asset));
 }
 
 module.exports = {

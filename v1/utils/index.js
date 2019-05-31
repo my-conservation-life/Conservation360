@@ -1,27 +1,27 @@
-function isObject(x) {
-    return typeof(x) === "object";
+const isObject = (x) => {
+    return typeof(x) === 'object';
 }
 
-function hasProperties(x) {
+const hasProperties = (x) => {
     return isObject(x) && Object.keys(x).length > 0;
 }
 
-function isNull (x) {
+const isNull = (x) => {
     return x === null;
     }
     
-function isUndefined (x) {
+const isUndefined = (x) => {
     return typeof(x) === 'undefined';
 }
 
 // Returns string with n characters chopped off the end
-function trimString(str, n) {
+const trimString = (str, n) => {
     return str.substring(0, str.length - n);
 }
 
-function createDBErrorMessage(error) {
+const createDBErrorMessage = (error) => {
     const errorMessage = {
-        message: "Unable to query database",
+        message: 'Unable to query database',
         error: error.message,
         stack: error.stack //TODO: not in prod?
     };
@@ -29,11 +29,11 @@ function createDBErrorMessage(error) {
 }
 
 // TODO: explore other options to AND
-function createWhereClause(predicates) {
-    let whereClause = "";
+const createWhereClause = (predicates) => {
+    let whereClause = '';
     let values = [];
     if (hasProperties(predicates)) {
-        whereClause += " WHERE ";
+        whereClause += ' WHERE ';
 
         let id = 1;
         for (let parameter in predicates) {
@@ -41,12 +41,12 @@ function createWhereClause(predicates) {
 
             // TODO: Susceptible to SQL injection
             whereClause += `${parameter} = $${id++}`;
-            whereClause += " AND "
+            whereClause += ' AND '
 
             values.push(value);
         }
 
-        whereClause = trimString(whereClause, 5) //remove last " AND " from whereClause
+        whereClause = trimString(whereClause, 5) //remove last ' AND ' from whereClause
     }
 
     return {
@@ -55,7 +55,19 @@ function createWhereClause(predicates) {
     }
 }
 
-// TODO: may want to separate into each folder if it gets large
+const beginTransaction = async (client) => {
+    return client.query('BEGIN TRANSACTION');
+}
+
+const commitTransaction = async (client) => {
+    return client.query('END TRANSACTION');
+}
+
+const rollbackTransaction = async (client) => {
+    return client.query('ROLLBACK');
+}
+
+// TODO: may want to separate into each's folder if this index.js gets too large
 module.exports = {
     isObject,
     hasProperties,
@@ -63,6 +75,9 @@ module.exports = {
     isUndefined,
     db: {
         createErrorMessage: createDBErrorMessage, //rename because it's already prefixed
-        createWhereClause
+        createWhereClause,
+        beginTransaction,
+        commitTransaction,
+        rollbackTransaction
     }
 }

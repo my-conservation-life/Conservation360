@@ -1,4 +1,4 @@
-const utils = require("../utils");
+const utils = require('../utils');
 
 const get = async (predicates) => {
     try {
@@ -16,8 +16,7 @@ const get = async (predicates) => {
         const { whereClause, values } = utils.db.createWhereClause(predicates);
         query += whereClause;
 
-        const db = await pool.query(query, values);
-        return db.rows;
+        return pool.query(query, values);
     } catch (error) {
         return utils.db.createErrorMessage(error)
     }
@@ -29,9 +28,9 @@ const getAll = async (predicates) => {
 }
 
 const getOne = async (id, predicates) => {
-    predicates["id"] = id;
+    predicates['id'] = id;
     data = await get(predicates)
-    return data[0];
+    return data;
 }
 
 module.exports = {
