@@ -1,5 +1,5 @@
 import { LightningElement, track, api } from 'lwc';
-import * as utils from 'c/utils'
+import controllers from 'c/controllers';
 
 export default class CreateAssetDefinitionList extends LightningElement {
     id = 1;
@@ -19,17 +19,17 @@ export default class CreateAssetDefinitionList extends LightningElement {
             required: false,
             is_private: false
         };
+
         this.requiredPropertyLocation = JSON.stringify(locationProperty);
 
-        const dataTypesURL = utils.api.URL + 'dataTypes/'
-        utils.api.get(dataTypesURL)
+        controllers.dataTypes.getAll()
             .then(dataTypes => {
-                // Must stringify because LWC must use primitives, no support for lists/objects
-                this.propertyDataTypes = JSON.stringify(dataTypes);
-            })
+                    // Must stringify because LWC must use primitives, no support for lists/objects
+                    this.propertyDataTypes = JSON.stringify(dataTypes);
+                })
             .catch(e => {
-                console.error('createAssetDefinitionList.js')
-                console.error(e)
+                console.error('createAssetDefinitionList.js');
+                console.error(e);
             });
     }
 

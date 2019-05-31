@@ -1,5 +1,5 @@
 import { LightningElement } from 'lwc';
-import * as utils from 'c/utils'
+import controllers from 'c/controllers';
 
 export default class CreateAssetDefinition extends LightningElement {
     name = '';
@@ -20,22 +20,22 @@ export default class CreateAssetDefinition extends LightningElement {
 
         if (formValid) {
             let assetList = this.template.querySelector('c-create-asset-definition-list');
-            let properties = assetList.getProperties()
+            let properties = assetList.getProperties();
 
-            const data = {
+            const assetDefinition = {
                 name: this.name,
                 description: this.description,
                 properties: properties
-            }
+            };
 
-            utils.api.post(utils.api.URL + 'assetDefinitions/', data)
+            controllers.assetDefinitions.create(assetDefinition)
                 .then(json => {
                     // TODO: notify success
-                    console.log(json)
+                    console.log(json);
                 })
                 .catch(e => {
                     // TODO: notify failure
-                    console.error(e)
+                    console.error(e);
                 });
         } else {
             console.log('Asset definition failed validation');
@@ -48,7 +48,7 @@ export default class CreateAssetDefinition extends LightningElement {
         for (let input of inputElements) {
             let validity = input.reportValidity();
             validities.push(validity)
-        }
+        };
 
         // Return true if all attributes returned true
         return validities
