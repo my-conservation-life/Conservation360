@@ -104,9 +104,9 @@ app.get('/assets', async (req, res) => {
  * @param {string} [req.query.project_id] - Project ID of assets
  */
 app.get('/bbox-assets', async (req, res) => {
-    const query = `
+    const createQuery = (fromTableExpression) => `
         SELECT ST_XMin(bbox) AS latitude_min, ST_XMax(bbox) AS latitude_max, ST_YMin(bbox) AS longitude_min, ST_YMax(bbox) AS longitude_max
-        FROM (SELECT ST_Extent(location) AS bbox from asset)
+        FROM (SELECT ST_Extent(location) AS bbox FROM ${fromTableExpression})
         AS tbbox
     `;
 
@@ -121,10 +121,11 @@ app.get('/bbox-assets', async (req, res) => {
 
     withQueryParam(req, res, 'project_id', dbKeyParser,
         (projectId) => {
-            const queryByProject = query + ' WHERE project_id = $1';
-            queryDbResult(res, queryByProject, [projectId], withResult);
+            const query = createQuery('asset WHERE project_id = $1')
+            queryDbResult(res, query, [projectId], withResult);
         },
         () => {
+            const query = createQuery('asset');
             queryDbResult(res, query, [], withResult);
         });
 });
