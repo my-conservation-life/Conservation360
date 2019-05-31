@@ -20,7 +20,10 @@ export default class MapProjectAssets extends LightningElement {
     assetsBboxPromise;
 
     connectedCallback() {
-        this.assetsPromise = fetch(API_URL + 'assets?project_id=' + this.projectId);
+        this.assetsPromise =
+            fetch(API_URL + 'assets?project_id=' + this.projectId)
+            .then((response) => response.json());
+
         this.assetsBboxPromise =
             fetch(API_URL + 'bbox-assets?project_id=' + this.projectId)
             .then((response) => response.json());
@@ -35,8 +38,8 @@ export default class MapProjectAssets extends LightningElement {
                 [bbox.latitude_max, bbox.longitude_max]]);
         });
 
-        this.assetsPromise
-        .then((response) => response.json())
-        .then((assets) => L.featureGroup(assets.map(asset => markerFromAsset(asset))).addTo(map));
+        this.assetsPromise.then((assets) => {
+            L.featureGroup(assets.map(markerFromAsset)).addTo(map);
+        });
     }
 }
