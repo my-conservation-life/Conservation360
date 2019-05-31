@@ -45,7 +45,7 @@ const create = async (assetDefinition) => {
 
         const msg = {
             message: "Asset definition successfuly created"
-        }
+        };
 
         return msg;
     } catch (error) {
