@@ -10,7 +10,7 @@ import { LightningElement, api } from 'lwc';
  */
 const markerFromAsset = (asset) => L.marker(L.latLng(asset.latitude, asset.longitude));
 
-const API_URL = 'https://cidb-dev-experimental-1.herokuapp.com/';
+const API_URL = 'https://cidb-dev-experimental-1.herokuapp.com/api/v1/';
 
 export default class MapProjectAssets extends LightningElement {
     @api
