@@ -6,11 +6,11 @@
             "c/map": [
                 "map/map.js"
             ],
-            "c/mapprojectassets": [
-                "mapprojectassets/mapprojectassets.js"
-            ],
             "c/leaflet": [
                 "../staticresources/leaflet/leaflet.js"
+            ],
+            "c/mapProjectAssets": [
+                "mapProjectAssets/mapProjectAssets.js"
             ]
         }
     },
