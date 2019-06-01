@@ -19,6 +19,9 @@ export default class MapProjectAssets extends LightningElement {
     assetsPromise;
     assetsBboxPromise;
 
+    /**
+     * Starts the download for asset details and bounding box early.
+     */
     connectedCallback() {
         this.assetsPromise =
             fetch(API_URL + 'assets?project_id=' + this.projectId)
@@ -29,6 +32,19 @@ export default class MapProjectAssets extends LightningElement {
             .then((response) => response.json());
     }
 
+    /**
+     * Event handler for the ready event of the child map component.
+     * 
+     * When the API call for the bounding box of the assets completes,
+     * modify the view of the map to fit all assets within view.
+     * 
+     * When the API call for the asset data completes,
+     * convert each asset into a marker that is displayed on the map
+     * all at once.
+     * 
+     * @param {CustomEvent} event
+     * @param {Map} event.details - Leaflet Map of the child component
+     */
     onMapInitialized(event) {
         const map = event.detail;
 
