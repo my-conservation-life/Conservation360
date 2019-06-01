@@ -1,0 +1,13 @@
+{
+  "name": "my-conservation-life",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:unit": "lwc-jest",
+    "test:unit:watch": "lwc-jest --watch",
+    "test:unit:debug": "lwc-jest --debug"
+  },
+  "devDependencies": {
+    "@salesforce/lwc-jest": "^0.4.14"
+  }
+}
