@@ -6,7 +6,7 @@ const handleFetchErrors = (response) => {
     }
 
     return response.json();
-}
+};
 
 const get = (url) => {
     return fetch(url, {
@@ -15,7 +15,7 @@ const get = (url) => {
             'Content-Type': 'application/json'
         }
     }).then(handleFetchErrors);
-}
+};
 
 const post = (url, data) => {
     return fetch(url, {
@@ -25,10 +25,10 @@ const post = (url, data) => {
         },
         body: JSON.stringify(data)
     }).then(handleFetchErrors);
-}
+};
 
 export default {
     URL,
     get,
     post
-}
+};

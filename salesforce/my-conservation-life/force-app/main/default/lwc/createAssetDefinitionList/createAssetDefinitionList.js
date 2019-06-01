@@ -24,9 +24,9 @@ export default class CreateAssetDefinitionList extends LightningElement {
 
         controllers.dataTypes.getAll()
             .then(dataTypes => {
-                    // Must stringify because LWC must use primitives, no support for lists/objects
-                    this.propertyDataTypes = JSON.stringify(dataTypes);
-                })
+                // Must stringify because LWC must use primitives, no support for lists/objects
+                this.propertyDataTypes = JSON.stringify(dataTypes);
+            })
             .catch(e => {
                 console.error('createAssetDefinitionList.js');
                 console.error(e);
@@ -53,7 +53,7 @@ export default class CreateAssetDefinitionList extends LightningElement {
         const validities = [];
         for (let property of propertyElements) {
             let validity = property.validateAttributes();
-            validities.push(validity)
+            validities.push(validity);
         }
 
         // Return true if all properties returned true
@@ -64,7 +64,7 @@ export default class CreateAssetDefinitionList extends LightningElement {
     @api
     getProperties() {
         const propertyElements = this.template.querySelectorAll('c-create-asset-definition-property');
-        const properties = []
+        const properties = [];
         for (let property of propertyElements) {
             const attributes = property.getAttributes();
             if (attributes) properties.push(attributes);

@@ -20,7 +20,7 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
             this.hasRendered = true; //prevent re-rendering
 
             this.isCustomProperty = false; //hide remove property button
-            const propertyData = JSON.parse(this.propertyData)
+            const propertyData = JSON.parse(this.propertyData);
 
             const inputs = this.template.querySelectorAll('lightning-input, lightning-combobox');
             for (let input of inputs) {
@@ -40,15 +40,15 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
 
     // Getter that converts the stringified propertyDataTypes received from parent lwc into an option list
     get options() {
-        const optionList = []
+        const optionList = [];
         if (this.propertyDataTypes) {
             const propertyDataTypes = JSON.parse(this.propertyDataTypes);
             for(let type of propertyDataTypes) {
                 const option = {
                     label: type,
                     value: type
-                }
-                optionList.push(option)
+                };
+                optionList.push(option);
             }
         }
 
@@ -62,7 +62,7 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
         const validities = [];
         for (let input of inputElements) {
             let validity = input.reportValidity();
-            validities.push(validity)
+            validities.push(validity);
         }
 
         // Return true if all attributes returned true
@@ -78,7 +78,7 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
                 data_type: this.data_type,
                 required: this.required === 'true' || this.required === true,
                 is_private: this.is_private === 'true' || this.is_private === true
-            }
+            };
         }
     }
 

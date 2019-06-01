@@ -47,8 +47,8 @@ export default class CreateAssetDefinition extends LightningElement {
         const validities = [];
         for (let input of inputElements) {
             let validity = input.reportValidity();
-            validities.push(validity)
-        };
+            validities.push(validity);
+        }
 
         // Return true if all attributes returned true
         return validities

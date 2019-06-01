@@ -6,4 +6,4 @@ export default {
     assets,
     assetDefinitions,
     dataTypes
-}
+};
