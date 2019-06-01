@@ -43,11 +43,7 @@ const create = async (assetDefinition) => {
         await Promise.all(propertyPromises);
         await utils.db.commitTransaction(client);
 
-        const msg = {
-            message: 'Asset definition successfuly created'
-        };
-
-        return msg;
+        return assetTypeId;
     } catch (error) {
         await utils.db.rollbackTransaction(client); //TODO: could fail, needs catch
         return utils.db.createErrorMessage(error);
