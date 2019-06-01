@@ -1,4 +1,12 @@
- .create-asset-definition-list {
+.create-asset-definition-list {
     margin-top: 10px;
     margin-bottom: 10px;
- }
+}
+
+.success {
+    color: darkgreen;
+}
+
+.error {
+    color: darkred;
+}

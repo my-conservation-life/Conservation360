@@ -1,9 +1,12 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, track } from 'lwc';
 import controllers from 'c/controllers';
 
 export default class CreateAssetDefinition extends LightningElement {
     name = '';
     description = '';
+
+    @track hasSuccess = false;
+    @track hasError = false;
 
     validateAssetDefinition() {
         const assetListElement = this.template.querySelector('c-create-asset-definition-list');
@@ -16,8 +19,8 @@ export default class CreateAssetDefinition extends LightningElement {
 
     saveAssetDefinition() {
         console.log('Saving asset definition');
+        
         const formValid = this.validateAssetDefinition();
-
         if (formValid) {
             let assetList = this.template.querySelector('c-create-asset-definition-list');
             let properties = assetList.getProperties();
@@ -30,11 +33,11 @@ export default class CreateAssetDefinition extends LightningElement {
 
             controllers.assetDefinitions.create(assetDefinition)
                 .then(json => {
-                    // TODO: notify success
+                    this.hasSuccess = true;
                     console.log(json);
                 })
                 .catch(e => {
-                    // TODO: notify failure
+                    this.hasError = true;
                     console.error(e);
                 });
         } else {
