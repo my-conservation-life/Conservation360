@@ -1,16 +1,10 @@
 import { LightningElement, api } from 'lwc';
 
 import { assets, bboxAssets } from 'c/dbApiService';
+import { markerFromAsset } from './utils';
 
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
-
-/**
- * Returns a Leaflet marker at the location of the asset
- * 
- * precondition: L is an initialized leaflet object
- */
-const markerFromAsset = (asset) => L.marker(L.latLng(asset.latitude, asset.longitude));
 
 export default class MapProjectAssets extends LightningElement {
     @api
