@@ -11,6 +11,9 @@
             ],
             "c/leaflet": [
                 "../staticresources/leaflet/leaflet.js"
+            ],
+            "c/dbApiService": [
+                "dbApiService/dbApiService.js"
             ]
         }
     },
