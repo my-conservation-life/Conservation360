@@ -1,11 +1,13 @@
 <template>
-    <div class="slds-m-around_medium">
 
-        <c-create-asset-property></c-create-asset-property>
-        <c-create-asset-property></c-create-asset-property>
-        <c-create-asset-property></c-create-asset-property>
-        <c-create-asset-property></c-create-asset-property>
-        <c-create-asset-property></c-create-asset-property>
+    <lightning-combobox
+        name="data_type"
+        label="Data Type"
+        placeholder="Select DataType"
+        options={options}
+        required>
+    </lightning-combobox>
 
-    </div>
+    <p>{propertyDataTypes}</p>
+
 </template>
