@@ -16,8 +16,8 @@ router.get('/assets/:id', assets.getOne);
 
 
 // Asset Definitions
+router.post('/assetDefinitions', assetDefinitions.getAll);
 router.post('/assetDefinitions', assetDefinitions.create);
-
 
 // Data Types
 router.get('/dataTypes', dataTypes.getAll);

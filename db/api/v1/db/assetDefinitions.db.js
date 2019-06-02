@@ -25,6 +25,11 @@ const createProperty = async (client, assetTypeId, property) => {
     return client.query(query, values);
 };
 
+const getAll = async predicates => {
+    const db = await get(predicates);
+    return db.rows;
+};
+
 const create = async (assetDefinition) => {
     const client = await pool.connect();
 
@@ -53,5 +58,6 @@ const create = async (assetDefinition) => {
 };
 
 module.exports = {
+    getAll,
     create
 };
