@@ -3,14 +3,14 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "paths": {
-            "c/generateAsset": [
-                "generateAsset/generateAsset.js"
+            "c/createAsset": [
+                "createAsset/createAsset.js"
             ],
-            "c/generatePropertyList": [
-                "generatePropertyList/generatePropertyList.js"
+            "c/createAssetList": [
+                "createAssetList/createAssetList.js"
             ],
-            "c/generateProperty": [
-                "generateProperty/generateProperty.js"
+            "c/createAssetProperty": [
+                "createAssetProperty/createAssetProperty.js"
             ]
         }
     },

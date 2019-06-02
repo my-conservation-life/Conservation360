@@ -1,7 +1,7 @@
 import { LightningElement } from 'lwc';
 
-export default class ComboboxBasic extends LightningElement {
-
+export default class CreateAsset extends LightningElement {
+    
     get options() {
         return [
             { label: 'Baum', value: 'baum' },
@@ -13,4 +13,5 @@ export default class ComboboxBasic extends LightningElement {
     handleChange(event) {
         this.value = event.detail.value;
     }
+
 }
