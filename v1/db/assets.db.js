@@ -1,6 +1,6 @@
 const utils = require('../utils');
 
-const get = async predicates => {
+const _get = async predicates => {
     try {
         let query = `
             SELECT
@@ -23,13 +23,13 @@ const get = async predicates => {
 };
 
 const getAll = async predicates => {
-    const db = await get(predicates);
+    const db = await _get(predicates);
     return db.rows;
 };
 
 const getOne = async (id, predicates) => {
     predicates['id'] = id;
-    const db = await get(predicates);
+    const db = await _get(predicates);
 
     let asset = null;
     if (db.rows.length > 0) asset = db.rows[0];
