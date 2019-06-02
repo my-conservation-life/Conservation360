@@ -11,6 +11,12 @@
             ],
             "c/createAssetProperty": [
                 "createAssetProperty/createAssetProperty.js"
+            ],
+            "c/utils": [
+                "utils/utils.js"
+            ],
+            "c/controllers": [
+                "controllers/controllers.js"
             ]
         }
     },
