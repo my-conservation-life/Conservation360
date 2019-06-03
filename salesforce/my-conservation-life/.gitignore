@@ -32,3 +32,4 @@ $RECYCLE.BIN/
 
 # Visual Studio Code project settings
 .vscode/
+jsconfig.json
