@@ -1,0 +1,18 @@
+<template>
+    <div class="slds-p-around_x-large">
+        <h1 class="slds-text-heading_large">{state.title}</h1>
+
+        <lightning-combobox options={sponsor} value="supports"></lightning-combobox>
+        <lightning-badge label="Sponsor">
+        </lightning-badge>
+
+        <lightning-combobox options={project} value="supports"></lightning-combobox>
+        <lightning-badge label="Project">
+        </lightning-badge>
+        
+        <lightning-combobox options={assets} value="supports"></lightning-combobox>
+        <lightning-badge label="Asset">
+        </lightning-badge>
+
+    </div>
+</template>
