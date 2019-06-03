@@ -24,6 +24,9 @@ export default class CreateAssetList extends LightningElement {
         this.requiredPropertyLocation = JSON.stringify(locationProperty);
 
         controllers.assetDefinitions.getAll().then(assetDefinitions => {
+
+            console.log(assetDefinitions)
+
             // Must stringify because LWC must use primitives, no support for lists/objects
             this.propertyDataTypes = JSON.stringify(assetDefinitions);
 

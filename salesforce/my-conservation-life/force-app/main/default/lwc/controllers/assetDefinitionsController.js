@@ -1,7 +1,7 @@
 import utils from 'c/utils';
 
-const getAll = (parameters) => {
-    const url = utils.URL + 'assetDefinitions' + parameters;
+const getAll = () => {
+    const url = utils.URL + 'assetDefinitions';
     return utils.get(url);
 };
 
