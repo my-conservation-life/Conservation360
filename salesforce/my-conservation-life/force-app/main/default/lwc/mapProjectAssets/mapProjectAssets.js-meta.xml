@@ -11,7 +11,7 @@
 
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
-            <property name="projectId" description="Project ID" required="true" type="Integer" min="1" max="2147483647"></property>
+            <property name="projectId" label="Project ID" description="If provided, only show assets belonging to the specified project" required="false" type="Integer" min="1" max="2147483647"></property>
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
