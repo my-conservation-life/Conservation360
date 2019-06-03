@@ -6,7 +6,7 @@ const DATABASE_QUERY_FAILED_MESSAGE = 'Database query for the bounding box faile
  * 
  * @param {number} [projectId] - filter assets by project ID, if specified
  * @returns {Promise<Bbox>} bounding box of the specified assets
- * @throws {string} throws an error message when the database query returns no results
+ * @throws {string} throws an error when the database query returns no results
  */
 const get = async (projectId) => {
     const createQuery = (fromTableExpression) => `
