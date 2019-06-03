@@ -11,10 +11,9 @@ const QUERY_FIND_WHERE_PROJECT_ID = QUERY_FIND + ' WHERE project_id = $1';
  * 
  * Returns all assets across all projects unless projectId is given.
  * 
- * @param {number} [projectId] - (projectId > 0) optional: filter assets by this Project ID
- * @returns {object[]} array of assets with fields (id, project_id, latitude, and longitude)
+ * @param {number} [projectId] - (assumes isValidDbInteger(projectId)): optional: filter assets by this Project ID
+ * @returns {object[]|undefined} array of assets with fields (id, project_id, latitude, and longitude), or undefined if projectId is invalid.
  * @throws error if the DB query failed to execute
- * @throws error if projectId is not valid for the database column type
  */
 const find = async (projectId) => {
     let query;
@@ -22,7 +21,7 @@ const find = async (projectId) => {
 
     if (typeof projectId !== 'undefined') {
         if (!isValidDbInteger(projectId)) {
-            throw new Error('Invalid argument for projectId. Expected a positive integer.');
+            return;
         }
 
         query = QUERY_FIND_WHERE_PROJECT_ID;

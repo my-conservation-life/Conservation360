@@ -64,6 +64,7 @@ const queryDbResult = async (res, query, values, onSuccess) => {
 
 
 module.exports = {
+    DB_INTEGER_MAX,
     isValidDbInteger,
     dbKeyParser,
     queryDB,

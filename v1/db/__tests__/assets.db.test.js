@@ -41,7 +41,7 @@ describe('assets.db.find', () => {
     });
 
     it('throws when projectId equals 0', async () => {
-        await expect(find(0)).rejects.toThrow('Invalid argument');
+        await expect(find(0)).resolves.toBe(undefined);
     });
 
     it('throws when DB query throws', async () => {
