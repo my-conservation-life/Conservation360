@@ -1,21 +1,22 @@
-const { queryDB, isValidDbInteger } = require('../db');
+const assetsDb = require('../db/assets.db');
 
-const find = async (req, res) => {
+const find = async (req, res, next) => {
     const projectIdString = req.query['project_id'];
 
-    const query = `
-        SELECT id, project_id, asset_type_id, ST_X(location) AS latitude, ST_Y(location) AS longitude
-        FROM asset`;
+    try {
+        let projectId;
+        if (projectIdString) {
+            projectId = parseInt(projectIdString, 10);
 
-    if (projectIdString) {
-        const projectId = Number.parseInt(projectIdString, 10);
-        if (projectId && isValidDbInteger(projectId)) {
-            queryDB(res, query + ' WHERE project_id = $1', [projectId]);
-        } else {
-            res.status(500).send({ error: 'Invalid argument for the project_id parameter. Expected a positive integer.' });
+            if (isNaN(projectId)) {
+                throw new Error('Error while parsing the argument for project_id. Expected a number.');
+            }
         }
-    } else {
-        queryDB(res, query);
+
+        const assets = await assetsDb.find(projectId);
+        res.json(assets);
+    } catch (error) {
+        next(error);
     }
 };
 
