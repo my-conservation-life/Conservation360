@@ -15,7 +15,7 @@ const get = async (projectId) => {
         AS tbbox
         `;
 
-    let query = createQuery('asset' + ((projectId) ? ' WHERE project_id = $1' : ''));
+    const query = createQuery('asset' + ((projectId) ? ' WHERE project_id = $1' : ''));
 
     let result;
     try {
