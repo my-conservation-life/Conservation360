@@ -1,5 +1,24 @@
 const utils = require('../utils');
 
+const get = async predicates => {
+    try {
+        let query = `
+            SELECT
+                name
+                description
+            FROM
+                assetDefinition
+        `;
+
+        const { whereClause, values } = utils.db.createWhereClause(predicates);
+        query += whereClause;
+
+        return pool.query(query, values);
+    } catch (error) {
+        return utils.db.createErrorMessage(error);
+    }
+};
+
 const createAssetType = async (client, name, description) => {
     const query = `
         INSERT INTO asset_type
