@@ -3,15 +3,28 @@ import { createElement } from 'lwc';
 import MapProjectAssets from 'c/mapProjectAssets';
 import { assets, bboxAssets } from 'c/dbApiService';
 
+const LWC_STARTUP_WAIT = 10; // milliseconds to wait the LWC to finish loading
+
 describe('c-map-project-assets', () => {
     let element;
-    let featureGroupAddTo = jest.fn();
+    let featureGroupAddTo;
     const CONSOLE_ERROR = global.console.error;
 
-    beforeAll(() => {
-        assets.find = jest.fn(() => Promise.resolve([]));
-        bboxAssets.get = jest.fn(() => Promise.resolve({}));
+    /**
+     * Load the LWC with the given attribute values.
+     * 
+     * This returns a promise that waits until the LWC has likely finished starting.
+     * 
+     * @param {*} projectId 
+     */
+    const load = (projectId) => {
+        element.projectId = projectId;
+        document.body.appendChild(element);
 
+        return new Promise((resolve) => setTimeout(resolve, LWC_STARTUP_WAIT));
+    };
+
+    beforeAll(() => {
         // Suppress irrelevant console error log caused by a LWC error
         // on the title attribute of the lightning-card in this component's HTML
         global.console.error = jest.fn();
@@ -23,6 +36,10 @@ describe('c-map-project-assets', () => {
     });
 
     beforeEach(() => {
+        assets.find = jest.fn(() => Promise.resolve([]));
+        bboxAssets.get = jest.fn(() => Promise.resolve({}));
+        featureGroupAddTo = jest.fn();
+
         global.L = {
             map: jest.fn(() => ({
                 type: 'map',
@@ -37,9 +54,6 @@ describe('c-map-project-assets', () => {
         element = createElement('c-map-project-assets', {
             is: MapProjectAssets
         });
-        element.projectId = 2;
-
-        document.body.appendChild(element);
     });
 
     afterEach(() => {
@@ -48,17 +62,24 @@ describe('c-map-project-assets', () => {
         }
     });
 
-    it('retrieves assets and bounding box for project 2', () => {
-        expect(assets.find).toHaveBeenCalledWith(2);
-        expect(bboxAssets.get).toHaveBeenCalledWith(2);
-    });
+    it('retrieves assets and bounding box for project 2', () =>
+        load(2).then(() => {
+            expect(assets.find).toHaveBeenCalledWith(2);
+            expect(bboxAssets.get).toHaveBeenCalledWith(2);
+        })
+    );
 
-    it('loads without crashing', (done) => {
-        setTimeout(done, 1000);
-    });
+    it('adds assets to the map when a projectId is specified', () =>
+        load(2).then(() => {
+            expect(global.L.featureGroup).toHaveBeenCalledWith([]);
+            expect(featureGroupAddTo).toHaveBeenCalled();
+        })
+    );
 
-    it('adds a feature group to the map', () => {
-        expect(global.L.featureGroup).toHaveBeenCalledWith([]);
-        expect(featureGroupAddTo).toHaveBeenCalled();
-    });
+    it('adds assets to the map when no projectId is specified', () =>
+        load(undefined).then(() => {
+            expect(global.L.featureGroup).toHaveBeenCalledWith([]);
+            expect(featureGroupAddTo).toHaveBeenCalled();
+        })
+    );
 });
