@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node app.js",
     "test": "jest",
-    "test:unit": "jest"
+    "test:unit": "jest",
+    "test:unit:coverage": "jest --coverage"
   },
   "author": "",
   "license": "ISC",
