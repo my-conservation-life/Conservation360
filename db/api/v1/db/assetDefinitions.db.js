@@ -62,15 +62,15 @@ const createProperty = async (client, assetTypeId, property) => {
 };
 
 const getAll = async () => {
-    
+
     const types = (await getAssetTypes()).rows;
     const properties = (await getAssetProperties()).rows;
 
     const assetDefinitions = [];
-    for (let type of types){
+    for (let type of types) {
         const assetDefinition = {
             assetType: type,
-            properties: []        
+            properties: []
         };
         for (let property of properties) {
             if (type.id === property.asset_type_id) {

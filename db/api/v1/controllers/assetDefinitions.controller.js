@@ -5,7 +5,7 @@ const getAll = async (req, res) => {
     const predicates = req.query;
 
     const assetDefinitions = await db.assetDefinitions.getAll(predicates);
-    
+
     res.send(JSON.stringify(assetDefinitions));
 };
 

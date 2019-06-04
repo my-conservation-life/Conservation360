@@ -1,0 +1,31 @@
+<template>
+    <div class="slds-grid slds-gutters slds-grid_vertical">
+        <div class="slds-col slds-medium-size_1-of-3  slds-small-size_1-of-1">
+            <lightning-input
+                type="text"
+                name="name"
+                label="Name"
+                onchange={saveAttribute}
+                maxlength="50"
+                required>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-medium-size_1-of-3 slds-small-size_1-of-1">
+            <lightning-input
+                type="text"
+                name="description"
+                label="Description"
+                onchange={saveAttribute}>
+            </lightning-input>
+        </div>
+    </div>
+
+    <div class="create-asset-definition-list">
+        <c-create-asset-definition-list></c-create-asset-definition-list>
+    </div>
+
+    <!-- <lightning-button variant="destructive" label="Cancel"></lightning-button> -->
+    <lightning-button variant="success" label="Save" onclick={saveAssetDefinition}></lightning-button>
+    <p if:true={hasSuccess} class="success">Sucessfuly saved</p>
+    <p if:true={hasError} class="error">An error has occured. Refresh and try again.</p>
+</template>

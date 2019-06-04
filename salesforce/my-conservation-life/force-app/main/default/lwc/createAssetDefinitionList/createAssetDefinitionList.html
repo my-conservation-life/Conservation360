@@ -1,0 +1,23 @@
+<template>
+    <header>Required Properties</header>
+    <div class="create-asset-definition-property">
+        <c-create-asset-definition-property
+            property-data-types={propertyDataTypes}
+            property-data={requiredPropertyLocation}>
+        </c-create-asset-definition-property>
+    </div>
+    
+    <header>Custom Properties</header>
+    <div class="create-asset-definition-property">
+        <template for:each={properties} for:item="property">
+            <c-create-asset-definition-property
+                key={property}
+                property-key={property}
+                property-data-types={propertyDataTypes}
+                onremoveproperty={handleRemoveProperty}>
+            </c-create-asset-definition-property>
+        </template>
+    </div>
+
+    <lightning-button variant="Neutral" label="Add Property" icon-name="utility:add" onclick={addCustomProperty}></lightning-button>
+</template>
