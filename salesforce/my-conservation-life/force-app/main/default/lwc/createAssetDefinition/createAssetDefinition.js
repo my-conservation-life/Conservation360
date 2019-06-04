@@ -29,7 +29,7 @@ export default class CreateAssetDefinition extends LightningElement {
                 name: this.name,
                 description: this.description,
                 properties: properties
-            }
+            };
 
             controllers.assetDefinitions.create(assetDefinition)
                 .then(json => {
