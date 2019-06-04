@@ -1,18 +1,16 @@
-const assetsDb = require('../db/assets.db');
 const utils = require('../utils');
+const bboxAssetsDb = require('../db/bbox-assets.db');
 
-const find = async (req, res, next) => {
+const get = async (req, res, next) => {
     const projectIdString = req.query['project_id'];
     const projectId = utils.db.parseKey('project_id', projectIdString, res);
 
     try {
-        const assets = await assetsDb.find(projectId);
-        res.json(assets);
+        const bbox = await bboxAssetsDb.get(projectId);
+        res.json(bbox);
     } catch (error) {
         next(error);
     }
 };
 
-module.exports = {
-    find
-};
+module.exports = { get };

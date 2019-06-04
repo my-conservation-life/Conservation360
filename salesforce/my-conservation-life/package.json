@@ -1,18 +1,16 @@
 {
-    "name": "my-conservation-life",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test:unit": "lwc-jest",
-        "test:unit:watch": "lwc-jest --watch",
-        "test:unit:debug": "lwc-jest --debug"
-    },
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "@salesforce/eslint-config-lwc": "^0.3.0",
-        "@salesforce/lwc-jest": "^0.4.14",
-        "eslint": "^5.16.0"
-    }
+  "name": "my-conservation-life",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "lwc-jest",
+    "test:unit": "lwc-jest",
+    "test:unit:watch": "lwc-jest --watch",
+    "test:unit:debug": "lwc-jest --debug",
+    "test:unit:coverage": "lwc-jest --coverage"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "@salesforce/eslint-config-lwc": "^0.3.0",
+    "@salesforce/lwc-jest": "^0.4.14"
+  }
 }

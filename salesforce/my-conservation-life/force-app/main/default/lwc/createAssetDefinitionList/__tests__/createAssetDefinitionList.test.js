@@ -1,7 +1,7 @@
 import { createElement } from 'lwc';
 import createAssetDefinitionList from 'c/createAssetDefinitionList';
 
-describe('c-create-asset-definition-list', () => {
+describe.skip('c-create-asset-definition-list', () => {
     afterEach(() => {
         // The jsdom instance is shared across test cases in a single file so reset the DOM
         while (document.body.firstChild) {

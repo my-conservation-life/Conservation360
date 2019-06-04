@@ -1,7 +1,7 @@
 import { createElement } from 'lwc';
 import controllers from 'c/controllers';
 
-describe('dataTypesController', () => {
+describe.skip('dataTypesController', () => {
     // afterEach(() => {
     //     // The jsdom instance is shared across test cases in a single file so reset the DOM
     //     while (document.body.firstChild) {

@@ -1,7 +1,4 @@
-import { createElement } from 'lwc';
-import createAssetDefinitionProperty from 'c/createAssetDefinitionProperty';
-
-describe('c-create-asset-definition-property', () => {
+describe.skip('c-create-asset-definition-property', () => {
     afterEach(() => {
         // The jsdom instance is shared across test cases in a single file so reset the DOM
         while (document.body.firstChild) {
