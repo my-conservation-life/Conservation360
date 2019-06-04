@@ -1,4 +1,4 @@
-const { get } = require('../bbox-assets.db');
+const { get } = require('../bboxAssets.db');
 
 const MOCK_BBOX = {
     latitude_min: -20,
@@ -7,7 +7,7 @@ const MOCK_BBOX = {
     longitude_max: 48
 };
 
-describe('bbox-assets.db.get', () => {
+describe('bboxAssets.db.get', () => {
     beforeEach(() => {
         global.dbPool = {
             query: jest.fn(async () => ({

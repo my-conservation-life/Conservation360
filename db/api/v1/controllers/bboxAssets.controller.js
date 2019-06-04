@@ -1,5 +1,5 @@
 const utils = require('../utils');
-const bboxAssetsDb = require('../db/bbox-assets.db');
+const bboxAssetsDb = require('../db/bboxAssets.db');
 
 const get = async (req, res, next) => {
     const projectIdString = req.query['project_id'];
