@@ -1,25 +1,27 @@
+/* eslint-disable no-console */
+
 const http = require('http');
 const express = require('express');
 const routes = {
     v1: require('./v1/routes')
 };
-const { Pool } = require("pg");
-const bodyParser = require("body-parser");
+const { Pool } = require('pg');
+const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.use(express.static("./client"));
+app.use(express.static('./client'));
 
 let dbConfig;
 if (process.env.DATABASE_UNIX_SOCKET_DIR) {
