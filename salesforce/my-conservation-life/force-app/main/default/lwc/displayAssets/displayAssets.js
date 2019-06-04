@@ -9,7 +9,7 @@ const columns = [
     { label: 'Planting Date', fieldName: 'plantDate', type: 'date' },
 ];
 
-export default class DatatableBasic extends LightningElement {
+export default class DisplayAssets extends LightningElement {
     @track data = [];
     @track columns = columns;
     @track tableLoadingState = true;
