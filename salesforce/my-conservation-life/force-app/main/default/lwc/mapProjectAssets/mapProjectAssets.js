@@ -1,6 +1,6 @@
 import { LightningElement, api } from 'lwc';
 
-import { assets, bboxAssets } from 'c/dbApiService';
+import { assets, bboxAssets } from 'c/controllers';
 import { markerFromAsset } from './utils';
 
 /* L is the Leaflet object constructed by the leaflet.js script */

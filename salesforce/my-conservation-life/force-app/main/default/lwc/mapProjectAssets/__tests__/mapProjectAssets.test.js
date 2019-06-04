@@ -1,7 +1,7 @@
 /* eslint-disable @lwc/lwc/no-async-operation */
 import { createElement } from 'lwc';
 import MapProjectAssets from 'c/mapProjectAssets';
-import { assets, bboxAssets } from 'c/dbApiService';
+import { assets, bboxAssets } from 'c/controllers';
 
 const LWC_STARTUP_WAIT = 10; // milliseconds to wait the LWC to finish loading
 
