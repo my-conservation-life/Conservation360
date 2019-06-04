@@ -10,21 +10,21 @@ const MOCK_BBOX = {
 describe('bbox-assets.db.get', () => {
     beforeEach(() => {
         global.dbPool = {
-            query: jest.fn(() => ({
+            query: jest.fn(async () => ({
                 rows: [MOCK_BBOX]
             }))
         }
     });
 
     it('executes correct query for all assets', async () => {
-        const bbox = await get();
+        await get();
         expect(global.dbPool.query).toHaveBeenCalledTimes(1);
         expect(global.dbPool.query.mock.calls[0][0]).toEqual(expect.stringContaining('FROM asset'));
         expect(global.dbPool.query.mock.calls[0][0]).toEqual(expect.not.stringContaining('WHERE'));
     });
 
     it('executes query for assets of specific project', async () => {
-        const bbox = await get(3);
+        await get(3);
         expect(global.dbPool.query).toHaveBeenCalledTimes(1);
         expect(global.dbPool.query.mock.calls[0][0]).toEqual(expect.stringContaining('FROM asset WHERE project_id = $1'));
     });
