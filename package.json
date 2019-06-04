@@ -1,21 +1,24 @@
 {
-    "name": "api",
-    "version": "1.0.0",
-    "description": "",
-    "main": "app.js",
-    "scripts": {
-        "start": "node app.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "pg": "^7.11.0",
-        "express": "^4.17.0",
-        "dotenv": "^8.0.0",
-        "body-parser": "^1.19.0"
-    },
-    "devDependencies": {
-        "eslint": "^5.16.0"
-    }
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "jest",
+    "test:unit": "jest",
+    "test:unit:coverage": "jest --coverage"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^7.11.0",
+    "express": "^4.17.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "jest": "^24.8.0"
+  }
 }
