@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // TODO: may want to separate into each's folder if this index.js gets too large
-const { 
+const {
     assets,
     assetDefinitions,
     dataTypes
@@ -16,8 +16,8 @@ router.get('/assets/:id', assets.getOne);
 
 
 // Asset Definitions
+router.get('/assetDefinitions', assetDefinitions.getAll);
 router.post('/assetDefinitions', assetDefinitions.create);
-
 
 // Data Types
 router.get('/dataTypes', dataTypes.getAll);

@@ -1,5 +1,41 @@
 const utils = require('../utils');
 
+const getAssetTypes = async () => {
+    try {
+        let query = `
+            SELECT
+                id,
+                name,
+                description
+            FROM
+                asset_type
+        `;
+
+        return pool.query(query);
+    } catch (error) {
+        return utils.db.createErrorMessage(error);
+    }
+};
+
+const getAssetProperties = async () => {
+    try {
+        let query = `
+            SELECT
+                asset_type_id,
+                name,
+                data_type,
+                required,
+                is_private
+            FROM
+                property
+        `;
+
+        return pool.query(query);
+    } catch (error) {
+        return utils.db.createErrorMessage(error);
+    }
+};
+
 const createAssetType = async (client, name, description) => {
     const query = `
         INSERT INTO asset_type
@@ -23,6 +59,28 @@ const createProperty = async (client, assetTypeId, property) => {
     const values = [assetTypeId, property.name, property.data_type, property.required, property.is_private];
 
     return client.query(query, values);
+};
+
+const getAll = async () => {
+
+    const types = (await getAssetTypes()).rows;
+    const properties = (await getAssetProperties()).rows;
+
+    const assetDefinitions = [];
+    for (let type of types) {
+        const assetDefinition = {
+            assetType: type,
+            properties: []
+        };
+        for (let property of properties) {
+            if (type.id === property.asset_type_id) {
+                assetDefinition.properties.push(property);
+            }
+        }
+        assetDefinitions.push(assetDefinition);
+    }
+
+    return assetDefinitions;
 };
 
 const create = async (assetDefinition) => {
@@ -53,5 +111,6 @@ const create = async (assetDefinition) => {
 };
 
 module.exports = {
+    getAll,
     create
 };

@@ -2,7 +2,23 @@
     "compilerOptions": {
         "experimentalDecorators": true,
         "baseUrl": ".",
-        "paths": {}
+        "paths": {
+            "c/controllers": [
+                "controllers/controllers.js"
+            ],
+            "c/createAsset": [
+                "createAsset/createAsset.js"
+            ],
+            "c/createAssetList": [
+                "createAssetList/createAssetList.js"
+            ],
+            "c/createAssetProperty": [
+                "createAssetProperty/createAssetProperty.js"
+            ],
+            "c/utils": [
+                "utils/utils.js"
+            ]
+        }
     },
     "include": [
         "**/*",
