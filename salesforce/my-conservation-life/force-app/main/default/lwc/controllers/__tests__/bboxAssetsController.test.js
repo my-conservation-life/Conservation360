@@ -1,5 +1,5 @@
 import { API_URL } from '../config';
-import bboxAssets from '../bboxAssets';
+import bboxAssets from '../bboxAssetsController';
 
 const createMockFetchJson = (jsonObject) => jest.fn(() => Promise.resolve({ ok: true, json: () => jsonObject }));
 

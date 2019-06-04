@@ -1,5 +1,5 @@
 import { API_URL } from '../config';
-import assets from '../assets';
+import assets from '../assetsController';
 
 const createMockFetchJson = (jsonObject) => jest.fn(() => Promise.resolve({ ok: true, json: () => jsonObject }));
 
