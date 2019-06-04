@@ -19,7 +19,7 @@ export default class CreateAssetDefinition extends LightningElement {
 
     saveAssetDefinition() {
         console.log('Saving asset definition');
-        
+
         const formValid = this.validateAssetDefinition();
         if (formValid) {
             let assetList = this.template.querySelector('c-create-asset-definition-list');
@@ -29,7 +29,7 @@ export default class CreateAssetDefinition extends LightningElement {
                 name: this.name,
                 description: this.description,
                 properties: properties
-            };
+            }
 
             controllers.assetDefinitions.create(assetDefinition)
                 .then(json => {
