@@ -1,13 +1,11 @@
 <template>
 
-    <lightning-combobox
-        name="data_type"
-        label="Data Type"
-        placeholder="Select DataType"
-        options={options}
-        required>
-    </lightning-combobox>
-
-    <p>{propertyDataTypes}</p>
+    <template for:each={properties} for:item="property">
+        <div key={property.name}>
+            <c-create-asset-property
+            property={property}
+            ></c-create-asset-property>
+        </div>
+    </template>
 
 </template>
