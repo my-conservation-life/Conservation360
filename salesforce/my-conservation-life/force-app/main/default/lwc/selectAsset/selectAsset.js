@@ -1,11 +1,13 @@
 import { LightningElement, track } from 'lwc';
 
-export default class SelectAsset extends LightningElement {
+export default class App extends LightningElement {
     @track
     state = {
         title: 'Select Asset Type',
     };
-    get sponsor() {
+    @track
+    sponsor;
+    get sponsors() {
         return [
             {
                 label: 'Seneca Park Zoo',
@@ -17,8 +19,9 @@ export default class SelectAsset extends LightningElement {
             },
         ];
     }
-    
-    get project() {
+    @track
+    project;
+    get projects() {
         return [
             {
                 label: 'Madagascar Reforesting Project',
@@ -30,7 +33,8 @@ export default class SelectAsset extends LightningElement {
             },
         ];
     }
-
+    @track
+    asset;
     get assets() {
         return [
             {
@@ -42,5 +46,14 @@ export default class SelectAsset extends LightningElement {
                 value: 'asset_02',
             },
         ];
+    }
+    handleSponsorChange(event) {
+        this.sponsor = event.detail.value;
+    }
+    handleProjectChange(event) {
+        this.project = event.detail.value;
+    }
+    handleAssetChange(event) {
+        this.asset = event.detail.value;
     }
 }
