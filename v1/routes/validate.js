@@ -25,7 +25,7 @@ const validate = (extractParam, paramName, parser) =>
         if (arg) {
             const parseResult = parser(arg);
 
-            if (parseResult.value === undefined) {
+            if (parseResult.isFailure()) {
                 res.status(400).json({
                     errors: [{
                         problem: `Failed to validate the argument '${arg}' for the parameter '${paramName}'`,
