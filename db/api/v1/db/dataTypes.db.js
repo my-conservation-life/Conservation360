@@ -1,21 +1,15 @@
-const utils = require('../utils');
+const find = async () => {
+    const query = `
+        SELECT
+            name
+        FROM
+            data_type
+    `;
 
-const getAll = async () => {
-    try {
-        const query = `
-            SELECT
-                name
-            FROM
-                data_type
-        `;
-
-        const db = await pool.query(query);
-        return db.rows;
-    } catch (error) {
-        return utils.db.createErrorMessage(error);
-    }
+    const db = await global.pool.query(query);
+    return db.rows;
 };
 
 module.exports = {
-    getAll
+    find
 };

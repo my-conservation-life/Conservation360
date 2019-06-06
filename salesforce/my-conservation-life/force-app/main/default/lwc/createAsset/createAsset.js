@@ -13,7 +13,7 @@ export default class CreateAsset extends LightningElement {
     // Fires when this component is inserted into the DOM
     connectedCallback() {
 
-        controllers.assetDefinitions.getAll().then(assetDefinitions => {
+        controllers.assetDefinitions.find().then(assetDefinitions => {
 
             // Must stringify because LWC must use primitives, no support for lists/objects
             const definitionsString = JSON.stringify(assetDefinitions);
@@ -23,14 +23,14 @@ export default class CreateAsset extends LightningElement {
             const propertiesCollection = {};
             if (definitionsString) {
                 const definitions = JSON.parse(definitionsString);
-                for(let definition of definitions) {
+                for (let definition of definitions) {
                     const name = definition.assetType.name;
                     const type = {
                         label: name,
                         value: name
                     };
                     types.push(type);
-                    descriptions[name] = definition.assetType.description;        
+                    descriptions[name] = definition.assetType.description;
                     propertiesCollection[name] = definition.properties;
                 }
             }
@@ -45,5 +45,5 @@ export default class CreateAsset extends LightningElement {
         this.descriptionValue = this.descriptionOptions[this.typeValue];
         this.propertiesValue = this.propertiesOptions[this.typeValue];
     }
-    
+
 }

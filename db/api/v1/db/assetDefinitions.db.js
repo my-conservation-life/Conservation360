@@ -1,39 +1,31 @@
 const utils = require('../utils');
 
-const getAssetTypes = async () => {
-    try {
-        let query = `
-            SELECT
-                id,
-                name,
-                description
-            FROM
-                asset_type
-        `;
+const findAssetTypes = async () => {
+    let query = `
+        SELECT
+            id,
+            name,
+            description
+        FROM
+            asset_type
+    `;
 
-        return pool.query(query);
-    } catch (error) {
-        return utils.db.createErrorMessage(error);
-    }
+    return global.pool.query(query);
 };
 
-const getAssetProperties = async () => {
-    try {
-        let query = `
-            SELECT
-                asset_type_id,
-                name,
-                data_type,
-                required,
-                is_private
-            FROM
-                property
-        `;
+const findAssetProperties = async () => {
+    let query = `
+        SELECT
+            asset_type_id,
+            name,
+            data_type,
+            required,
+            is_private
+        FROM
+            property
+    `;
 
-        return pool.query(query);
-    } catch (error) {
-        return utils.db.createErrorMessage(error);
-    }
+    return global.pool.query(query);
 };
 
 const createAssetType = async (client, name, description) => {
@@ -61,10 +53,10 @@ const createProperty = async (client, assetTypeId, property) => {
     return client.query(query, values);
 };
 
-const getAll = async () => {
+const find = async () => {
 
-    const types = (await getAssetTypes()).rows;
-    const properties = (await getAssetProperties()).rows;
+    const types = (await findAssetTypes()).rows;
+    const properties = (await findAssetProperties()).rows;
 
     const assetDefinitions = [];
     for (let type of types) {
@@ -84,7 +76,7 @@ const getAll = async () => {
 };
 
 const create = async (assetDefinition) => {
-    const client = await pool.connect();
+    const client = await global.pool.connect();
 
     try {
         await utils.db.beginTransaction(client);
@@ -103,14 +95,14 @@ const create = async (assetDefinition) => {
 
         return assetTypeId;
     } catch (error) {
-        await utils.db.rollbackTransaction(client); //TODO: could fail, needs catch
-        return utils.db.createErrorMessage(error);
+        await utils.db.rollbackTransaction(client);
+        throw error;
     } finally {
         client.release();
     }
 };
 
 module.exports = {
-    getAll,
+    find,
     create
 };

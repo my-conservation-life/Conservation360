@@ -1,6 +1,6 @@
 import utils from 'c/utils';
 
-const getAll = () => {
+const find = () => {
     const url = utils.URL + 'assetDefinitions';
     return utils.get(url);
 };
@@ -11,6 +11,6 @@ const create = (assetDefinition) => {
 };
 
 export default {
-    getAll,
+    find,
     create
 };
