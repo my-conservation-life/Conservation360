@@ -21,7 +21,7 @@ router.get('/assetDefinitions', assetDefinitions.find);
 router.post('/assetDefinitions', assetDefinitions.create);
 
 // Bounding Box of Assets
-router.get('/bbox-assets', bboxAssets.get);
+router.get('/bbox-assets', validate(param.query, 'project_id', type.id), bboxAssets.get);
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);
