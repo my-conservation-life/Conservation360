@@ -113,5 +113,7 @@ module.exports = {
 
     type: {
         id: parseId
-    }
+    },
+
+    ParseResult
 };
