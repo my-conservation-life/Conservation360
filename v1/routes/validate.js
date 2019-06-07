@@ -18,6 +18,10 @@ const validate = (extractParam, paramName, parser) =>
     (req, res, next) => {
         const arg = extractParam(req, paramName);
 
+        if (arg !== undefined && typeof arg !== 'string') {
+            throw new Error(`validate: Parameter extracter returned a value with type '${typeof arg}'. Parameter extracters may only return values with the type 'string'.`);
+        }
+
         if (!req.valid) {
             req.valid = {};
         }
