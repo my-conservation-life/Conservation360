@@ -9,6 +9,7 @@ describe('bboxAssets.controller.get', () => {
 
     beforeEach(() => {
         req = {
+            valid: {},
             query: {}
         };
 
@@ -28,23 +29,20 @@ describe('bboxAssets.controller.get', () => {
         bboxAssetsDb.get = jest.fn(async () => expectedBbox);
     });
 
-    it('queries DB for bbox when no project_id is given', async () => {
+    it('queries DB and sends JSON response for bbox when no project_id is given', async () => {
         await get(req, res, next);
         expect(bboxAssetsDb.get).toHaveBeenCalledWith(undefined);
-    });
-
-    it('queries DB for bbox when project_id is 20', async () => {
-        req.query.project_id = 20;
-        await get(req, res, next);
-        expect(bboxAssetsDb.get).toHaveBeenCalledWith(20);
-    });
-
-    it('sends the bounding box as JSON', async () => {
-        await get(req, res, next);
         expect(res.json).toHaveBeenCalledWith(expectedBbox);
     });
 
-    it('catches DB access exceptions to pass them to the Express', async () => {
+    it('queries DB and sends JSON response for bbox when project_id is 20', async () => {
+        req.valid.project_id = 20;
+        await get(req, res, next);
+        expect(bboxAssetsDb.get).toHaveBeenCalledWith(20);
+        expect(res.json).toHaveBeenCalledWith(expectedBbox);
+    });
+
+    it('catches DB access exceptions to pass them to the Express error handler', async () => {
         const DB_ERROR = new Error();
         bboxAssetsDb.get = jest.fn(async () => { throw DB_ERROR; });
         await get(req, res, next);
