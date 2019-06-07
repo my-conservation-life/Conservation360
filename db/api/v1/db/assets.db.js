@@ -1,5 +1,3 @@
-const utils = require('../utils');
-
 const QUERY_FIND =
 `SELECT id, project_id, asset_type_id, ST_X(location) AS latitude, ST_Y(location) AS longitude
 FROM asset`;
@@ -20,10 +18,6 @@ const find = async (projectId) => {
     let values;
 
     if (typeof projectId !== 'undefined') {
-        if (!utils.db.isValidDbInteger(projectId)) {
-            return;
-        }
-
         query = QUERY_FIND_WHERE_PROJECT_ID;
         values = [projectId];
     } else {
