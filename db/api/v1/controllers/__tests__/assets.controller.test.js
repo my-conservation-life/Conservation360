@@ -46,9 +46,11 @@ describe('assets.controller.find', () => {
         expect(getProjectId).not.toHaveBeenCalled();
     });
 
-    it('uses the Express error handler for database exceptions', async () => {
-        assetsDb.find = jest.fn(async () => { throw new Error(); });
+    it('catches DB access exceptions to pass them to the Express error handler', async () => {
+        const DB_ERROR = new Error();
+        assetsDb.find = jest.fn(async () => { throw DB_ERROR; });
         await find(req, res, next);
-        expect(next).toHaveBeenCalled();
+        expect(next).toHaveBeenCalledWith(DB_ERROR);
+        expect(res.json).not.toHaveBeenCalled();
     });
 });
