@@ -22,7 +22,7 @@ export default class CreateAssetDefinitionList extends LightningElement {
 
         this.requiredPropertyLocation = JSON.stringify(locationProperty);
 
-        controllers.dataTypes.getAll()
+        controllers.dataTypes.find()
             .then(dataTypes => {
                 // Must stringify because LWC must use primitives, no support for lists/objects
                 this.propertyDataTypes = JSON.stringify(dataTypes);

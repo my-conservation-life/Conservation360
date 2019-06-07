@@ -17,13 +17,13 @@ router.get('/assets', validate(param.query, 'project_id', type.id), assets.find)
 // router.put('/assets/:id', assets.update); //example update
 
 // Asset Definitions
-router.get('/assetDefinitions', assetDefinitions.getAll);
+router.get('/assetDefinitions', assetDefinitions.find);
 router.post('/assetDefinitions', assetDefinitions.create);
 
 // Bounding Box of Assets
 router.get('/bbox-assets', bboxAssets.get);
 
 // Data Types
-router.get('/dataTypes', dataTypes.getAll);
+router.get('/dataTypes', dataTypes.find);
 
 module.exports = router;

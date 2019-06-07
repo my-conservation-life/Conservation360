@@ -1,12 +1,14 @@
 import { LightningElement, track } from 'lwc';
-import fetchDataHelper from './fetchDataHelper';
+import { assets } from 'c/controllers';
 
 const columns = [
-    { label: 'Asset ID', fieldName: 'assetID' },
-    { label: 'Asset Type', fieldName: 'assetType'},
-    { label: 'Location', fieldName: 'location', type: 'location' },
-    { label: 'Funding Date', fieldName: 'fundDate', type: 'date' },
-    { label: 'Planting Date', fieldName: 'plantDate', type: 'date' },
+    { label: 'Asset ID', fieldName: 'id' },
+    { label: 'Project ID', fieldName: 'project_id' },
+    { label: 'Asset Type', fieldName: 'asset_type_id' },
+    { label: 'Latitude', fieldName: 'latitude', type: Number },
+    { label: 'Longitude', fieldName: 'longitude', typie: Number },
+    //{ label: 'Funding Date', fieldName: 'fundDate', type: 'date' },
+    //{ label: 'Planting Date', fieldName: 'plantDate', type: 'date' },
 ];
 
 export default class DisplayAssets extends LightningElement {
@@ -15,8 +17,7 @@ export default class DisplayAssets extends LightningElement {
     @track tableLoadingState = true;
 
     async connectedCallback() {
-        const data = await fetchDataHelper({ amountOfRecords: 100 });
-        this.data = data;
+        assets.find('').then(response => { this.data = response; });
         this.tableLoadingState = false;
     }
 }

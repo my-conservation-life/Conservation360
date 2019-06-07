@@ -1,5 +1,5 @@
 <template>
-    <lightning-card title="Machen eine Dinge" icon-name="custom:custom12">
+    <lightning-card title="Create an Asset" icon-name="custom:custom12">
         <div class="slds-m-around_medium">
 
             <lightning-combobox
@@ -7,7 +7,7 @@
                 label="Asset Type"
                 value={typeValue}
                 placeholder="Select an Asset Type"
-                options={options}
+                options={typeOptions}
                 onchange={handleChange}
             ></lightning-combobox>
 
@@ -17,13 +17,15 @@
                 type="text"
                 value={descriptionValue}
                 placeholder="No description"
-                readonly
+                disabled
             ></lightning-input>
 
             <br>
             
             <header>Properties</header>
-            <c-create-asset-list></c-create-asset-list>
+            <c-create-asset-list
+            properties={propertiesValue}
+            ></c-create-asset-list>
 
             <br>
 
