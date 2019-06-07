@@ -6,8 +6,11 @@ describe('assets.controller.find', () => {
     let res;
     let next;
 
+    let EXPECTED_ASSETS;
+
     beforeEach(() => {
         req = {
+            valid: {},
             query: {}
         };
 
@@ -19,38 +22,28 @@ describe('assets.controller.find', () => {
 
         next = jest.fn();
 
-        assetsDb.find = jest.fn();
+        EXPECTED_ASSETS = [{}];
+        assetsDb.find = jest.fn(async () => EXPECTED_ASSETS);
     });
 
-    it('calls assetsDb.find when no project_id is provided', async () => {
+    it('accesses DB and sends JSON response when no project_id is provided', async () => {
         await find(req, res, next);
         expect(assetsDb.find).toHaveBeenCalledWith(undefined);
-    });
-
-    it('sends JSON response when project_id is provided', async () => {
-        req.query['project_id'] = '2';
-
-        const EXPECTED_ASSETS = [{}];
-        assetsDb.find = jest.fn(async () => EXPECTED_ASSETS);
-
-        await find(req, res, next);
         expect(res.json).toHaveBeenCalledWith(EXPECTED_ASSETS);
     });
 
-    it('sends 500 status response when project_id is text', async () => {
-        req.query['project_id'] = 'a';
+    it('accesses DB and sends JSON response when project_id is provided', async () => {
+        req.valid['project_id'] = 2;
         await find(req, res, next);
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.send).toHaveBeenCalled();
-        expect(next).not.toHaveBeenCalled();
+        expect(assetsDb.find).toHaveBeenCalledWith(2);
+        expect(res.json).toHaveBeenCalledWith(EXPECTED_ASSETS);
     });
 
-    it('sends 500 status response when project_id is an invalid DB integer key', async () => {
-        req.query['project_id'] = '0';
+    it('ignores unvalidated project_id', async () => {
+        const getProjectId = jest.fn(() => 'a');
+        Object.defineProperty(req.query, 'project_id', { get: getProjectId });
         await find(req, res, next);
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.send).toHaveBeenCalled();
-        expect(next).not.toHaveBeenCalled();
+        expect(getProjectId).not.toHaveBeenCalled();
     });
 
     it('uses the Express error handler for database exceptions', async () => {
