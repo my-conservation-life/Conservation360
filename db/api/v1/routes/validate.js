@@ -14,17 +14,16 @@ const utils = require('../utils');
  * @param {*} parser - callback that parses the argument to a value or returns a parse failure error
  * @returns Express middleware
  */
-const validate = (extractParam, paramName, parser) =>
+const validate = (extractParam, paramName, parser, required = false) =>
     (req, res, next) => {
         const arg = extractParam(req, paramName);
 
-        if (arg !== undefined && typeof arg !== 'string') {
-            throw new Error(`validate: Parameter extracter returned a value with type '${typeof arg}'. Parameter extracters may only return values with the type 'string'.`);
-        }
+        // if (arg !== undefined && typeof arg !== 'string') {
+        //     throw new Error(`validate: Parameter extracter returned a value with type '${typeof arg}'. Parameter extracters may only return values with the type 'string'.`);
+        // }
 
-        if (!req.valid) {
-            req.valid = {};
-        }
+        if (req.valid) throw new Error('The request parameter "valid" is reserved for validation middleware. Please change your request.');
+        if (!req.valid) req.valid = {};
 
         if (arg) {
             const parseResult = parser(arg);
@@ -32,7 +31,7 @@ const validate = (extractParam, paramName, parser) =>
             if (parseResult.isFailure()) {
                 res.status(400).json({
                     errors: [{
-                        problem: `Failed to validate the argument '${arg}' for the parameter '${paramName}'`,
+                        problem: `Failed to validate the argument "${arg}" for the parameter "${paramName}"`,
                         reason: parseResult.error
                     }]
                 });
@@ -40,11 +39,13 @@ const validate = (extractParam, paramName, parser) =>
             }
 
             req.valid[paramName] = parseResult.value;
+        } else if (required) {
+            throw new Error(`Required parameter "${paramName}" not found within the request"`);
         }
 
         next();
     }
-;
+    ;
 
 /**
  * Result of calling a parser
@@ -91,6 +92,8 @@ class ParseResult {
  */
 const extractQueryParam = (req, paramName) => req.query[paramName];
 
+const extractBodyParam = (req, paramName) => req.body[paramName];
+
 /**
  * Parse a database ID value
  * @param {string} idStr
@@ -104,15 +107,78 @@ const parseId = (idStr) => {
         : ParseResult.success(id);
 };
 
+const parseString = (name, minLength = 0, maxLength = Number.MAX_SAFE_INTEGER) => {
+    if (!utils.shared.isString(name)) return false;
+    if (name.length < minLength) return false;
+    if (name.length > maxLength) return false;
+
+    return true;
+};
+
+const parseBoolean = (bool) => {
+    if (!utils.shared.isBoolean(bool)) return false;
+
+    return true;
+};
+
+const parseDataType = (dataType) => {
+    // TODO: hardcoded
+    const dataTypes = [
+        'boolean',
+        'number',
+        'datetime',
+        'location',
+        'text'
+    ];
+
+    if (!parseString(dataType, 0, 50)) return false;
+    if (!dataTypes.includes(dataType)) return false;
+
+    return true;
+};
+
+const parseProperty = (property) => {
+    const name = property.name;
+    const dataType = property.data_type;
+    const required = property.required;
+    const isPrivate = property.is_private;
+
+    if (!parseString(name, 0, 50)) return ParseResult.failure('assetDefinition property name must be a string <= 50 characters long');
+    if (!parseDataType(dataType)) return ParseResult.failure('assetDefinition property data_type must be a dataType string');
+    if (!parseBoolean(required)) return ParseResult.failure('assetDefinition property required must be a boolean (not a string)');
+    if (!parseBoolean(isPrivate)) return ParseResult.failure('assetDefinition property is_private must be a boolean (not a string)');
+
+    return ParseResult.success(property);
+};
+
+const parseAssetDefinition = (assetDefinition) => {
+    const name = assetDefinition.name;
+    const description = assetDefinition.description;
+    const properties = assetDefinition.properties;
+
+    if (!parseString(name, 0, 50)) return ParseResult.failure('assetDefinition name must be a string <= 50 characters long');
+    if (!parseString(description)) return ParseResult.failure('assetDefinition description must be a string');
+    if (!properties.length > 0) return ParseResult.failure('assetDefinition must have properties');
+
+    for (let property of properties) {
+        const parseResult = parseProperty(property);
+        if (parseResult.isFailure()) return parseResult;
+    }
+
+    return ParseResult.success(assetDefinition);
+};
+
 module.exports = {
     validate,
-    
+
     param: {
-        query: extractQueryParam
+        query: extractQueryParam,
+        body: extractBodyParam
     },
 
     type: {
-        id: parseId
+        id: parseId,
+        assetDefinition: parseAssetDefinition
     },
 
     ParseResult

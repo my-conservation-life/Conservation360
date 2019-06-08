@@ -26,9 +26,11 @@ export default class CreateAssetDefinition extends LightningElement {
             let properties = assetList.getProperties();
 
             const assetDefinition = {
-                name: this.name,
-                description: this.description,
-                properties: properties
+                assetDefinition: {
+                    name: this.name,
+                    description: this.description,
+                    properties: properties
+                }
             };
 
             controllers.assetDefinitions.create(assetDefinition)
