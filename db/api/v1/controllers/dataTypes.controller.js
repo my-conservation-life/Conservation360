@@ -9,7 +9,7 @@ const find = async (req, res) => {
         dataTypes.push(row.name);
     }
 
-    res.send(JSON.stringify(dataTypes));
+    res.json(dataTypes);
 };
 
 

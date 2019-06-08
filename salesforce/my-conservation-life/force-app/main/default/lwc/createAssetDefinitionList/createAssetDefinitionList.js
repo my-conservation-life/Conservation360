@@ -11,7 +11,7 @@ export default class CreateAssetDefinitionList extends LightningElement {
     connectedCallback() {
         this.addCustomProperty();
 
-        // Hardcoded; May need to be grabbed form DB later on
+        // TODO: this is hardcoded; May need to be grabbed form DB later on
         const locationProperty = {
             name: 'location',
             description: 'the location of this asset',
