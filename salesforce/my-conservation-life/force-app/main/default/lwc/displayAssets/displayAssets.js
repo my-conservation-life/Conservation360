@@ -18,7 +18,7 @@ export default class DisplayAssets extends LightningElement {
     @track tableLoadingState = true;
 
     async connectedCallback() {
-        assets.getAll('').then( response => { this.data = response; } );
+        assets.find('').then( response => { this.data = response; } );
         this.tableLoadingState = false;
     }
 }
