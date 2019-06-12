@@ -61,15 +61,7 @@ describe('validate', () => {
         expect(res.json).not.toHaveBeenCalled();
     });
 
-    it.skip('throws an error if the parameter extractor returns an object', () => {
-        const extractor = (req) => req.query; // this extractor should return a string, not an object
-        const validator = validate(extractor, 'test', succeedingParser);
-        expect(() => {
-            validator(req, res, next);
-        }).toThrow('validate');
-    });
-
-    it.skip('does not delete any existing req.valid entries', () => {
+    it('does not delete any existing req.valid entries', () => {
         const ALREADY_VALID_VALUE = 'do not delete';
         req.valid = {
             already_valid: ALREADY_VALID_VALUE
