@@ -18,7 +18,6 @@ const validate = (extractParam, paramName, parser, required = false) =>
     (req, res, next) => {
         const arg = extractParam(req, paramName);
 
-        if (req.valid) throw new Error('The request parameter "valid" is reserved for validation middleware. Please change your request.');
         if (!req.valid) req.valid = {};
 
         if (arg) {
