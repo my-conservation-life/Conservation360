@@ -35,7 +35,13 @@ const validate = (extractParam, paramName, parser, required = false) =>
 
             req.valid[paramName] = parseResult.value;
         } else if (required) {
-            throw new Error(`Required parameter "${paramName}" not found within the request"`);
+            res.status(400).json({
+                errors: [{
+                    problem: `Required parameter "${paramName}" not found within the request"`,
+                    reason: 'missing required parameter'
+                }]
+            });
+            return;
         }
 
         next();
