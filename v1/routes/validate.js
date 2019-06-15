@@ -116,12 +116,6 @@ const parseString = (name, minLength = 0, maxLength = Number.MAX_SAFE_INTEGER) =
     return true;
 };
 
-const parseBoolean = (bool) => {
-    if (!utils.shared.isBoolean(bool)) return false;
-
-    return true;
-};
-
 const parseDataType = (dataType) => {
     // TODO: hardcoded
     const dataTypes = [
@@ -144,10 +138,10 @@ const parseProperty = (property) => {
     const required = property.required;
     const isPrivate = property.is_private;
 
-    if (!parseString(name, 0, 50)) return ParseResult.failure('assetDefinition property name must be a string <= 50 characters long');
+    if (!parseString(name, 1, 50)) return ParseResult.failure('assetDefinition property name must be a string <= 50 characters long');
     if (!parseDataType(dataType)) return ParseResult.failure('assetDefinition property data_type must be a dataType string');
-    if (!parseBoolean(required)) return ParseResult.failure('assetDefinition property required must be a boolean (not a string)');
-    if (!parseBoolean(isPrivate)) return ParseResult.failure('assetDefinition property is_private must be a boolean (not a string)');
+    if (!utils.shared.isBoolean(required)) return ParseResult.failure('assetDefinition property required must be a boolean (not a string)');
+    if (!utils.shared.isBoolean(isPrivate)) return ParseResult.failure('assetDefinition property is_private must be a boolean (not a string)');
 
     return ParseResult.success(property);
 };
@@ -157,8 +151,11 @@ const parseAssetDefinition = (assetDefinition) => {
     const description = assetDefinition.description;
     const properties = assetDefinition.properties;
 
-    if (!parseString(name, 0, 50)) return ParseResult.failure('assetDefinition name must be a string <= 50 characters long');
-    if (!parseString(description)) return ParseResult.failure('assetDefinition description must be a string');
+    if (!parseString(name, 1, 50)) return ParseResult.failure('assetDefinition name must be a string <= 50 characters long');
+
+    if (!utils.shared.isUndefined(description))
+        if (!parseString(description)) return ParseResult.failure('assetDefinition description must be a string');
+
     if (!properties.length > 0) return ParseResult.failure('assetDefinition must have properties');
 
     for (let property of properties) {

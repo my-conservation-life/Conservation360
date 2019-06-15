@@ -104,6 +104,93 @@ describe('validate.type.id', () => {
     });
 });
 
+describe('validate.type.assetDefinition', () => {
+    let assetDefinition;
+
+    beforeEach(() => {
+        assetDefinition = {
+            'name': 'tname',
+            'description': 'tdesc',
+            'properties': [
+                {
+                    'name': 'tprop1',
+                    'data_type': 'number',
+                    'required': true,
+                    'is_private': false
+                },
+                {
+                    'name': 'tprop2',
+                    'data_type': 'boolean',
+                    'required': false,
+                    'is_private': true
+                }
+            ]
+        };
+    });
+
+    // Test Asset Type
+    it('accepts valid assetDefinition', () => {
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isSuccess()).toBe(true);
+    });
+
+    it('rejects empty name', () => {
+        assetDefinition.name = '';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects name > 50 characters', () => {
+        assetDefinition.name = 'x'.repeat(51);
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    // Test Properties
+    it('rejects empty properties', () => {
+        assetDefinition.properties = [];
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+
+    it('rejects empty property name', () => {
+        assetDefinition.properties[0].name = '';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects property name > 50 characters', () => {
+        assetDefinition.properties[0].name = 'x'.repeat(51);
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects empty property dataType', () => {
+        assetDefinition.properties[0].data_type = 'coordinate';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects incorrect property dataType', () => {
+        assetDefinition.properties[0].data_type = 'coordinate';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects string property required', () => {
+        assetDefinition.properties[0].required = 'true';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects string property isPrivate', () => {
+        assetDefinition.properties[0].is_private = 'true';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+});
+
 describe('validate.param.query', () => {
     it('extracts 2 from query string', () => {
         const req = {
