@@ -42,6 +42,13 @@ describe('validate', () => {
         expect(res.json).toHaveBeenCalled();
     });
 
+    it('sends HTTP 400 with a JSON response when missing required param', () => {
+        const validator = validate(param.query, 'id', type.id, true);
+        validator(req, res, next);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalled();
+    });
+
     it('adds parsed value to req.valid when parse succeeds', () => {
         req.query.test = '2';
         const validator = validate(extractQueryParam, 'test', succeedingParser);
