@@ -212,3 +212,25 @@ describe('validate.param.query', () => {
         expect(result).toBe(undefined);
     });
 });
+
+describe('validate.param.body', () => {
+    it('extracts 2 from body string', () => {
+        const req = {
+            body: {
+                test: '2'
+            }
+        };
+
+        const result = param.body(req, 'test');
+        expect(result).toBe('2');
+    });
+
+    it('returns undefined when extracting a parameter from body that does not exist', () => {
+        const req = {
+            body: {}
+        };
+
+        const result = param.body(req, 'test');
+        expect(result).toBe(undefined);
+    });
+});
