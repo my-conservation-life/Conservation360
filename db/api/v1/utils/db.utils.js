@@ -22,20 +22,11 @@ const rollbackTransaction = async (client) => {
     return client.query('ROLLBACK');
 };
 
-const createErrorMessage = (error) => {
-    const errorMessage = {
-        message: 'Unable to query database',
-        error: error.message,
-        stack: error.stack //TODO: not in prod?
-    };
-    return errorMessage;
-};
 
 module.exports = {
     DB_INTEGER_MAX,
     isValidDbInteger,
     beginTransaction,
     commitTransaction,
-    rollbackTransaction,
-    createErrorMessage
+    rollbackTransaction
 };
