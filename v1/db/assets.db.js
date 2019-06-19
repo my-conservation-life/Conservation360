@@ -1,3 +1,5 @@
+const utils = require('../utils');
+
 const QUERY_FIND =
 `SELECT id, project_id, asset_type_id, ST_X(location) AS latitude, ST_Y(location) AS longitude
 FROM asset`;
@@ -29,6 +31,60 @@ const find = async (projectId) => {
     return result.rows;
 };
 
+const createAssetProperty = async (client, assetId, property) => {
+    const query = `
+        INSERT INTO asset_property
+            (asset_id, property_id, value)
+        VALUES
+            ($1, $2, $3)
+    `;
+    const values = [assetId, property.id, property.value];
+
+    return client.query(query, values);
+};
+
+const createAsset = async (client, projectId, assetTypeId, location) => {
+
+    const query = `
+        INSERT INTO asset
+            (project_id, asset_type_id, location)
+        VALUES
+            ($1, $2, 'SRID=4326;POINT(20 40)')
+        RETURNING id
+    `;
+    const values = [projectId, assetTypeId];
+
+    return client.query(query, values);
+};
+
+const create = async (asset) => {
+    const client = await global.pool.connect();
+
+    try {
+        await utils.db.beginTransaction(client);
+
+        const data = await createAsset(client, asset.project.id, asset.type.id, asset.location);
+        const assetId = data.rows[0].id;
+
+        const propertyPromises = [];
+        for (let property of asset.properties) {
+            const propertyPromise = createAssetProperty(client, assetId, property);
+            propertyPromises.push(propertyPromise);
+        }
+
+        await Promise.all(propertyPromises);
+        await utils.db.commitTransaction(client);
+
+        return assetId;
+    } catch (error) {
+        await utils.db.rollbackTransaction(client);
+        throw error;
+    } finally {
+        client.release();
+    }
+};
+
 module.exports = {
-    find
+    find,
+    create
 };
