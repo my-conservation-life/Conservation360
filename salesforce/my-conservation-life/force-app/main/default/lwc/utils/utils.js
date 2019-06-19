@@ -1,4 +1,5 @@
-const URL = 'https://my-conservation-life.herokuapp.com/api/v1/';
+// const URL = 'https://my-conservation-life.herokuapp.com/api/v1/';
+const URL = 'https://kmw6893-dev-db.herokuapp.com/api/v1/';
 
 const handleFetchErrors = (response) => {
     if (!response.ok) {

@@ -11,6 +11,17 @@ const find = async (req, res, next) => {
     }
 };
 
+const create = async (req, res, next) => {
+    const asset = req.body;
+    try {
+        const assetId = await assetsDb.create(asset);
+        res.json(assetId);
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
-    find
+    find,
+    create
 };
