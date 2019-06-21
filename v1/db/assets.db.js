@@ -49,10 +49,10 @@ const createAsset = async (client, projectId, assetTypeId, location) => {
         INSERT INTO asset
             (project_id, asset_type_id, location)
         VALUES
-            ($1, $2, 'SRID=4326;POINT(20 40)')
+            ($1, $2, ST_POINT($3, $4))
         RETURNING id
     `;
-    const values = [projectId, assetTypeId];
+    const values = [projectId, assetTypeId, location.lattitude, location.longitude];
 
     return client.query(query, values);
 };
