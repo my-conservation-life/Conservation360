@@ -11,6 +11,22 @@ export default class CreateAsset extends LightningElement {
     @track descriptionValue;
     @track propertiesOptions;
     @track propertiesValue;
+    @track lattitude = JSON.stringify({
+        asset_type_id:0,
+        name:'assetLattitude',
+        data_type:'number',
+        required:true,
+        is_private:false
+    });
+    @track longitude = JSON.stringify({
+        asset_type_id:0,
+        name:'assetLongitude',
+        data_type:'number',
+        required:true,
+        is_private:false
+    });
+    @track lattitudeKey = 'assetLattitude';
+    @track longitudeKey = 'assetLongitude';
 
     // Fires when this component is inserted into the DOM
     connectedCallback() {
@@ -49,8 +65,6 @@ export default class CreateAsset extends LightningElement {
     }
 
     saveAsset() {
-        console.log("checkpoint");
-
         const myProject = {id:1};
         const myAssetType = {id:1};
         const myLocation = {lattitude:45, longitude:85};

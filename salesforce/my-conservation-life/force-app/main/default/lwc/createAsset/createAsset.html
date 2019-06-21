@@ -21,7 +21,21 @@
             ></lightning-input>
 
             <br>
-            
+
+            <div key={lattitudeKey}>
+                <c-create-asset-property
+                property={lattitudeProp}
+                ></c-create-asset-property>
+            </div>
+
+            <div key={longitudeKey}>
+                <c-create-asset-property
+                property={longitudeProp}
+                ></c-create-asset-property>
+            </div>
+
+            <br>
+
             <header>Properties</header>
             <c-create-asset-list
             properties={propertiesValue}
