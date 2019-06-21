@@ -1,4 +1,4 @@
-const URL = 'https://my-conservation-life.herokuapp.com/api/v1/';
+import { URL } from './connection';
 
 const handleFetchErrors = (response) => {
     if (!response.ok) {
