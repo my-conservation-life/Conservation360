@@ -62,12 +62,14 @@ export default class CreateAssetDefinitionList extends LightningElement {
     }
 
     @api
-    getProperties() {
+    getCustomProperties() {
         const propertyElements = this.template.querySelectorAll('c-create-asset-definition-property');
         const properties = [];
         for (let property of propertyElements) {
-            const attributes = property.getAttributes();
-            if (attributes) properties.push(attributes);
+            if (property.getIsCustomProperty()) {
+                const attributes = property.getAttributes();
+                if (attributes) properties.push(attributes);
+            }
         }
 
         return properties;

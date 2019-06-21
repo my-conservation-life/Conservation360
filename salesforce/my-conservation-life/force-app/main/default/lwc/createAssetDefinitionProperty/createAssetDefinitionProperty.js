@@ -2,7 +2,7 @@ import { LightningElement, track, api } from 'lwc';
 
 export default class CreateAssetDefinitionProperty extends LightningElement {
     // Passed in for pre-filled properties (Such as the required location property)
-    @api propertyData; 
+    @api propertyData;
     @track isCustomProperty = true;
 
     // Handles option list and remove property button
@@ -43,7 +43,7 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
         const optionList = [];
         if (this.propertyDataTypes) {
             const propertyDataTypes = JSON.parse(this.propertyDataTypes);
-            for(let type of propertyDataTypes) {
+            for (let type of propertyDataTypes) {
                 const option = {
                     label: type,
                     value: type
@@ -71,15 +71,18 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
     }
 
     @api
+    getIsCustomProperty() {
+        return this.isCustomProperty;
+    }
+
+    @api
     getAttributes() {
-        if (this.isCustomProperty) {
-            return {
-                name: this.name,
-                data_type: this.data_type,
-                required: this.required === 'true' || this.required === true,
-                is_private: this.is_private === 'true' || this.is_private === true
-            };
-        }
+        return {
+            name: this.name,
+            data_type: this.data_type,
+            required: this.required === 'true' || this.required === true,
+            is_private: this.is_private === 'true' || this.is_private === true
+        };
     }
 
     saveAttribute(e) {
@@ -99,7 +102,7 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
     }
 
     handleRemoveProperty() {
-        const event = new CustomEvent('removeproperty', {detail: this.propertyKey});
+        const event = new CustomEvent('removeproperty', { detail: this.propertyKey });
         this.dispatchEvent(event);
     }
 }

@@ -1,17 +1,19 @@
 {
-  "extends": ["@salesforce/eslint-config-lwc/recommended"],
-  "rules": {
-      "indent": [
-          "error",
-          4
-      ],
-      "quotes": [
-          "error",
-          "single"
-      ],
-      "semi": [
-          "error",
-          "always"
-      ]
-  }
+    "extends": [
+        "@salesforce/eslint-config-lwc/recommended"
+    ],
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
 }
