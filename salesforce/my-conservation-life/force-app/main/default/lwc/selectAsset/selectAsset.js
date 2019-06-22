@@ -13,17 +13,13 @@ export default class App extends LightningElement {
     get sponsors() {
         return [
             {
-                label: '(none)',
+                label: 'Default: Any',
                 value: '0',
             },
             {
                 label: 'Seneca Park Zoo',
                 value: '1',
-            },
-            {
-                label: 'Franklin Park Zoo',
-                value: '2',
-            },
+            }
         ];
     }
     @track
@@ -31,7 +27,7 @@ export default class App extends LightningElement {
     get projects() {
         return [
             {
-                label: '(none)',
+                label: 'Default: Any',
                 value: '0',
             },
             {
@@ -41,7 +37,7 @@ export default class App extends LightningElement {
             {
                 label: 'Save The Great Barrier Reef',
                 value: '2',
-            },
+            }
         ];
     }
     @track
@@ -49,17 +45,13 @@ export default class App extends LightningElement {
     get assets() {
         return [
             {
-                label: '(none)',
+                label: 'Default: Any',
                 value: '0',
             },
             {
                 label: 'Tree',
                 value: '1',
-            },
-            {
-                label: 'Gray-headed Lemur',
-                value: '2',
-            },
+            }
         ];
     }
     handleSponsorChange(event) {
