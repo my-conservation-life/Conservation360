@@ -46,4 +46,21 @@ describe('c-create-asset-definition-property', () => {
 
         expect(element.getAttributes()).toEqual(attributes);
     });
+
+    it('creates custom event when remove button is clicked', (done) => {
+        element.propertyKey = 1;
+
+        element.addEventListener('removeproperty', (event) => {
+            const receivedKey = event.detail;
+            expect(receivedKey).toBe(element.propertyKey);
+            done();
+        });
+
+        const removeButton = element.shadowRoot.querySelector('lightning-button');
+        removeButton.dispatchEvent(new Event('click'));
+    });
+
+    // it('', () => {
+
+    // });
 });
