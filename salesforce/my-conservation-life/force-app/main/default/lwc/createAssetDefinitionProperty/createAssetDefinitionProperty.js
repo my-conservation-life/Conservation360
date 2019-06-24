@@ -26,12 +26,10 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
             for (let input of inputs) {
                 const name = input.name;
                 const value = propertyData[name];
+                this[name] = value;
 
-                if (input.type === 'checkbox') {
-                    input.checked = value;
-                } else {
-                    input.value = value;
-                }
+                if (input.type === 'checkbox') input.checked = value;
+                else input.value = value;
 
                 input.disabled = true;
             }

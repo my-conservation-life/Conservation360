@@ -12,6 +12,16 @@ describe('c-create-asset-definition-property', () => {
         is_private: true
     };
 
+    const options = ['boolean', 'number', 'datetime', 'location', 'text'];
+
+    const getInputs = (ele) => ele.shadowRoot.querySelectorAll('lightning-input, lightning-combobox');
+
+    const removeComponents = () => {
+        while (document.body.firstChild) {
+            document.body.removeChild(document.body.firstChild);
+        }
+    };
+
     beforeAll(() => {
         CONSOLE_WARN = console.warn;
         console.warn = () => { };
@@ -23,18 +33,17 @@ describe('c-create-asset-definition-property', () => {
 
     beforeEach(() => {
         element = createElement('c-map-project-assets', { is: CreateAssetDefinitionProperty });
+        element.propertyDataTypes = JSON.stringify(options);
         document.body.appendChild(element);
     });
 
     afterEach(() => {
         // The jsdom instance is shared across test cases in a single file so reset the DOM
-        while (document.body.firstChild) {
-            document.body.removeChild(document.body.firstChild);
-        }
+        removeComponents();
     });
 
-    it('gets correct attributes', () => {
-        const inputs = element.shadowRoot.querySelectorAll('lightning-input, lightning-combobox');
+    it('saves and gets correct attributes', () => {
+        const inputs = getInputs(element);
         for (let input of inputs) {
             const value = attributes[input.name];
 
@@ -60,7 +69,23 @@ describe('c-create-asset-definition-property', () => {
         removeButton.dispatchEvent(new Event('click'));
     });
 
-    // it('', () => {
+    it('gets correct combobox options', () => {
+        const comboboxElement = element.shadowRoot.querySelector('lightning-combobox');
+        const receivedOptions = comboboxElement.options;
 
-    // });
+        for (let option of receivedOptions) {
+            expect(options).toContain(option.value);
+        }
+    });
+
+    it('correctly sets for prefilled properties', () => {
+        removeComponents();
+        element.propertyData = JSON.stringify(attributes);
+        document.body.appendChild(element);
+
+        const inputs = getInputs(element);
+        for (let input of inputs) expect(input.disabled).toBe(true);
+        expect(element.getIsCustomProperty()).toBe(false);
+        expect(element.getAttributes()).toEqual(attributes);
+    });
 });

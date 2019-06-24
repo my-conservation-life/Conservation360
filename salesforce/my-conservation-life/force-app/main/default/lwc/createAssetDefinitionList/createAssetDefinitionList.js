@@ -14,7 +14,6 @@ export default class CreateAssetDefinitionList extends LightningElement {
         // TODO: this is hardcoded; May need to be grabbed form DB later on
         const locationProperty = {
             name: 'location',
-            description: 'the location of this asset',
             data_type: 'location',
             required: false,
             is_private: false
