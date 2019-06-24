@@ -7,7 +7,12 @@ export default class CreateAssetDefinitionList extends LightningElement {
     @track propertyDataTypes; //names starting with data are reserved :(
     @track requiredPropertyLocation;
 
-    // Fires when this component is inserted into the DOM
+    /**
+     * Fires when this component is inserted into the DOM.
+     * 
+     * Creates the prefilled property location.
+     * Calls the db/api for datatypes so its child custom properties can populate their combobox.
+     */
     connectedCallback() {
         this.addCustomProperty();
 
@@ -23,7 +28,7 @@ export default class CreateAssetDefinitionList extends LightningElement {
 
         controllers.dataTypes.find()
             .then(dataTypes => {
-                // Must stringify because LWC must use primitives, no support for lists/objects
+                // Must stringify because LWC bindings must use primitives, no support for lists/objects
                 this.propertyDataTypes = JSON.stringify(dataTypes);
             })
             .catch(e => {
@@ -32,12 +37,19 @@ export default class CreateAssetDefinitionList extends LightningElement {
             });
     }
 
-    // Takes advantage of template's for:each by appending new createAssetDefinitionProperty per value in list
+    /**
+     * Takes advantage of the template's for:each attribute by appending new createAssetDefinitionProperty per value in list.
+     */
     addCustomProperty() {
         this.properties.push(this.id);
         this.id++;
     }
 
+    /**
+     * Takes advantage of the template's for:each attribute by removing createAssetDefinitionProperty based on the event detail id.
+     * 
+     * @param {CustomEvent} e - contains the id to remove from properties in e.detail
+     */
     handleRemoveProperty(e) {
         const id = e.detail;
         const idx = this.properties.indexOf(id);
