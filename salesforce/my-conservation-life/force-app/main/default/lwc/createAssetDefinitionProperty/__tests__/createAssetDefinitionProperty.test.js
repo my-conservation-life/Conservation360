@@ -43,6 +43,7 @@ describe('c-create-asset-definition-property', () => {
     });
 
     it('saves and gets correct attributes', () => {
+        // set all inputs' values to the values in attributes
         const inputs = getInputs(element);
         for (let input of inputs) {
             const value = attributes[input.name];
@@ -73,12 +74,12 @@ describe('c-create-asset-definition-property', () => {
         const comboboxElement = element.shadowRoot.querySelector('lightning-combobox');
         const receivedOptions = comboboxElement.options;
 
-        for (let option of receivedOptions) {
+        for (let option of receivedOptions)
             expect(options).toContain(option.value);
-        }
     });
 
     it('correctly sets for prefilled properties', () => {
+        // Remount component to the DOM so we can set propertyData and have renderedCallback called
         removeComponents();
         element.propertyData = JSON.stringify(attributes);
         document.body.appendChild(element);

@@ -5,16 +5,22 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
     @api propertyData;
     @track isCustomProperty = true;
 
-    // Handles option list and remove property button
+    // Handles the option list for the combobox and remove property button
     @api propertyDataTypes;
     @api propertyKey;
 
-    // Property attributes
+    // The property's attributes
     name = '';
     data_type = '';
     required = false;
     is_private = false;
 
+    /**
+     * Called everytime this component is rendered, but hasRendered flag prevents code from running twice.
+     * 
+     * If propertyData is sent in, this property is not custom.
+     * Set inputs' values to values in propertyData and disables the input.
+     */
     renderedCallback() {
         if (this.propertyData && !this.hasRendered) {
             this.hasRendered = true; //prevent re-rendering
@@ -36,7 +42,11 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
         }
     }
 
-    // Getter that converts the stringified propertyDataTypes received from parent lwc into an option list
+    /**
+     * Getter that converts the stringified propertyDataTypes received from parent lwc into an option list.
+     * 
+     * @returns {object[]} a list of objects containing label and value
+     */
     get options() {
         const optionList = [];
         if (this.propertyDataTypes) {
@@ -53,7 +63,11 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
         return optionList;
     }
 
-    // TODO: Extract to shared
+    /**
+     * Validates inputs by using lwc reportValidity function.
+     * 
+     * @returns {boolean} true if all inputs considered valid
+     */
     @api
     validateAttributes() {
         const inputElements = this.template.querySelectorAll('lightning-input, lightning-combobox');
@@ -73,6 +87,12 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
         return this.isCustomProperty;
     }
 
+    /**
+     * Gets the attributes of this property.
+     * Converts required and is_private strings to booleans.
+     * 
+     * @returns {object} attributes of this property
+     */
     @api
     getAttributes() {
         return {
@@ -83,6 +103,12 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
         };
     }
 
+
+    /**
+     * Event handler to save the user inputted value to this property's attributes.
+     * 
+     * @param {Event} e - a change event dispatched by each input
+     */
     saveAttribute(e) {
         const ele = e.srcElement;
 
@@ -99,6 +125,10 @@ export default class CreateAssetDefinitionProperty extends LightningElement {
         this[name] = value;
     }
 
+    /**
+     * Event handler to dispatch a custom event to be handled by the parent component.
+     * The custom event contains the property's propertyKey so it can be removed.
+     */
     handleRemoveProperty() {
         const event = new CustomEvent('removeproperty', { detail: this.propertyKey });
         this.dispatchEvent(event);
