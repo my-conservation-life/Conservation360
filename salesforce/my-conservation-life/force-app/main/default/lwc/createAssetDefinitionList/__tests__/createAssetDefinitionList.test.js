@@ -1,8 +1,19 @@
+/* eslint-disable no-console */
 import { createElement } from 'lwc';
 import createAssetDefinitionList from 'c/createAssetDefinitionList';
 
 describe('c-create-asset-definition-list', () => {
     let element;
+    let CONSOLE_WARN;
+
+    beforeAll(() => {
+        CONSOLE_WARN = console.warn;
+        console.warn = () => { };
+    });
+
+    afterAll(() => {
+        console.warn = CONSOLE_WARN;
+    });
 
     beforeEach(() => {
         element = createElement('c-create-asset-definition-list', { is: createAssetDefinitionList });

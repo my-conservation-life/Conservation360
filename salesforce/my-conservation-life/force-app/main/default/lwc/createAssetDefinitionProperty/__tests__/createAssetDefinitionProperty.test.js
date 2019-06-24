@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { createElement } from 'lwc';
 import CreateAssetDefinitionProperty from 'c/createAssetDefinitionProperty';
 
