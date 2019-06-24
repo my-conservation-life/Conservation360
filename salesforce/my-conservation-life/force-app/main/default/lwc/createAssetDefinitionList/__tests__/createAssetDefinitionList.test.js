@@ -1,10 +1,13 @@
 /* eslint-disable no-console */
 import { createElement } from 'lwc';
-import createAssetDefinitionList from 'c/createAssetDefinitionList';
+import CreateAssetDefinitionList from 'c/createAssetDefinitionList';
+import { dataTypes } from 'c/controllers';
 
 describe('c-create-asset-definition-list', () => {
     let element;
     let CONSOLE_WARN;
+
+    let DATA_TYPES = ['boolean', 'number', 'datetime', 'location', 'text'];
 
     beforeAll(() => {
         CONSOLE_WARN = console.warn;
@@ -16,7 +19,9 @@ describe('c-create-asset-definition-list', () => {
     });
 
     beforeEach(() => {
-        element = createElement('c-create-asset-definition-list', { is: createAssetDefinitionList });
+        dataTypes.find = () => jest.fn(async () => ['']);
+
+        element = createElement('c-create-asset-definition-list', { is: CreateAssetDefinitionList });
         document.body.appendChild(element);
     });
 

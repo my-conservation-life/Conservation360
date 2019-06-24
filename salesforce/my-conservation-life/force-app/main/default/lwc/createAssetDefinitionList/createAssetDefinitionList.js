@@ -1,8 +1,7 @@
 import { LightningElement, track, api } from 'lwc';
-import controllers from 'c/controllers';
+import { dataTypes } from 'c/controllers';
 
 export default class CreateAssetDefinitionList extends LightningElement {
-    id = 1;
     @track properties = [];
     @track propertyDataTypes; //names starting with data are reserved :(
     @track requiredPropertyLocation;
@@ -14,6 +13,8 @@ export default class CreateAssetDefinitionList extends LightningElement {
      * Calls the db/api for datatypes so its child custom properties can populate their combobox.
      */
     connectedCallback() {
+        // rename
+        this.id = 1;
         this.addCustomProperty();
 
         // TODO: this is hardcoded; May need to be grabbed form DB later on
@@ -25,11 +26,10 @@ export default class CreateAssetDefinitionList extends LightningElement {
         };
 
         this.requiredPropertyLocation = JSON.stringify(locationProperty);
-
-        controllers.dataTypes.find()
-            .then(dataTypes => {
+        dataTypes.find()
+            .then(data => {
                 // Must stringify because LWC bindings must use primitives, no support for lists/objects
-                this.propertyDataTypes = JSON.stringify(dataTypes);
+                this.propertyDataTypes = JSON.stringify(data);
             })
             .catch(e => {
                 console.error('createAssetDefinitionList.js');
