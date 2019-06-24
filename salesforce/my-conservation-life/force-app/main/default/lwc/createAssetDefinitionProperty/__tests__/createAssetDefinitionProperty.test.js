@@ -32,7 +32,7 @@ describe('c-create-asset-definition-property', () => {
     });
 
     beforeEach(() => {
-        element = createElement('c-map-project-assets', { is: CreateAssetDefinitionProperty });
+        element = createElement('c-create-asset-definition-property', { is: CreateAssetDefinitionProperty });
         element.propertyDataTypes = JSON.stringify(options);
         document.body.appendChild(element);
     });
