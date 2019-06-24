@@ -46,6 +46,11 @@ export default class CreateAssetDefinitionList extends LightningElement {
         }
     }
 
+    /**
+     * Validates all the custom properties by calling each property's validate method.
+     * 
+     * @returns {boolean} true if all properties are considered valid
+     */
     @api
     validateProperties() {
         const propertyElements = this.template.querySelectorAll('c-create-asset-definition-property');
@@ -60,6 +65,11 @@ export default class CreateAssetDefinitionList extends LightningElement {
             .every(validity => validity === true);
     }
 
+    /**
+     * Gets all the child custom properties' attributes
+     * 
+     * @returns {object[]} an array of the child property attribute objects
+     */
     @api
     getCustomProperties() {
         const propertyElements = this.template.querySelectorAll('c-create-asset-definition-property');
