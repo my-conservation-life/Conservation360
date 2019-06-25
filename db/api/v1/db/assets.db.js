@@ -12,7 +12,9 @@ JOIN project ON asset.project_id = project.id
 JOIN sponsor ON project.sponsor_id = sponsor.id
 JOIN asset_type ON asset.asset_type_id = asset_type.id`;
 
-//const QUERY_FIND_WHERE_PROJECT_ID = QUERY_FIND + ' WHERE project_id = $1';
+const QUERY_FIND_WHERE =
+  QUERY_FIND +
+  ' WHERE sponsor_id = $1 AND project_id = $2 AND asset_type_id = $3';
 
 /**
  * Find project assets.
@@ -24,21 +26,35 @@ JOIN asset_type ON asset.asset_type_id = asset_type.id`;
  * @throws error if the DB query failed to execute
  */
 const find = async (sponsorId, projectId, assetType) => {
-    let query = QUERY_FIND;
-    /**
+    let query = QUERY_FIND_WHERE;
+    let values = [];
+
     if (typeof sponsorId !== 'undefined') {
-        query = query + 'WHERE sponsor_id = ' + sponsorId;
-    } else if (typeof projectId == 'undefined') {
-        query = query + 'WHERE TRUE';
+        if (sponsorId == 0) {
+            values[0] = 'TRUE';
+        }
+        values[0] = sponsorId;
+    } else if (typeof sponsorId == 'undefined') {
+        values[0] = 'TRUE';
     }
     if (typeof projectId !== 'undefined') {
-        query = query + 'AND project_id = ' + projectId;
+        if (projectId == 0) {
+            values[1] = 'TRUE';
+        }
+        values[1] = projectId;
+    } else if (typeof projectId == 'undefined') {
+        values[1] = 'TRUE';
     }
     if (typeof assetType !== 'undefined') {
-        query = query + 'AND asset_type_id = ' + assetType;
+        if (assetType == 0) {
+            values[2] = 'TRUE';
+        }
+        values[2] = assetType;
+    } else if (typeof assetType == 'undefined') {
+        values[2] == 'TRUE';
     }
-*/
-    const result = await global.dbPool.query(query);
+
+    const result = await global.dbPool.query(query, values);
     return result.rows;
 };
 
