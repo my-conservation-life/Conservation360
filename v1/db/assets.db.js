@@ -27,19 +27,16 @@ const find = async (sponsorId, projectId, assetType) => {
     let query = QUERY_FIND;
     let values;
 
-    if (typeof projectId !== 'undefined') {
-        query = query + 'WHERE project_id = ' + projectId;
+    if (typeof sponsorId !== 'undefined') {
+        query = query + 'WHERE sponsor_id = ' + sponsorId;
     } else if (typeof projectId == 'undefined') {
         query = query + 'WHERE TRUE';
     }
-    if (typeof sponsorId !== 'undefined') {
-        query = query + 'AND sponsor_id = ' + sponsorId;
+    if (typeof projectId !== 'undefined') {
+        query = query + 'AND project_id = ' + projectId;
     }
     if (typeof assetType !== 'undefined') {
         query = query + 'AND asset_type_id = ' + assetType;
-    } else {
-        query = QUERY_FIND;
-        values = [];
     }
 
     const result = await global.dbPool.query(query, values);
