@@ -29,12 +29,14 @@ const find = async (sponsorId, projectId, assetType) => {
 
     if (typeof projectId !== 'undefined') {
         query = query + 'WHERE project_id = ' + projectId;
+    } else if (typeof projectId == 'undefined') {
+        query = query + 'WHERE TRUE';
     }
     if (typeof sponsorId !== 'undefined') {
-        query = query + 'WHERE sponsor_id = ' + sponsorId;
+        query = query + 'AND sponsor_id = ' + sponsorId;
     }
     if (typeof assetType !== 'undefined') {
-        query = query + 'WHERE asset_type_id = ' + assetType;
+        query = query + 'AND asset_type_id = ' + assetType;
     } else {
         query = QUERY_FIND;
         values = [];
