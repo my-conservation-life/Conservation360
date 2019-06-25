@@ -12,7 +12,7 @@ JOIN project ON asset.project_id = project.id
 JOIN sponsor ON project.sponsor_id = sponsor.id
 JOIN asset_type ON asset.asset_type_id = asset_type.id`;
 
-const QUERY_FIND_WHERE_PROJECT_ID = QUERY_FIND + ' WHERE project_id = $1';
+//const QUERY_FIND_WHERE_PROJECT_ID = QUERY_FIND + ' WHERE project_id = $1';
 
 /**
  * Find project assets.
@@ -23,13 +23,18 @@ const QUERY_FIND_WHERE_PROJECT_ID = QUERY_FIND + ' WHERE project_id = $1';
  * @returns {object[]|undefined} array of assets with fields (id, project_id, latitude, and longitude), or undefined if projectId is invalid.
  * @throws error if the DB query failed to execute
  */
-const find = async projectId => {
-    let query;
+const find = async (sponsorId, projectId, assetType) => {
+    let query = QUERY_FIND;
     let values;
 
     if (typeof projectId !== 'undefined') {
-        query = QUERY_FIND_WHERE_PROJECT_ID;
-        values = [projectId];
+        query = query + 'WHERE project_id = ' + projectId;
+    }
+    if (typeof sponsorId !== 'undefined') {
+        query = query + 'WHERE sponsor_id = ' + sponsorId;
+    }
+    if (typeof assetType !== 'undefined') {
+        query = query + 'WHERE asset_type_id = ' + assetType;
     } else {
         query = QUERY_FIND;
         values = [];
