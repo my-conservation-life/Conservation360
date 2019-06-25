@@ -6,14 +6,14 @@ describe('c-create-asset-definition-property', () => {
     let element;
     let CONSOLE_WARN;
 
-    const attributes = {
+    const ATTRIBUTES = {
         name: 'testname',
         data_type: 'testdatatype',
         required: true,
         is_private: true
     };
 
-    const options = ['boolean', 'number', 'datetime', 'location', 'text'];
+    const OPTIONS = ['boolean', 'number', 'datetime', 'location', 'text'];
 
     const getInputs = (ele) => ele.shadowRoot.querySelectorAll('lightning-input, lightning-combobox');
 
@@ -34,7 +34,7 @@ describe('c-create-asset-definition-property', () => {
 
     beforeEach(() => {
         element = createElement('c-create-asset-definition-property', { is: CreateAssetDefinitionProperty });
-        element.propertyDataTypes = JSON.stringify(options);
+        element.propertyDataTypes = JSON.stringify(OPTIONS);
         document.body.appendChild(element);
     });
 
@@ -47,7 +47,7 @@ describe('c-create-asset-definition-property', () => {
         // set all inputs' values to the values in attributes
         const inputs = getInputs(element);
         for (let input of inputs) {
-            const value = attributes[input.name];
+            const value = ATTRIBUTES[input.name];
 
             if (input.type === 'checkbox') input.checked = value;
             else input.value = value;
@@ -55,7 +55,7 @@ describe('c-create-asset-definition-property', () => {
             input.dispatchEvent(new Event('change'));
         }
 
-        expect(element.getAttributes()).toEqual(attributes);
+        expect(element.getAttributes()).toEqual(ATTRIBUTES);
     });
 
     it('creates custom event when remove button is clicked', (done) => {
@@ -76,18 +76,18 @@ describe('c-create-asset-definition-property', () => {
         const receivedOptions = comboboxElement.options;
 
         for (let option of receivedOptions)
-            expect(options).toContain(option.value);
+            expect(OPTIONS).toContain(option.value);
     });
 
     it('correctly sets for prefilled properties', () => {
         // Remount component to the DOM so we can set propertyData and have renderedCallback called
         removeComponents();
-        element.propertyData = JSON.stringify(attributes);
+        element.propertyData = JSON.stringify(ATTRIBUTES);
         document.body.appendChild(element);
 
         const inputs = getInputs(element);
         for (let input of inputs) expect(input.disabled).toBe(true);
         expect(element.getIsCustomProperty()).toBe(false);
-        expect(element.getAttributes()).toEqual(attributes);
+        expect(element.getAttributes()).toEqual(ATTRIBUTES);
     });
 });

@@ -5,7 +5,7 @@ export default class CreateAssetDefinitionList extends LightningElement {
     @track properties = [];
     @track propertyDataTypes; //names starting with data are reserved :(
     @track requiredPropertyLocation;
-
+    currentPropertyId = 1;
     /**
      * Fires when this component is inserted into the DOM.
      * 
@@ -13,8 +13,6 @@ export default class CreateAssetDefinitionList extends LightningElement {
      * Calls the db/api for datatypes so its child custom properties can populate their combobox.
      */
     connectedCallback() {
-        // rename
-        this.id = 1;
         this.addCustomProperty();
 
         // TODO: this is hardcoded; May need to be grabbed form DB later on
@@ -41,8 +39,8 @@ export default class CreateAssetDefinitionList extends LightningElement {
      * Takes advantage of the template's for:each attribute by appending new createAssetDefinitionProperty per value in list.
      */
     addCustomProperty() {
-        this.properties.push(this.id);
-        this.id++;
+        this.properties.push(this.currentPropertyId);
+        this.currentPropertyId++;
     }
 
     /**
@@ -51,8 +49,8 @@ export default class CreateAssetDefinitionList extends LightningElement {
      * @param {CustomEvent} e - contains the id to remove from properties in e.detail
      */
     handleRemoveProperty(e) {
-        const id = e.detail;
-        const idx = this.properties.indexOf(id);
+        const propertyId = e.detail;
+        const idx = this.properties.indexOf(propertyId);
         if (idx > -1) {
             this.properties.splice(idx, 1);
         }
