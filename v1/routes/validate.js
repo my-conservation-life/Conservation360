@@ -9,10 +9,11 @@ const utils = require('../utils');
  * It adds a valid property to all requests that includes
  * a mapping of parameter name to value for every successfully parsed argument.
  * 
- * @param {*} extractParam - callback that extracts the argument for the given parameter from the request
+ * @param {Function} extractParam - callback that extracts the argument for the given parameter from the request
  * @param {string} paramName - name of the parameter to parse
- * @param {*} parser - callback that parses the argument to a value or returns a parse failure error
- * @returns Express middleware
+ * @param {Function} parser - callback that parses the argument to a value or returns a parse failure error
+ * @param {boolean} required - validation will fail if a required param is not found in extractParam
+ * @returns {Function} Express middleware
  */
 const validate = (extractParam, paramName, parser, required = false) =>
     (req, res, next) => {
@@ -63,7 +64,8 @@ class ParseResult {
     /**
      * Construct a successful parse result
      * 
-     * @param {*} value the parsed value, which may not be undefined
+     * @param {string|object} [value] - the parsed value, which may not be undefined
+     * @returns {ParseResult} a successful ParseResult with the parsed value
      */
     static success(value) {
         return new ParseResult(value, undefined);
@@ -71,7 +73,8 @@ class ParseResult {
 
     /**
      * Construct a parse failure result
-     * @param {string} error 
+     * @param {string} error - the error message to save in the ParseResult
+     * @returns {ParseResult} a failed ParseResult with the error message
      */
     static failure(error) {
         return new ParseResult(undefined, error);
@@ -87,18 +90,27 @@ class ParseResult {
 }
 
 /**
- * Extract the query string from a request
+ * Extracts the parameter from the request's query.
  * 
- * @param {*} req Express request
+ * @param {*} req - Express request
+ * @param {string} paramName - the parameter to extract from req.query
+ * @returns {string|object} the extracted parameter
  */
 const extractQueryParam = (req, paramName) => req.query[paramName];
 
+/**
+ * Extracts the parameter from the request's body.
+ * 
+ * @param {*} req - Express request
+ * @param {string} paramName - the parameter to extract from req.body
+ * @returns {string|object} the extracted parameter
+ */
 const extractBodyParam = (req, paramName) => req.body[paramName];
 
 /**
- * Parse a database ID value
- * @param {string} idStr
- * @returns parse success with a number value, or a parse failure
+ * Parse a database id value from a string.
+ * @param {string} idStr - the string to parse into an id
+ * @returns {ParseResult} parse success with a number value, or a parse failure
  */
 const parseId = (idStr) => {
     const id = parseInt(idStr, 10);
@@ -108,6 +120,15 @@ const parseId = (idStr) => {
         : ParseResult.success(id);
 };
 
+/**
+ *  Validates if it is a string and within min/max length
+ * 
+ * @param {*} name - the variable to parse
+ * @param {*} [minLength=0] - the minimum length to pass.
+ * @param {*} [maxLength=Number.MAX_SAFE_INTEGER] - the maximum length to pass
+ * 
+ * @returns {boolean} true if it is a string and within minLength-maxLength
+ */
 const parseString = (name, minLength = 0, maxLength = Number.MAX_SAFE_INTEGER) => {
     if (!utils.shared.isString(name)) return false;
     if (name.length < minLength) return false;
@@ -116,6 +137,12 @@ const parseString = (name, minLength = 0, maxLength = Number.MAX_SAFE_INTEGER) =
     return true;
 };
 
+/**
+ * Validates if it is a valid my conservation life data type
+ * 
+ * @param {string} dataType - the string to validate
+ * @returns {boolean} true if it is a valid data type
+ */
 const parseDataType = (dataType) => {
     // TODO: hardcoded
     const dataTypes = [
@@ -132,6 +159,12 @@ const parseDataType = (dataType) => {
     return true;
 };
 
+/**
+ * Validates if it is a valid my conservation life property
+ * 
+ * @param {object} property - a my conservation life property containing name, dataType, required, and isPrivate
+ * @returns {ParseResult} a successful ParseResult if it is a valid property
+ */
 const parseProperty = (property) => {
     const name = property.name;
     const dataType = property.data_type;
@@ -146,6 +179,12 @@ const parseProperty = (property) => {
     return ParseResult.success(property);
 };
 
+/**
+ * Validates if it is a valid my conservation life asset definition
+ * 
+ * @param {object} assetDefinition - a my conservation life asset definition containing name, description, and valid properties
+ * @returns {ParseResult} a successful ParseResult if it is a valid asset definition
+ */
 const parseAssetDefinition = (assetDefinition) => {
     const name = assetDefinition.name;
     const description = assetDefinition.description;
