@@ -14,7 +14,7 @@ JOIN asset_type ON asset.asset_type_id = asset_type.id`;
 
 const QUERY_FIND_WHERE =
   QUERY_FIND +
-  ' WHERE sponsor_id = $0 AND project_id = $1 AND asset_type_id = $2';
+  ' WHERE sponsor_id = $1 AND project_id = $2 AND asset_type_id = $3';
 
 /**
  * Find project assets.
@@ -31,27 +31,24 @@ const find = async (sponsorId, projectId, assetType) => {
 
     if (typeof sponsorId !== 'undefined') {
         if (sponsorId == 0) {
-            values[0] = 'TRUE';
-        }
-        values[0] = sponsorId;
+            values += 'TRUE';
+        } else values += sponsorId;
     } else if (typeof sponsorId == 'undefined') {
-        values[0] = 'TRUE';
+        values += 'TRUE';
     }
     if (typeof projectId !== 'undefined') {
         if (projectId == 0) {
-            values[1] = 'TRUE';
-        }
-        values[1] = projectId;
+            values += 'TRUE';
+        } else values += projectId;
     } else if (typeof projectId == 'undefined') {
-        values[1] = 'TRUE';
+        values += 'TRUE';
     }
     if (typeof assetType !== 'undefined') {
         if (assetType == 0) {
-            values[2] = 'TRUE';
-        }
-        values[2] = assetType;
+            values += 'TRUE';
+        } else values += assetType;
     } else if (typeof assetType == 'undefined') {
-        values[2] == 'TRUE';
+        values += 'TRUE';
     }
 
     const result = await global.dbPool.query(query, values);
