@@ -1,5 +1,12 @@
 const db = require('../db');
 
+/**
+ * Queries the database for dataTypes.
+ * Converts dataTypes into flat array.
+ * 
+ * @param {*} req - Express request object
+ * @param {*} res - Express response object
+ */
 const find = async (req, res) => {
     const data = await db.dataTypes.find();
 
