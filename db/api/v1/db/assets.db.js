@@ -14,7 +14,7 @@ JOIN asset_type ON asset.asset_type_id = asset_type.id`;
 
 const QUERY_FIND_WHERE =
   QUERY_FIND +
-  ' WHERE sponsor_id = $1 AND project_id = $2 AND asset_type_id = $3';
+  ' WHERE sponsor_id = $0 AND project_id = $1 AND asset_type_id = $2';
 
 /**
  * Find project assets.
