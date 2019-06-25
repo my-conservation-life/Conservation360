@@ -25,7 +25,7 @@ JOIN asset_type ON asset.asset_type_id = asset_type.id`;
  */
 const find = async (sponsorId, projectId, assetType) => {
     let query = QUERY_FIND;
-
+    /**
     if (typeof sponsorId !== 'undefined') {
         query = query + 'WHERE sponsor_id = ' + sponsorId;
     } else if (typeof projectId == 'undefined') {
@@ -37,7 +37,7 @@ const find = async (sponsorId, projectId, assetType) => {
     if (typeof assetType !== 'undefined') {
         query = query + 'AND asset_type_id = ' + assetType;
     }
-
+*/
     const result = await global.dbPool.query(query);
     return result.rows;
 };
