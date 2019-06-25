@@ -6,11 +6,11 @@
             <lightning-combobox options={sponsors} value={sponsor} onchange={handleSponsorChange}></lightning-combobox>
             <lightning-badge label="Sponsor"></lightning-badge>
 
-            <lightning-combobox options={projects} value={project} if:true={sponsor} onchange={handleProjectChange}></lightning-combobox>
-            <lightning-badge label="Project" if:true={sponsor}></lightning-badge>
+            <lightning-combobox options={projects} value={project} onchange={handleProjectChange}></lightning-combobox>
+            <lightning-badge label="Project"></lightning-badge>
             
-            <lightning-combobox options={assets} value={asset} if:true={project} onchange={handleAssetChange}></lightning-combobox>
-            <lightning-badge label="Asset" if:true={project}></lightning-badge>
+            <lightning-combobox options={assets} value={asset} onchange={handleAssetChange}></lightning-combobox>
+            <lightning-badge label="Asset"></lightning-badge>
         </div>
     </lightning-card>
 </template>
