@@ -70,10 +70,15 @@ export default class DisplayAssets extends LightningElement {
    * Update table with latest queries
    */
   updateTable() {
-      assets.find(parseInt(this.sponsor_id, 10), parseInt(this.project_id, 10), parseInt(this.asset_type, 10)).then(response => {
-          this.data = response;
-      });
-      //TODO: display text, numbers bad
+      assets
+          .find(
+              parseInt(this.sponsor_id, 10),
+              parseInt(this.project_id, 10),
+              parseInt(this.asset_type, 10)
+          )
+          .then(response => {
+              this.data = response;
+          });
 
       this.tableLoadingState = false;
       console.log('Updated Table');
