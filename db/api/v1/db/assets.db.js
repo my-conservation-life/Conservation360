@@ -40,57 +40,7 @@ const find = async (sponsorId, projectId, assetType) => {
     const result = await global.dbPool.query(query);
     return result.rows;
 };
-/**
-const find = async (sponsorId, projectId, assetType) => {
-    let query = QUERY_FIND;
-    let criteria;
-    console.log(query);
-    if (typeof sponsorId !== 'undefined') {
-        criteria = criteria + 'AND sponsor_id = ' + sponsorId + ' ';
-    }
-    if (typeof projectId !== 'undefined') {
-        criteria = criteria + 'AND project_id = ' + projectId + ' ';
-    }
-    if (typeof assetType !== 'undefined') {
-        criteria = criteria + 'AND asset_type_id = ' + assetType + ' ';
-    }
-    console.log(query.toString);
-    const result = await global.dbPool.query(query + criteria);
-    console.log('it did it');
-    return result.rows;
-};
-*/
-/**
-const find = async (sponsorId, projectId, assetType) => {
-    let query = QUERY_FIND_WHERE;
-    let values = [];
 
-    if (typeof sponsorId !== 'undefined') {
-        if (sponsorId == 0) {
-            values += '';
-        } else values += sponsorId;
-    } else if (typeof sponsorId == 'undefined') {
-        values += '';
-    }
-    if (typeof projectId !== 'undefined') {
-        if (projectId == 0) {
-            values += '';
-        } else values += projectId;
-    } else if (typeof projectId == 'undefined') {
-        values += '';
-    }
-    if (typeof assetType !== 'undefined') {
-        if (assetType == 0) {
-            values += '';
-        } else values += assetType;
-    } else if (typeof assetType == 'undefined') {
-        values += '';
-    }
-
-    const result = await global.dbPool.query(query, values);
-    return result.rows;
-};
-*/
 module.exports = {
     find
 };
