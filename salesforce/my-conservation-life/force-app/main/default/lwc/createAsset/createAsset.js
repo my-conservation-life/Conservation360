@@ -74,7 +74,7 @@ export default class CreateAsset extends LightningElement {
         const latt = this.template.querySelector('.location-lattitude').getPropertyValue();
         const long = this.template.querySelector('.location-longitude').getPropertyValue();
 
-        const properties = this.tempmlate.querySelectorAll('.asset-property');
+        const properties = this.template.querySelector('.property-list').getProperties();
         const props = [];
         for (let property of properties) {
             props.push({
@@ -89,8 +89,6 @@ export default class CreateAsset extends LightningElement {
             location:{lattitude:latt, longitude:long},
             properties: props
         };
-
-        console.log(asset);
 
         this.c.assets.create(asset).then(json => {
             this.hasSuccess = true;
