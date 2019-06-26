@@ -25,6 +25,7 @@ WHERE TRUE `;
  */
 const find = async (sponsorId, projectId, assetType) => {
     let query = QUERY_FIND;
+
     if ((typeof sponsorId !== 'undefined') & (sponsorId > 0)) {
         query = query + 'AND sponsor_id = ' + sponsorId + ' ';
     }
