@@ -26,10 +26,25 @@ const QUERY_FIND_WHERE =
  * @returns {object[]|undefined} array of assets with fields (id, project_id, latitude, and longitude), or undefined if projectId is invalid.
  * @throws error if the DB query failed to execute
  */
-
+const find = async (sponsorId, projectId, assetType) => {
+    let query = QUERY_FIND;
+    if ((typeof sponsorId !== 'undefined') & (sponsorId > 0)) {
+        query = query + 'AND sponsor_id = ' + sponsorId + ' ';
+    }
+    if ((typeof projectId !== 'undefined') & (projectId > 0)) {
+        query = query + 'AND project_id = ' + projectId + ' ';
+    }
+    if ((typeof assetType !== 'undefined') & (assetType > 0)) {
+        query = query + 'AND asset_type_id = ' + assetType + ' ';
+    }
+    const result = await global.dbPool.query(query);
+    return result.rows;
+};
+/**
 const find = async (sponsorId, projectId, assetType) => {
     let query = QUERY_FIND;
     let criteria;
+    console.log(query);
     if (typeof sponsorId !== 'undefined') {
         criteria = criteria + 'AND sponsor_id = ' + sponsorId + ' ';
     }
@@ -39,9 +54,12 @@ const find = async (sponsorId, projectId, assetType) => {
     if (typeof assetType !== 'undefined') {
         criteria = criteria + 'AND asset_type_id = ' + assetType + ' ';
     }
+    console.log(query.toString);
     const result = await global.dbPool.query(query + criteria);
+    console.log('it did it');
     return result.rows;
 };
+*/
 /**
 const find = async (sponsorId, projectId, assetType) => {
     let query = QUERY_FIND_WHERE;
