@@ -11,7 +11,13 @@ const {
 } = require('../controllers');
 
 // Assets
-router.get('/assets', validate(param.query, 'project_id', type.id), assets.find);
+router.get(
+    '/assets',
+    validate(param.query, 'sponsor_id', type.id),
+    validate(param.query, 'project_id', type.id),
+    validate(param.query, 'asset_type_id', type.id),
+    assets.find
+);
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);
 // router.put('/assets/:id', assets.update); //example update
@@ -21,7 +27,11 @@ router.get('/assetDefinitions', assetDefinitions.find);
 router.post('/assetDefinitions', assetDefinitions.create);
 
 // Bounding Box of Assets
-router.get('/bbox-assets', validate(param.query, 'project_id', type.id), bboxAssets.get);
+router.get(
+    '/bbox-assets',
+    validate(param.query, 'project_id', type.id),
+    bboxAssets.get
+);
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);
