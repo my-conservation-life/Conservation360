@@ -1,7 +1,6 @@
 const QUERY_FIND = `SELECT
 sponsor.name AS sponsor_name,
-project.name AS project_name,
-asset_type_id,
+project.name AS project_name,he
 asset.id AS asset_id,
 asset_type.name AS asset_type,
 asset_type.description AS asset_description,
@@ -27,16 +26,16 @@ const find = async (sponsorId, projectId, assetType) => {
     let query = QUERY_FIND;
     let values = [];
     if ((typeof sponsorId !== 'undefined') & (sponsorId > 0)) {
-        query = query + `AND sponsor_id = ${values.length + 1}` + ' ';
         values.push(sponsorId);
+        query = query + `AND sponsor_id = $${values.length}` + ' ';
     }
     if ((typeof projectId !== 'undefined') & (projectId > 0)) {
-        query = query + `AND project_id = ${values.length + 1}` + ' ';
         values.push(projectId);
+        query = query + `AND project_id = $${values.length}` + ' ';
     }
     if ((typeof assetType !== 'undefined') & (assetType > 0)) {
-        query = query + `AND asset_type_id = ${values.length + 1}` + ' ';
         values.push(assetType);
+        query = query + `AND asset_type_id = $${values.length}` + ' ';
     }
     const result = await global.dbPool.query(query, values);
     return result.rows;
