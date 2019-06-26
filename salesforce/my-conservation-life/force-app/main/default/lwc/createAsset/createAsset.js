@@ -71,6 +71,8 @@ export default class CreateAsset extends LightningElement {
 
     saveAsset() {
 
+        this.template.querySelector('.status-text').value = 'Saving...';
+
         const latt = this.template.querySelector('.location-lattitude').getPropertyValue();
         const long = this.template.querySelector('.location-longitude').getPropertyValue();
 
@@ -91,10 +93,10 @@ export default class CreateAsset extends LightningElement {
         };
 
         this.c.assets.create(asset).then(json => {
-            this.hasSuccess = true;
+            this.template.querySelector('.status-text').value = 'Saved Successfully';
             console.log(json);
         }).catch(e => {
-            this.hasError = true;
+            this.template.querySelector('.status-text').value = 'Error Encountered';
             console.log(e);
         });
     }
