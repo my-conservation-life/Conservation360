@@ -49,20 +49,20 @@ export default class DisplayAssets extends LightningElement {
 
   //Handle Sponsor Update
   updateSponsor(sponsor) {
-      console.log(this.sponsor_id);
       this.sponsor_id = sponsor;
+      console.log(this.sponsor_id);
       this.updateTable();
   }
   //Handle Project Update
   updateProject(project) {
-      console.log(this.project_id);
       this.project_id = project;
+      console.log(this.project_id);
       this.updateTable();
   }
   //Handle Asset Update
   updateAsset(asset) {
-      console.log(this.asset_id);
       this.asset_id = asset;
+      console.log(this.asset_id);
       this.updateTable();
   }
 
@@ -74,7 +74,7 @@ export default class DisplayAssets extends LightningElement {
           .find(
               parseInt(this.sponsor_id, 10),
               parseInt(this.project_id, 10),
-              parseInt(this.asset_type, 10)
+              parseInt(this.asset_id, 10)
           )
           .then(response => {
               this.data = response;

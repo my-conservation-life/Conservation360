@@ -1,6 +1,7 @@
 const QUERY_FIND = `SELECT
 sponsor.name AS sponsor_name,
 project.name AS project_name,
+asset_type_id,
 asset.id AS asset_id,
 asset_type.name AS asset_type,
 asset_type.description AS asset_description,
@@ -12,10 +13,6 @@ JOIN project ON asset.project_id = project.id
 JOIN sponsor ON project.sponsor_id = sponsor.id
 JOIN asset_type ON asset.asset_type_id = asset_type.id
 WHERE TRUE `;
-
-const QUERY_FIND_WHERE =
-  QUERY_FIND +
-  ' WHERE sponsor_id = $1 AND project_id = $2 AND asset_type_id = $3';
 
 /**
  * Find project assets.
