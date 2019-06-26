@@ -25,17 +25,20 @@ WHERE TRUE `;
  */
 const find = async (sponsorId, projectId, assetType) => {
     let query = QUERY_FIND;
-
+    let values = [];
     if ((typeof sponsorId !== 'undefined') & (sponsorId > 0)) {
-        query = query + 'AND sponsor_id = ' + sponsorId + ' ';
+        query = query + `AND sponsor_id = ${values.length + 1}` + ' ';
+        values.push(sponsorId);
     }
     if ((typeof projectId !== 'undefined') & (projectId > 0)) {
-        query = query + 'AND project_id = ' + projectId + ' ';
+        query = query + `AND project_id = ${values.length + 1}` + ' ';
+        values.push(projectId);
     }
     if ((typeof assetType !== 'undefined') & (assetType > 0)) {
-        query = query + 'AND asset_type_id = ' + assetType + ' ';
+        query = query + `AND asset_type_id = ${values.length + 1}` + ' ';
+        values.push(assetType);
     }
-    const result = await global.dbPool.query(query);
+    const result = await global.dbPool.query(query, values);
     return result.rows;
 };
 

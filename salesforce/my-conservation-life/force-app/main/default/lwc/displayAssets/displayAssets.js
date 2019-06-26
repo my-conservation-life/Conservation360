@@ -25,7 +25,7 @@ export default class DisplayAssets extends LightningElement {
   @track selectedProject;
   @track selectedAsset;
   sponsor_id = '';
-  project_id = 999;
+  project_id = '';
   asset_id = '';
   @track data = [];
   @track columns = columns;
