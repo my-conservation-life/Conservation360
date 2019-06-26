@@ -7,26 +7,26 @@ export default class CreateAsset extends LightningElement {
 
     @track typeOptions;
     @track typeValue;
+    @track typeIdOptions;
+    @track typeIdValue;
     @track descriptionOptions;
     @track descriptionValue;
     @track propertiesOptions;
     @track propertiesValue;
-    @track lattitude = JSON.stringify({
+    @track lattitude = {
         asset_type_id:0,
-        name:'assetLattitude',
+        name:'location-lattitude',
         data_type:'number',
         required:true,
         is_private:false
-    });
-    @track longitude = JSON.stringify({
+    };
+    @track longitude = {
         asset_type_id:0,
-        name:'assetLongitude',
+        name:'location-longitude',
         data_type:'number',
         required:true,
         is_private:false
-    });
-    @track lattitudeKey = 'assetLattitude';
-    @track longitudeKey = 'assetLongitude';
+    };
 
     // Fires when this component is inserted into the DOM
     connectedCallback() {
@@ -37,6 +37,7 @@ export default class CreateAsset extends LightningElement {
             const definitionsString = JSON.stringify(assetDefinitions);
 
             const types = [];
+            const ids = {};
             const descriptions = {};
             const propertiesCollection = {};
             if (definitionsString) {
@@ -45,14 +46,16 @@ export default class CreateAsset extends LightningElement {
                     const name = definition.assetType.name;
                     const type = {
                         label: name,
-                        value: name
+                        value: name,
                     };
                     types.push(type);
+                    ids[name] = definition.assetType.id;
                     descriptions[name] = definition.assetType.description;
                     propertiesCollection[name] = definition.properties;
                 }
             }
             this.typeOptions = types;
+            this.typeIdOptions = ids;
             this.descriptionOptions = descriptions;
             this.propertiesOptions = propertiesCollection;
         });
@@ -60,25 +63,34 @@ export default class CreateAsset extends LightningElement {
 
     handleChange(event) {
         this.typeValue = event.detail.value;
+        this.type = event.detail;
+        this.typeIdValue = this.typeIdOptions[this.typeValue];
         this.descriptionValue = this.descriptionOptions[this.typeValue];
         this.propertiesValue = this.propertiesOptions[this.typeValue];
     }
 
     saveAsset() {
-        const myProject = {id:1};
-        const myAssetType = {id:1};
-        const myLocation = {lattitude:45, longitude:85};
-        const myProperties = [
-            {id:1, value:200},
-            {id:2, value:'10-10-2010'}
-        ];
+
+        const latt = this.template.querySelector('.location-lattitude').getPropertyValue();
+        const long = this.template.querySelector('.location-longitude').getPropertyValue();
+
+        const properties = this.tempmlate.querySelectorAll('.asset-property');
+        const props = [];
+        for (let property of properties) {
+            props.push({
+                id:property.getPropertyId(),
+                value:property.getPropertyValue()
+            });
+        }
 
         const asset = {
-            project: myProject,
-            type: myAssetType,
-            location:myLocation,
-            properties: myProperties
+            project: {id:1},
+            type: {id:this.typeIdValue},
+            location:{lattitude:latt, longitude:long},
+            properties: props
         };
+
+        console.log(asset);
 
         this.c.assets.create(asset).then(json => {
             this.hasSuccess = true;
