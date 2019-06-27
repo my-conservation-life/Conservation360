@@ -64,7 +64,7 @@ class ParseResult {
     /**
      * Construct a successful parse result
      * 
-     * @param {string|object} [value] - the parsed value, which may not be undefined
+     * @param {*} value - the parsed value, which may not be undefined
      * @returns {ParseResult} a successful ParseResult with the parsed value
      */
     static success(value) {
@@ -94,7 +94,7 @@ class ParseResult {
  * 
  * @param {*} req - Express request
  * @param {string} paramName - the parameter to extract from req.query
- * @returns {string|object} the extracted parameter
+ * @returns {*} the extracted parameter
  */
 const extractQueryParam = (req, paramName) => req.query[paramName];
 
@@ -103,7 +103,7 @@ const extractQueryParam = (req, paramName) => req.query[paramName];
  * 
  * @param {*} req - Express request
  * @param {string} paramName - the parameter to extract from req.body
- * @returns {string|object} the extracted parameter
+ * @returns {*} the extracted parameter
  */
 const extractBodyParam = (req, paramName) => req.body[paramName];
 
@@ -124,8 +124,8 @@ const parseId = (idStr) => {
  *  Validates if it is a string and within min/max length
  * 
  * @param {*} name - the variable to parse
- * @param {*} [minLength=0] - the minimum length to pass.
- * @param {*} [maxLength=Number.MAX_SAFE_INTEGER] - the maximum length to pass
+ * @param {number} [minLength=0] - the minimum length to pass.
+ * @param {number} [maxLength=Number.MAX_SAFE_INTEGER] - the maximum length to pass
  * 
  * @returns {boolean} true if it is a string and within minLength-maxLength
  */
@@ -195,7 +195,7 @@ const parseAssetDefinition = (assetDefinition) => {
     if (!utils.shared.isUndefined(description))
         if (!parseString(description)) return ParseResult.failure('assetDefinition description must be a string');
 
-    if (!properties.length > 0) return ParseResult.failure('assetDefinition must have properties');
+    if (!properties || !properties.length > 0) return ParseResult.failure('assetDefinition must have properties');
 
     for (let property of properties) {
         const parseResult = parseProperty(property);
