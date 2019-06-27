@@ -135,7 +135,7 @@ describe('validate.type.assetDefinition', () => {
         };
     });
 
-    // Test Asset Type
+    // Test Asset Definition Type
     it('accepts valid assetDefinition', () => {
         const result = type.assetDefinition(assetDefinition);
         expect(result.isSuccess()).toBe(true);
@@ -153,13 +153,24 @@ describe('validate.type.assetDefinition', () => {
         expect(result.isFailure()).toBe(true);
     });
 
+    it('rejects incorrect type for description', () => {
+        assetDefinition.description = 5;
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
     // Test Properties
+    it('rejects undefined properties', () => {
+        assetDefinition.properties = undefined;
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
     it('rejects empty properties', () => {
         assetDefinition.properties = [];
         const result = type.assetDefinition(assetDefinition);
         expect(result.isFailure()).toBe(true);
     });
-
 
     it('rejects empty property name', () => {
         assetDefinition.properties[0].name = '';
@@ -173,14 +184,14 @@ describe('validate.type.assetDefinition', () => {
         expect(result.isFailure()).toBe(true);
     });
 
-    it('rejects empty property dataType', () => {
+    it('rejects incorrect property dataType', () => {
         assetDefinition.properties[0].data_type = 'coordinate';
         const result = type.assetDefinition(assetDefinition);
         expect(result.isFailure()).toBe(true);
     });
 
-    it('rejects incorrect property dataType', () => {
-        assetDefinition.properties[0].data_type = 'coordinate';
+    it('rejects incorrect type for property dataType', () => {
+        assetDefinition.properties[0].data_type = { 'coordinate': 123 };
         const result = type.assetDefinition(assetDefinition);
         expect(result.isFailure()).toBe(true);
     });
