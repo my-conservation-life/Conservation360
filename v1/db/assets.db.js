@@ -1,6 +1,6 @@
 const QUERY_FIND = `SELECT
 sponsor.name AS sponsor_name,
-project.name AS project_name,he
+project.name AS project_name,
 asset.id AS asset_id,
 asset_type.name AS asset_type,
 asset_type.description AS asset_description,
@@ -37,6 +37,9 @@ const find = async (sponsorId, projectId, assetType) => {
         values.push(assetType);
         query = query + `AND asset_type_id = $${values.length}` + ' ';
     }
+    console.log(query);
+    console.log(values);
+    console.log('-------');
     const result = await global.dbPool.query(query, values);
     return result.rows;
 };
