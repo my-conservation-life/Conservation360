@@ -17,7 +17,7 @@ describe('c-map', () => {
     /**
      * Load the LWC.
      * 
-     * This returns a promise that waits until the LWC has likely finished starting.
+     * @returns {Promise} a promise that waits until the LWC has likely finished starting.
      */
     const load = () => {
         document.body.appendChild(element);
