@@ -13,7 +13,7 @@ const find = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-    const assetDefinition = req.body;
+    const assetDefinition = req.valid.assetDefinition;
     try {
         const assetTypeId = await db.assetDefinitions.create(assetDefinition);
         res.json(assetTypeId);
