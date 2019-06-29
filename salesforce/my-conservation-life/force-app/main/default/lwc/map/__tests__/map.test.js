@@ -45,7 +45,7 @@ describe('c-map', () => {
             }))
         };
 
-        element = createElement('c-map-project-assets', {
+        element = createElement('c-map', {
             is: Map
         });
     });
