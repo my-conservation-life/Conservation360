@@ -1,4 +1,4 @@
-const URL = 'https://my-conservation-life.herokuapp.com/api/v1/';
+import { URL } from './connection';
 
 const handleFetchErrors = (response) => {
     if (!response.ok) {
@@ -27,11 +27,8 @@ const post = (url, data) => {
     }).then(handleFetchErrors);
 };
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
 export default {
     URL,
     get,
-    post,
-    delay
+    post
 };
