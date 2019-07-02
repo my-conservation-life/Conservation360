@@ -37,9 +37,6 @@ const find = async (sponsorId, projectId, assetType) => {
         values.push(assetType);
         query = query + `AND asset_type_id = $${values.length}` + ' ';
     }
-    console.log(query);
-    console.log(values);
-    console.log('-------');
     const result = await global.dbPool.query(query, values);
     return result.rows;
 };
