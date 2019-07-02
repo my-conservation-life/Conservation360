@@ -1,4 +1,5 @@
 import { LightningElement, wire, track } from 'lwc';
+//import { assets } from 'c/controllers';
 import { CurrentPageReference } from 'lightning/navigation';
 import { fireEvent } from 'c/pubsub';
 
@@ -8,55 +9,86 @@ export default class App extends LightningElement {
   state = {
       title: 'Select Asset Type'
   };
+
   @track
   sponsor;
+
   get sponsors() {
-      return [
-          {
-              label: 'Default: Any',
-              value: ''
-          },
-          {
-              label: 'Seneca Park Zoo',
-              value: '1'
-          }
-      ];
+      var ret = [];
+
+      ret.push({
+          label: 'Default: Any',
+          value: ''
+      });
+
+      ret.push({
+          label: 'Seneca Park Zoo',
+          value: '1'
+      });
+      if (ret.sizeOf === 0) {
+          return [
+              {
+                  label: 'Default: Any',
+                  value: ''
+              }
+          ];
+      }
+      return ret;
   }
   @track
   project;
   get projects() {
-      return [
-          {
-              label: 'Default: Any',
-              value: ''
-          },
-          {
-              label: 'Madagascar Reforesting Project',
-              value: '1'
-          },
-          {
-              label: 'ID=2',
-              value: '2'
-          }
-      ];
+      var ret = []; //Set Up Return
+
+      //Push all projects to return
+      ret.push({
+          label: 'Default: Any',
+          value: ''
+      });
+      ret.push({
+          label: 'Madagascar Reforesting Project',
+          value: '1'
+      });
+      ret.push({
+          label: 'ID = 2 [Sample]',
+          value: '2'
+      });
+      if (ret.sizeOf === 0) {
+          return [
+              {
+                  label: 'Default: Any',
+                  value: ''
+              }
+          ];
+      }
+      return ret;
   }
   @track
   asset;
   get assets() {
-      return [
-          {
-              label: 'Default: Any',
-              value: ''
-          },
-          {
-              label: 'Tree',
-              value: '1'
-          },
-          {
-              label: 'ID=2',
-              value: '2'
-          }
-      ];
+      var ret = [];
+
+      ret.push({
+          label: 'Default: Any',
+          value: ''
+      });
+      ret.push({
+          label: 'Tree',
+          value: '1'
+      });
+      ret.push({
+          label: 'ID = 2 [Sample]',
+          value: '2'
+      });
+      if (ret.sizeOf === 0) {
+          return [
+              {
+                  label: 'Default: Any',
+                  value: ''
+              }
+          ];
+      }
+      return ret;
   }
   handleSponsorChange(event) {
       this.sponsor = event.detail.value;

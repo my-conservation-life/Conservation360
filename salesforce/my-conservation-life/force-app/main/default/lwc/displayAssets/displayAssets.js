@@ -5,17 +5,41 @@ import { registerListener, unregisterAllListeners } from 'c/pubsub';
 
 //Columns currently in our data tables
 const columns = [
-    { label: 'Sponsor', fieldName: 'sponsor_name', type: 'string' },
-    { label: 'Project Name', fieldName: 'project_name', type: 'string' },
-    { label: 'Asset ID', fieldName: 'asset_id', type: 'number' },
-    { label: 'Asset Type', fieldName: 'asset_type', type: 'string' },
+    {
+        label: 'Sponsor',
+        fieldName: 'sponsor_name',
+        type: 'string'
+    },
+    {
+        label: 'Project Name',
+        fieldName: 'project_name',
+        type: 'string'
+    },
+    {
+        label: 'Asset ID',
+        fieldName: 'asset_id',
+        type: 'number'
+    },
+    {
+        label: 'Asset Type',
+        fieldName: 'asset_type',
+        type: 'string'
+    },
     {
         label: 'Asset Description',
         fieldName: 'asset_description',
         type: 'string'
     },
-    { label: 'Latitude', fieldName: 'latitude', type: 'number' },
-    { label: 'Longitude', fieldName: 'longitude', type: 'number' }
+    {
+        label: 'Latitude',
+        fieldName: 'latitude',
+        type: 'number'
+    },
+    {
+        label: 'Longitude',
+        fieldName: 'longitude',
+        type: 'number'
+    }
 ];
 
 //Loads assets into the table through a database query, as found in the controllers
