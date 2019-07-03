@@ -3,6 +3,7 @@
     <template for:each={properties} for:item="property">
         <div key={property.name}>
             <c-create-asset-property
+            class="asset-property"
             property={property}
             ></c-create-asset-property>
         </div>
