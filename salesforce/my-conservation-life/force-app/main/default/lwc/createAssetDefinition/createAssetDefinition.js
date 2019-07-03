@@ -1,5 +1,5 @@
-import { LightningElement, track } from 'lwc';
-import controllers from 'c/controllers';
+import { LightningElement, track, api } from 'lwc';
+import { assetDefinitions } from 'c/controllers';
 
 export default class CreateAssetDefinition extends LightningElement {
     name = '';
@@ -8,6 +8,11 @@ export default class CreateAssetDefinition extends LightningElement {
     @track hasSuccess = false;
     @track hasError = false;
 
+    /**
+     * Calls all components validate method to check if the form is valid.
+     * 
+     * @returns {boolean} true if whole form is valid
+     */
     validateAssetDefinition() {
         const assetListElement = this.template.querySelector('c-create-asset-definition-list');
         const propertiesValid = assetListElement.validateProperties();
@@ -17,34 +22,51 @@ export default class CreateAssetDefinition extends LightningElement {
         return propertiesValid && attributesValid;
     }
 
+    /**
+     * Validates the whole asset definition form.
+     */
     saveAssetDefinition() {
-        console.log('Saving asset definition');
-
         const formValid = this.validateAssetDefinition();
         if (formValid) {
-            let assetList = this.template.querySelector('c-create-asset-definition-list');
-            let properties = assetList.getProperties();
-
-            const assetDefinition = {
-                name: this.name,
-                description: this.description,
-                properties: properties
-            };
-
-            controllers.assetDefinitions.create(assetDefinition)
-                .then(json => {
-                    this.hasSuccess = true;
-                    console.log(json);
-                })
-                .catch(e => {
-                    this.hasError = true;
-                    console.error(e);
-                });
+            this.sendAssetDefinition();
         } else {
             console.log('Asset definition failed validation');
         }
     }
 
+    /**
+     * Gathers all data required for a assetDefinition and sends it to the db/api.
+     * Exposed through api for testing.
+     */
+    @api
+    sendAssetDefinition() {
+        let assetList = this.template.querySelector('c-create-asset-definition-list');
+        let properties = assetList.getCustomProperties();
+
+        const assetDefinition = {
+            assetDefinition: {
+                name: this.name,
+                description: this.description,
+                properties: properties
+            }
+        };
+
+        assetDefinitions.create(assetDefinition)
+            .then(data => {
+                this.hasSuccess = true;
+            })
+            .catch(e => {
+                this.hasError = true;
+                console.error(e);
+            });
+    }
+
+
+    /**
+     * Validates inputs by using lwc reportValidity function.
+     * 
+     * @returns {boolean} true if all inputs considered valid
+     */
     validateAttributes() {
         const inputElements = this.template.querySelectorAll('lightning-input');
         const validities = [];
@@ -58,6 +80,11 @@ export default class CreateAssetDefinition extends LightningElement {
             .every(validity => validity === true);
     }
 
+    /**
+     * Event handler to save the user inputted value to this attributes.
+     * 
+     * @param {Event} e - a change event dispatched by each input
+     */
     saveAttribute(e) {
         const name = e.srcElement.name;
         const value = e.srcElement.value;

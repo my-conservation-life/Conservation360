@@ -1,18 +1,16 @@
 <template>
-    <div class="slds-p-around_x-large">
-        <h1 class="slds-text-heading_large">{state.title}</h1>
+    <lightning-card>
+        <div class="slds-p-around_x-large">
+            <h1 class="slds-text-heading_large">{state.title}</h1>
 
-        <lightning-combobox options={sponsors} value={sponsor} onchange={handleSponsorChange}></lightning-combobox>
-        <lightning-badge label="Sponsor">
-        </lightning-badge>
+            <lightning-combobox options={sponsors} value={sponsor} onchange={handleSponsorChange}></lightning-combobox>
+            <lightning-badge label="Sponsor"></lightning-badge>
 
-        <lightning-combobox options={projects} value={project} if:true={sponsor} onchange={handleProjectChange}></lightning-combobox>
-        <lightning-badge label="Project" if:true={sponsor}>
-        </lightning-badge>
-        
-        <lightning-combobox options={assets} value={asset} if:true={project} onchange={handleAssetChange}></lightning-combobox>
-        <lightning-badge label="Asset" if:true={project}>
-        </lightning-badge>
-
-    </div>
+            <lightning-combobox options={projects} value={project} if:true={sponsor} onchange={handleProjectChange}></lightning-combobox>
+            <lightning-badge label="Project" if:true={sponsor}></lightning-badge>
+            
+            <lightning-combobox options={assets} value={asset} if:true={project} onchange={handleAssetChange}></lightning-combobox>
+            <lightning-badge label="Asset" if:true={project}></lightning-badge>
+        </div>
+    </lightning-card>
 </template>

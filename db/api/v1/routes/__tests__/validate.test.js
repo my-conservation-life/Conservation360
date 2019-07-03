@@ -42,6 +42,13 @@ describe('validate', () => {
         expect(res.json).toHaveBeenCalled();
     });
 
+    it('sends HTTP 400 with a JSON response when missing required param', () => {
+        const validator = validate(param.query, 'id', type.id, true);
+        validator(req, res, next);
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalled();
+    });
+
     it('adds parsed value to req.valid when parse succeeds', () => {
         req.query.test = '2';
         const validator = validate(extractQueryParam, 'test', succeedingParser);
@@ -59,14 +66,6 @@ describe('validate', () => {
         expect(next).toHaveBeenCalledWith();
         expect(res.status).not.toHaveBeenCalled();
         expect(res.json).not.toHaveBeenCalled();
-    });
-
-    it('throws an error if the parameter extractor returns an object', () => {
-        const extractor = (req) => req.query; // this extractor should return a string, not an object
-        const validator = validate(extractor, 'test', succeedingParser);
-        expect(() => {
-            validator(req, res, next);
-        }).toThrow('validate');
     });
 
     it('does not delete any existing req.valid entries', () => {
@@ -95,7 +94,7 @@ describe('validate.type.id', () => {
         expect(result.isSuccess()).toBe(true);
         expect(result.value).toBe(1);
     });
-    
+
     it('rejects negative numbers', () => {
         const result = type.id('-1');
         expect(result.isFailure()).toBe(true);
@@ -108,6 +107,104 @@ describe('validate.type.id', () => {
 
     it('rejects alphabetic characters', () => {
         const result = type.id('b');
+        expect(result.isFailure()).toBe(true);
+    });
+});
+
+describe('validate.type.assetDefinition', () => {
+    let assetDefinition;
+
+    beforeEach(() => {
+        assetDefinition = {
+            'name': 'tname',
+            'description': 'tdesc',
+            'properties': [
+                {
+                    'name': 'tprop1',
+                    'data_type': 'number',
+                    'required': true,
+                    'is_private': false
+                },
+                {
+                    'name': 'tprop2',
+                    'data_type': 'boolean',
+                    'required': false,
+                    'is_private': true
+                }
+            ]
+        };
+    });
+
+    // Test Asset Definition Type
+    it('accepts valid assetDefinition', () => {
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isSuccess()).toBe(true);
+    });
+
+    it('rejects empty name', () => {
+        assetDefinition.name = '';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects name > 50 characters', () => {
+        assetDefinition.name = 'x'.repeat(51);
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects incorrect type for description', () => {
+        assetDefinition.description = 5;
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    // Test Properties
+    it('rejects undefined properties', () => {
+        assetDefinition.properties = undefined;
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects empty properties', () => {
+        assetDefinition.properties = [];
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects empty property name', () => {
+        assetDefinition.properties[0].name = '';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects property name > 50 characters', () => {
+        assetDefinition.properties[0].name = 'x'.repeat(51);
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects incorrect property dataType', () => {
+        assetDefinition.properties[0].data_type = 'coordinate';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects incorrect type for property dataType', () => {
+        assetDefinition.properties[0].data_type = { 'coordinate': 123 };
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects string property required', () => {
+        assetDefinition.properties[0].required = 'true';
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects string property isPrivate', () => {
+        assetDefinition.properties[0].is_private = 'true';
+        const result = type.assetDefinition(assetDefinition);
         expect(result.isFailure()).toBe(true);
     });
 });
@@ -130,6 +227,28 @@ describe('validate.param.query', () => {
         };
 
         const result = param.query(req, 'test');
+        expect(result).toBe(undefined);
+    });
+});
+
+describe('validate.param.body', () => {
+    it('extracts 2 from body string', () => {
+        const req = {
+            body: {
+                test: '2'
+            }
+        };
+
+        const result = param.body(req, 'test');
+        expect(result).toBe('2');
+    });
+
+    it('returns undefined when extracting a parameter from body that does not exist', () => {
+        const req = {
+            body: {}
+        };
+
+        const result = param.body(req, 'test');
         expect(result).toBe(undefined);
     });
 });
