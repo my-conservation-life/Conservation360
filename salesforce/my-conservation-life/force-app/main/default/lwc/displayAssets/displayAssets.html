@@ -1,13 +1,16 @@
 <template>
-    <div class="slds-m-top_medium slds-m-bottom_x-large">
-        <!-- Table -->
-        <div class="slds-p-around_medium lgc-bg" style="height: 300px;">
-            <lightning-datatable
-                key-field="id"
-                data={data}
-                columns={columns}
-                is-loading={tableLoadingState}>
-            </lightning-datatable>
+    <lightning-card>       
+        <div class="slds-m-top_medium slds-m-bottom_x-large">
+            <!-- Table -->
+            <div class="slds-p-around_medium lgc-bg" style="height: 300px;">
+                <lightning-datatable
+                    key-field="id"
+                    data={data}
+                    columns={columns}
+                    hidecheckboxcolumn=true 
+                    is-loading={tableLoadingState}>
+                </lightning-datatable>
+            </div>
         </div>
-    </div>
+    </lightning-card>
 </template>
