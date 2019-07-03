@@ -1,5 +1,5 @@
 -- Install PostGIS
-CREATE EXTENSION postgis;
+-- CREATE EXTENSION postgis;
 
 --
 -- PostgreSQL database dump

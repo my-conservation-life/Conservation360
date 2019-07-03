@@ -13,20 +13,26 @@ describe('bboxAssets.db.get', () => {
             query: jest.fn(async () => ({
                 rows: [MOCK_BBOX]
             }))
-        }
+        };
     });
 
     it('executes correct query for all assets', async () => {
         await get();
         expect(global.dbPool.query).toHaveBeenCalledTimes(1);
-        expect(global.dbPool.query.mock.calls[0][0]).toEqual(expect.stringContaining('FROM asset'));
-        expect(global.dbPool.query.mock.calls[0][0]).toEqual(expect.not.stringContaining('WHERE'));
+        expect(global.dbPool.query.mock.calls[0][0]).toEqual(
+            expect.stringContaining('FROM asset')
+        );
+        expect(global.dbPool.query.mock.calls[0][0]).toEqual(
+            expect.not.stringContaining('WHERE')
+        );
     });
 
     it('executes query for assets of specific project', async () => {
         await get(3);
         expect(global.dbPool.query).toHaveBeenCalledTimes(1);
-        expect(global.dbPool.query.mock.calls[0][0]).toEqual(expect.stringContaining('FROM asset WHERE project_id = $1'));
+        expect(global.dbPool.query.mock.calls[0][0]).toEqual(
+            expect.stringContaining('FROM asset WHERE project_id = $1')
+        );
     });
 
     it('returns bbox without projectId arg', async () => {
@@ -40,7 +46,9 @@ describe('bboxAssets.db.get', () => {
     });
 
     it('throws when query execution fails', async () => {
-        global.dbPool.query = jest.fn(async () => { throw 'DB error'; });
+        global.dbPool.query = jest.fn(async () => {
+            throw 'DB error';
+        });
         await expect(get()).rejects.toThrow();
     });
 
