@@ -5,9 +5,8 @@ import utils from 'c/utils';
  * 
  * @param {number} [projectId] - Project ID. If not specified or not a positive integer, then return all assets.
  */
-const find = (projectId) => {
+const find = (projectId) =>
     utils.get(utils.URL + 'assets' + ((typeof projectId === 'number' && projectId > 0) ? '?project_id=' + projectId : ''));
-};
 
 /**
  * create is used to generate an asset instance in the database
