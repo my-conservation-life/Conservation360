@@ -12,7 +12,7 @@ const {
 
 // Assets
 router.get('/assets', validate(param.query, 'project_id', type.id), assets.find);
-// router.post('/assets', assets.create); //example create
+router.post('/assets', assets.create);
 // router.get('/assets/:id', assets.get);
 // router.put('/assets/:id', assets.update); //example update
 
