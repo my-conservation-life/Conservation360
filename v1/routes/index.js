@@ -18,7 +18,7 @@ router.get(
     validate(param.query, 'asset_type_id', type.id),
     assets.find
 );
-// router.post('/assets', assets.create); //example create
+router.post('/assets', assets.create);
 // router.get('/assets/:id', assets.get);
 // router.put('/assets/:id', assets.update); //example update
 

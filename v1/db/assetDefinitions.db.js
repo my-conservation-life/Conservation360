@@ -16,6 +16,7 @@ const findAssetTypes = async () => {
 const findAssetProperties = async () => {
     let query = `
         SELECT
+            id,
             asset_type_id,
             name,
             data_type,
