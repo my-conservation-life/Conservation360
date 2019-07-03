@@ -95,11 +95,11 @@ export default class DisplayAssets extends LightningElement {
    */
   updateTable() {
       assets
-          .find(
-              parseInt(this.sponsor_id, 10),
-              parseInt(this.project_id, 10),
-              parseInt(this.asset_id, 10)
-          )
+          .find({
+              sponsorId: parseInt(this.sponsor_id, 10),
+              projectId: parseInt(this.project_id, 10),
+              assetTypeId: parseInt(this.asset_id, 10)
+          })
           .then(response => {
               this.data = response;
           });
