@@ -16,6 +16,7 @@ const findAssetTypes = async () => {
 const findAssetProperties = async () => {
     let query = `
         SELECT
+            id,
             asset_type_id,
             name,
             data_type,
@@ -28,6 +29,14 @@ const findAssetProperties = async () => {
     return global.pool.query(query);
 };
 
+/**
+ * Creates an asset type row in the database.
+ * 
+ * @param {*} client - node postgres client
+ * @param {string} name - the asset type's name
+ * @param {string} description - the asset type's description
+ * @returns {object} an object containing the newly created asset type's id
+ */
 const createAssetType = async (client, name, description) => {
     const query = `
         INSERT INTO asset_type
@@ -41,6 +50,13 @@ const createAssetType = async (client, name, description) => {
     return client.query(query, values);
 };
 
+/**
+ * Creates a property row in the database based on a asset type's id.
+ * 
+ * @param {*} client - node postgres client
+ * @param {string} assetTypeId - the asset type's id to assign this property to
+ * @param {object} property - an object containing name, data_type, required, and is_private
+ */
 const createProperty = async (client, assetTypeId, property) => {
     const query = `
         INSERT INTO property
@@ -75,6 +91,12 @@ const find = async () => {
     return assetDefinitions;
 };
 
+/**
+ * Creates a asset definition in the database.
+ * Creates asset types and properties within one transaction.
+ * 
+ * @param {object} assetDefinition - a valid my conservation life asset definition
+ */
 const create = async (assetDefinition) => {
     const client = await global.pool.connect();
 

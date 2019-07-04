@@ -1,10 +1,10 @@
 /* eslint-disable @lwc/lwc/no-async-operation */
 /* eslint-disable no-console */
 import { createElement } from 'lwc';
-import CreateAssetDefinitionList from 'c/createAssetDefinitionList';
+import CreateAssetList from 'c/createAssetDefinitionList';
 import { dataTypes } from 'c/controllers';
 
-describe('c-create-asset-definition-list', () => {
+describe('c-create-asset-list', () => {
     let element;
 
     let CONSOLE_WARN;

@@ -1,10 +1,10 @@
 /* eslint-disable @lwc/lwc/no-async-operation */
 /* eslint-disable no-console */
 import { createElement } from 'lwc';
-import CreateAssetDefinition from 'c/createAssetDefinition';
-import { assetDefinitions, dataTypes } from 'c/controllers';
+import CreateAsset from 'c/createAsset';
+import { assets, dataTypes } from 'c/controllers';
 
-describe('c-create-asset-definition', () => {
+describe('c-create-asset', () => {
     let element;
 
     let CONSOLE_WARN;
@@ -44,10 +44,10 @@ describe('c-create-asset-definition', () => {
     });
 
     beforeEach(() => {
-        assetDefinitions.create = jest.fn(async () => 1);
-        dataTypes.find = jest.fn(async () => DATA_TYPES);
+        assets.create = jest.fn(async () => 1);
+        assetDefinitions.find = jest.fn(async () => DATA_TYPES);
 
-        element = createElement('c-create-asset-definition', { is: CreateAssetDefinition });
+        element = createElement('c-create-asset', { is: CreateAsset });
         document.body.appendChild(element);
     });
 
@@ -60,7 +60,7 @@ describe('c-create-asset-definition', () => {
 
     it('creates a component with 2 inputs and 1 list component', () => {
         const inputElements = element.shadowRoot.querySelectorAll('lightning-input');
-        const listElements = element.shadowRoot.querySelectorAll('c-create-asset-definition-list');
+        const listElements = element.shadowRoot.querySelectorAll('c-create-asset-list');
 
         expect(inputElements.length).toBe(2);
         expect(listElements.length).toBe(1);
@@ -81,4 +81,3 @@ describe('c-create-asset-definition', () => {
         expect(assetDefinitions.create.mock.calls[0][0]).toEqual(ASSET_DEFINITION);
     });
 });
-

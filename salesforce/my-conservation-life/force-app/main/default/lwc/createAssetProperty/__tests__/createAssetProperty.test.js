@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { createElement } from 'lwc';
-import CreateAssetDefinitionProperty from 'c/createAssetDefinitionProperty';
+import CreateAssetProperty from 'c/createAssetDefinitionProperty';
 
-describe('c-create-asset-definition-property', () => {
+describe('c-create-asset-property', () => {
     let element;
     let CONSOLE_WARN;
 
@@ -10,7 +10,8 @@ describe('c-create-asset-definition-property', () => {
         name: 'testname',
         data_type: 'testdatatype',
         required: true,
-        is_private: true
+        is_private: true,
+        value: 'testvalue'
     };
 
     const OPTIONS = ['boolean', 'number', 'datetime', 'location', 'text'];
@@ -33,7 +34,7 @@ describe('c-create-asset-definition-property', () => {
     });
 
     beforeEach(() => {
-        element = createElement('c-create-asset-definition-property', { is: CreateAssetDefinitionProperty });
+        element = createElement('c-create-asset-property', { is: CreateAssetProperty });
         element.propertyDataTypes = JSON.stringify(OPTIONS);
         document.body.appendChild(element);
     });
