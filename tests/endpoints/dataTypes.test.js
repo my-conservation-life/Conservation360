@@ -12,11 +12,15 @@ describe('GET assetDefinitions', () => {
         await teardown();
     });
 
-    it('returns HTTP 200 response', done => {
+    it('returns the correct data', (done) => {
         request(app)
             .get('/api/v1/dataTypes')
-            .end((err, res) => {
-                expect(res.status).toBe(200);
+            .expect(200)
+            .then((response) => {
+                const data = response.body;
+                expect(data instanceof Array).toBe(true);
+                expect(data.length).toBeGreaterThan(0);
+                expect(typeof data[0]).toBe('string');
                 done();
             });
     });

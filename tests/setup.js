@@ -2,10 +2,10 @@ const { initializeDbConnections } = require('../db');
 var fs = require('fs');
 
 /**
- * Setup the database test environment asynchronously
- *
- * Connects to the database and installs the schema
- *
+ * Setup the database test environment asynchronously.
+ * Connects to the database from the test env found in
+ * 'db/api/tests/.env' and installs the schema.
+ * 
  * @returns {Promise<any>} a promise that resolves when the setup is complete
  */
 const setup = async () => {
