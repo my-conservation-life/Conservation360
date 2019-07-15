@@ -1,20 +1,38 @@
 const { initializeDbConnections } = require('../db');
 var fs = require('fs');
-const setup = () => {
+
+/**
+ * Setup the database test environment asynchronously
+ *
+ * Connects to the database and installs the schema
+ *
+ * @returns {Promise<any>} a promise that resolves when the setup is complete
+ */
+const setup = async () => {
     require('dotenv').config();
-    // ENTER YOUR TEST DB CONNECTION CONFIG HERE
     initializeDbConnections();
-    // Read file
-    loadSQL('../schema/schema.sql');
+    await loadSQL('../schema/schema.sql');
 };
 
-const loadSQL = fileName => {
+/**
+ * Execute the SQL script asynchronously
+ *
+ * @param {string} fileName path to the SQL script
+ * @returns {Promise<any>} a promise that resolves when the SQL script has finished execution
+ */
+const loadSQL = (fileName) => {
     var schema = fs.readFileSync(fileName, {
         encoding: 'utf8'
     });
-    global.dbPool.query(schema);
+
+    return global.dbPool.query(schema);
 };
-const teardown = () => {
-    global.dbPool.end();
-};
+
+/**
+ * Disconnect from the database asynchronously
+ *
+ * @returns {Promise<any>} a promise that resolves when this process has finished disconnecting from the database
+ */
+const teardown = () => global.dbPool.end();
+
 module.exports = { setup, teardown, loadSQL };
