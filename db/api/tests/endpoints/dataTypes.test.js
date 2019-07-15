@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../../app');
 const { setup, teardown, loadSQL } = require('../setup');
 
-describe('GET assetDefinitions', () => {
+describe('GET dataTypes', () => {
     beforeAll(async () => {
         await setup();
         await loadSQL('../schema/sample-data-dataTypes.sql');
