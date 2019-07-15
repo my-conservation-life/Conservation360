@@ -9,8 +9,8 @@ var fs = require('fs');
  * @returns {Promise<any>} a promise that resolves when the setup is complete
  */
 const setup = async () => {
-    require('dotenv').config();
-    if (process.env.DATABASE_URL_TEST) process.env.DATABASE_URL = process.env.DATABASE_URL_TEST;
+    // Use the test .env file within 'db/api/tests/'
+    require('dotenv').config({ path: './.env' });
 
     initializeDbConnections();
     await loadSQL('../schema/schema.sql');
