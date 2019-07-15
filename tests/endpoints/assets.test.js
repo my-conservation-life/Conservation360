@@ -1,22 +1,23 @@
 const request = require('supertest');
+
 const app = require('../../app');
-const { setup, teardown, loadSQL } = require('../setup');
+const { setup, teardown } = require('../setup');
+
 describe('GET assets', () => {
-    beforeAll(() => {
-        setup();
-        loadSQL('../schema/sample-data-1.sql');
+    beforeAll(async () => {
+        await setup();
     });
 
-    afterAll(() => {
-        teardown();
+    afterAll(async () => {
+        await teardown();
     });
 
-    it('returns HTTP 200 response', done => {
-        request(app)
+    it('returns HTTP 200 response', () => {
+        return request(app)
             .get('/api/v1/assets')
-            .end((err, res) => {
+            .then(res => {
                 expect(res.status).toBe(200);
-                done();
+                expect(res.text).toBe('[]');
             });
     });
 });

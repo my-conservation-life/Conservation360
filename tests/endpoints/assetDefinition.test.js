@@ -2,13 +2,13 @@ const request = require('supertest');
 const app = require('../../app');
 const { setup, teardown, loadSQL } = require('../setup');
 describe('GET assetDefinitions', () => {
-    beforeAll(() => {
-        setup();
-        loadSQL('../schema/sample-data-1.sql');
+    beforeAll(async () => {
+        await setup();
+        await loadSQL('../schema/sample-data-1.sql');
     });
 
-    afterAll(() => {
-        teardown();
+    afterAll(async () => {
+        await teardown();
     });
 
     it('returns HTTP 200 response', done => {
