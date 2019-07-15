@@ -18,7 +18,6 @@ const initializeDbConnections = () => {
     }
 
     global.dbPool = new Pool(dbConfig);
-    global.pool = global.dbPool;
     global.dbPool.on('error', err => console.error(err));
 };
 
