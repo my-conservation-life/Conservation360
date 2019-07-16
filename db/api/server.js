@@ -2,7 +2,11 @@
 const http = require('http');
 const app = require('./app');
 const { initializeDbConnections } = require('./db');
-require('dotenv').config();
+
+const envResult = require('dotenv').config();
+if (envResult.error) {
+    throw envResult.error;
+}
 
 initializeDbConnections();
 
