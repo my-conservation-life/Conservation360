@@ -88,4 +88,40 @@ describe('GET assets', () => {
             .get(ENDPOINT + '?asset_type_id=z')
             .expect(400);
     });
+
+    it.skip('able to create assets', async () => {
+        const asset = {
+            project: {
+                id: 1
+            },
+            type: {
+                id: 1
+            },
+            location: {
+                lattitude: 1.5,
+                longitude: -1.5
+            },
+            properties: [
+                {
+                    id: 1,
+                    value: '5.5'
+                },
+                {
+                    id: 2,
+                    value: '07-01-2019'
+                }
+            ]
+        };
+
+        await request(app)
+            .post(ENDPOINT)
+            .send(asset)
+            .expect(200)
+            .then((response) => {
+                const data = response.body;
+                console.log(data);
+                expect(data).toBeTruthy();
+                expect(typeof data).toBe('number');
+            });
+    });
 });

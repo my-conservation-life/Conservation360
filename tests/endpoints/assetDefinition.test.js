@@ -6,9 +6,6 @@ describe('GET/POST assetDefinitions', () => {
     beforeAll(async () => {
         await setup();
 
-        // FK relationship in assetDefinition requires dataTypes to exist
-        await loadSQL('../schema/sample-data-dataTypes.sql');
-
         // create some default asset definitions
         await loadSQL('../schema/sample-data-emptyProjects.sql');
     });
@@ -29,7 +26,7 @@ describe('GET/POST assetDefinitions', () => {
             });
     });
 
-    it('able to create assetDefinitions', (done) => {
+    it('able to create assetDefinitions', async () => {
         const assetDefinition = {
             'assetDefinition': {
                 'name': 'tname',
@@ -51,7 +48,7 @@ describe('GET/POST assetDefinitions', () => {
             }
         };
 
-        request(app)
+        await request(app)
             .post('/api/v1/assetDefinitions')
             .send(assetDefinition)
             //.expect(200)
@@ -60,7 +57,6 @@ describe('GET/POST assetDefinitions', () => {
                 const data = response.body;
                 expect(data).toBeTruthy();
                 expect(typeof data).toBe('number');
-                done();
             });
     });
 });
