@@ -5,7 +5,7 @@ const { initializeDbConnections } = require('./db');
 
 const envResult = require('dotenv').config();
 if (envResult.error) {
-    throw envResult.error;
+    console.log('Did not find a .env file. Using environment variables instead.');
 }
 
 initializeDbConnections();
