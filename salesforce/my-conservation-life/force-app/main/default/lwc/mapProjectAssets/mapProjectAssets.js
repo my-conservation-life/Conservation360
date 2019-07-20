@@ -39,9 +39,12 @@ export default class MapProjectAssets extends LightningElement {
         const map = event.detail;
 
         this.assetsBboxPromise.then((bbox) => {
-            map.fitBounds([
-                [bbox.latitude_min, bbox.longitude_min],
-                [bbox.latitude_max, bbox.longitude_max]]);
+            const isNull = Object.values(bbox).some(coord => coord === null || coord === undefined);
+            if (!isNull) {
+                map.fitBounds([
+                    [bbox.latitude_min, bbox.longitude_min],
+                    [bbox.latitude_max, bbox.longitude_max]]);
+            }
         });
 
         this.assetsPromise.then((assetArray) => {
