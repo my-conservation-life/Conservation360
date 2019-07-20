@@ -32,6 +32,7 @@ export default class Map extends LightningElement {
     initializeLeaflet() {
         const mapRoot = this.template.querySelector('.map-root');
         this.map = L.map(mapRoot);
+        this.map.fitWorld();
     }
 
     /**
