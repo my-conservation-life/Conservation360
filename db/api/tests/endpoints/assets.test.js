@@ -119,9 +119,9 @@ describe('GET assets', () => {
             .send(asset)
             .expect(200)
             .then((response) => {
-                const data = response.body;
+                const data = BigInt(response.body);
                 expect(data).toBeTruthy();
-                expect(typeof data).toBe('number');
+                expect(typeof data).toBe('bigint');
             });
     });
 });
