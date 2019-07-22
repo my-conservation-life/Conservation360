@@ -1,11 +1,12 @@
 const request = require('supertest');
 const app = require('../../app');
-const { setup, teardown, loadSQL } = require('../setup');
+const { setup, teardown } = require('../setup');
+
+const ENDPOINT = '/api/v1/dataTypes';
 
 describe('GET dataTypes', () => {
     beforeAll(async () => {
         await setup();
-        await loadSQL('../schema/sample-data-dataTypes.sql');
     });
 
     afterAll(async () => {
@@ -14,7 +15,7 @@ describe('GET dataTypes', () => {
 
     it('returns the correct data', (done) => {
         request(app)
-            .get('/api/v1/dataTypes')
+            .get(ENDPOINT)
             .expect(200)
             .then((response) => {
                 const data = response.body;
