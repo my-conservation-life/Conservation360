@@ -28,6 +28,7 @@ describe('GET assets', () => {
     });
 
     afterEach(async () => {
+        await global.dbPool.query('DELETE FROM asset_property');
         await global.dbPool.query('DELETE FROM asset');
     });
 
@@ -89,7 +90,7 @@ describe('GET assets', () => {
             .expect(400);
     });
 
-    it.skip('able to create assets', async () => {
+    it('able to create assets', async () => {
         const asset = {
             project: {
                 id: 1
@@ -119,7 +120,6 @@ describe('GET assets', () => {
             .expect(200)
             .then((response) => {
                 const data = response.body;
-                console.log(data);
                 expect(data).toBeTruthy();
                 expect(typeof data).toBe('number');
             });
