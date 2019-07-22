@@ -1,12 +1,12 @@
 import { LightningElement, wire } from 'lwc';
-import { getObjectInfo } from 'lightning/uiObjectInfoApi';
+import { getRecord } from 'lightning/uiRecordApi';
 
-import MCL_CONFIG_OBJECT from '@salesforce/schema/MCL_CONFIG__c';
+import API_URL_FIELD from '@salesforce/schema/MCL_CONFIG__mdt.API_URL__c';
 
 export default class RegisterAccessCode extends LightningElement {
-    @wire(getObjectInfo, { objectApiName: MCL_CONFIG_OBJECT })
+    @wire(getRecord, { recordId: 'MCL_Config', fields: [API_URL_FIELD] })
     mclConfig({ error, data }) {
-        if (error) console.error(error);
-        if (data) console.log('===', data, data.data);
+        if (error) console.error(error.body);
+        if (data) console.log('===', data);
     }
 }
