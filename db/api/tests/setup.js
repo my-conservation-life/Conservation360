@@ -1,3 +1,4 @@
+const path = require('path');
 const { initializeDbConnections } = require('../db');
 var fs = require('fs');
 
@@ -9,8 +10,13 @@ var fs = require('fs');
  * @returns {Promise<any>} a promise that resolves when the setup is complete
  */
 const setup = async () => {
+    const envPath = path.resolve(__dirname, '.env');
+
     // Use the test .env file within 'db/api/tests/'
-    require('dotenv').config({ path: './.env' });
+    const envResult = require('dotenv').config({ path: envPath });
+    if (envResult.error) {
+        throw envResult.error;
+    }
 
     initializeDbConnections();
     await loadSQL('../schema/schema.sql');

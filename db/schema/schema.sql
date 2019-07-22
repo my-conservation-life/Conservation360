@@ -66,7 +66,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE "public"."asset" (
-    "id" integer NOT NULL,
+    "id" bigint NOT NULL,
     "project_id" integer,
     "asset_type_id" integer NOT NULL,
     "location" "public"."geometry"(Point)
@@ -91,7 +91,7 @@ CREATE VIEW "public"."asset_expandedlocation" AS
 --
 
 CREATE SEQUENCE "public"."asset_id_seq"
-    AS integer
+    AS bigint
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -111,7 +111,7 @@ ALTER SEQUENCE "public"."asset_id_seq" OWNED BY "public"."asset"."id";
 --
 
 CREATE TABLE "public"."asset_property" (
-    "asset_id" integer NOT NULL,
+    "asset_id" bigint NOT NULL,
     "property_id" integer NOT NULL,
     "value" "text" NOT NULL
 );
@@ -407,3 +407,8 @@ ALTER TABLE ONLY "public"."property"
 -- PostgreSQL database dump complete
 --
 
+INSERT INTO data_type (name) VALUES ('boolean');
+INSERT INTO data_type (name) VALUES ('number');
+INSERT INTO data_type (name) VALUES ('datetime');
+INSERT INTO data_type (name) VALUES ('location');
+INSERT INTO data_type (name) VALUES ('text');

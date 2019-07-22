@@ -6,21 +6,27 @@ describe('GET/POST assetDefinitions', () => {
     beforeAll(async () => {
         await setup();
 
-        // FK relationship in assetDefinition requires dataTypes to exist
-        await loadSQL('../schema/sample-data-dataTypes.sql');
+        // create some default asset definitions
+        await loadSQL('../schema/sample-data-emptyProjects.sql');
     });
 
     afterAll(async () => {
         await teardown();
     });
 
-    it('returns HTTP 200 response', (done) => {
+    it('able to get assetDefinitions', (done) => {
         request(app)
             .get('/api/v1/assetDefinitions')
-            .expect(200, done);
+            .expect(200)
+            .then((response) => {
+                const assetDefinition = response.body[0];
+                expect(assetDefinition).toHaveProperty('assetType');
+                expect(assetDefinition).toHaveProperty('properties');
+                done();
+            });
     });
 
-    it('able to create assetDefinitions', (done) => {
+    it('able to create assetDefinitions', async () => {
         const assetDefinition = {
             'assetDefinition': {
                 'name': 'tname',
@@ -42,16 +48,15 @@ describe('GET/POST assetDefinitions', () => {
             }
         };
 
-        request(app)
+        await request(app)
             .post('/api/v1/assetDefinitions')
             .send(assetDefinition)
-            .expect(200)
+            //.expect(200)
             .then((response) => {
                 // response.body should contain the id of the created data_type
                 const data = response.body;
                 expect(data).toBeTruthy();
                 expect(typeof data).toBe('number');
-                done();
             });
     });
 });
