@@ -4,7 +4,7 @@ const { setup, teardown, loadSQL } = require('../setup');
 const { createTestAsset } = require('../utils');
 
 const ENDPOINT = '/api/v1/assets';
-
+/* global BigInt */
 describe('GET assets', () => {
     const ASSET1 = { latitude: 1, longitude: 2 };
     const ASSET2 = { latitude: 3, longitude: 4 };
