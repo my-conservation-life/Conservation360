@@ -1,5 +1,14 @@
 <template>
-    <lightning-card title="Contact ListView" icon-name="custom:custom67">
-        
+    <lightning-card title="AccessCode ListView" icon-name="custom:custom67">
+        <template if:true={listView.data}>
+            <div class="slds-m-around_medium">
+                <template for:each={asset_codes} for:item="asset_code">
+                    <p key={asset_code.Id}>{asset_code.fields.Asset_Id__c.value}</p>
+                </template>
+            </div>
+        </template>
+        <template if:true={listView.error}>
+            Error in loading the data ..
+        </template>
     </lightning-card>
 </template>
