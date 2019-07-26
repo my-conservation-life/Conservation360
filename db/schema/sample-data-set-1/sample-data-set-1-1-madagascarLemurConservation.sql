@@ -20,4 +20,12 @@ VALUES
 
 INSERT INTO asset (project_id, asset_type_id, location)
 SELECT 1, 1, ST_MakePoint(random_between(-22.127, -22.324), random_between(46.844, 47.019))
-FROM generate_series(1, 20);
+FROM generate_series(1, 15);
+
+INSERT INTO asset (project_id, asset_type_id, location)
+SELECT 1, 2, ST_MakePoint(random_between(-22.127, -22.324), random_between(46.844, 47.019))
+FROM generate_series(1, 15);
+
+INSERT INTO asset (project_id, asset_type_id, location)
+SELECT 1, 3, ST_MakePoint(random_between(-22.127, -22.324), random_between(46.844, 47.019))
+FROM generate_series(1, 15);
