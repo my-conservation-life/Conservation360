@@ -1,8 +1,14 @@
 <template>
     <lightning-card>
         <div class="slds-m-around_medium">
-            <lightning-input type="text" name="code" label="Input Access Code">
+            <lightning-input type="text" name="accessCode" label="Input Access Code" onchange={saveAttribute}>
             </lightning-input>
+            <br />
+            <lightning-button variant="success" label="Submit" title="Success" onclick={registerAccessCode}>
+            </lightning-button>
+            <p if:true={hasError} class="error">Unable to claim access code. Please make sure it is inputted correctly
+                and with the correct capitalization.</p>
+            <p if:true={hasSuccess} class="success">Sucessfuly claimed access code.</p>
         </div>
     </lightning-card>
 </template>
