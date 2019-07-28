@@ -1,6 +1,7 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import { assets } from 'c/controllers';
 import { createRecord } from 'lightning/uiRecordApi';
+import { getListUi } from 'lightning/uiListApi';
  
 import ACCESS_CODE_OBJECT from '@salesforce/schema/Access_Code__c';
 import ID_FIELD from '@salesforce/schema/Access_Code__c.Asset_Id__c';
@@ -9,29 +10,42 @@ export default class GenerateAssetCode extends LightningElement {
 
     @track code
 
+    @wire(getListUi, {
+        objectApiName: ACCESS_CODE_OBJECT,
+        listViewApiName: 'All_Access_Codes'
+    })
+    listView;
+
+    get accessCodeObjects() {
+        return this.listView.data.records.records;
+    }
+
     generateCode() {
         const fields = {};
         const recordInput = { apiName: ACCESS_CODE_OBJECT.objectApiName, fields };
         this.code = 'Generating code...';
-        
+
         assets.find().then( assetObjects => {
-            var assetId = -1;
+            var id = -1;
             var i;
             var map = {};
 
-            assetObjects.forEach( assetObject => {
-                i = parseInt(assetObject.asset_id, 10);
-                map[i] = 1;
-            });
+            if (!this.accessCodeObjects) throw ReferenceError;
 
-            for (i = 1; i <= (2^63)*2 ; i++) {
+            for (let accessCodeObject of this.accessCodeObjects) {
+                i = accessCodeObject.fields.Asset_Id__c.value;
+                map[i] = true;
+            }
+
+            for (let assetObject of assetObjects) {
+                i = parseInt(assetObject.asset_id, 10);
                 if (map[i] === undefined) {
-                    assetId = i;
+                    id = i;
                     break;
                 }
             }
 
-            fields[ID_FIELD.fieldApiName] = assetId;
+            fields[ID_FIELD.fieldApiName] = id;
 
             createRecord(recordInput).then(assetCode => {
                 this.code = assetCode.id;
