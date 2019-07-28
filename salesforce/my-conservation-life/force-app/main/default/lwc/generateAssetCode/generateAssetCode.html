@@ -1,14 +1,6 @@
 <template>
-    <lightning-card title="AccessCode ListView" icon-name="custom:custom67">
-        <template if:true={listView.data}>
-            <div class="slds-m-around_medium">
-                <template for:each={asset_codes} for:item="asset_code">
-                    <p key={asset_code.Id}>{asset_code.fields.Asset_Id__c.value}</p>
-                </template>
-            </div>
-        </template>
-        <template if:true={listView.error}>
-            Error in loading the data ..
-        </template>
+    <lightning-card title="Generate Asset Codes" icon-name="custom:custom67">
+        <lightning-button variant="success" label="Generate" onclick={generateCode}></lightning-button>
+            <p><lightning-formatted-text class="status-text" value="" ></lightning-formatted-text></p>
     </lightning-card>
 </template>
