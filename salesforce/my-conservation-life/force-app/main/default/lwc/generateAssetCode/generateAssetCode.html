@@ -1,0 +1,18 @@
+<template>
+    <lightning-card title="Generate Asset Codes" icon-name="custom:custom67">
+        <div class="slds-m-around_medium">
+
+            <lightning-button variant="success" label="Generate" onclick={generateCode}></lightning-button>
+            
+            <lightning-input
+                name="access-code"
+                label="Access Code"
+                type="text"
+                value={code}
+                placeholder="Generate a code"
+                disabled
+            ></lightning-input>
+        
+        </div>
+    </lightning-card>
+</template>
