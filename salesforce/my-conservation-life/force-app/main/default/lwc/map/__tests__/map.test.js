@@ -11,7 +11,10 @@ describe('c-map', () => {
     const CONSOLE_ERROR = global.console.error;
 
     const LeafletMap = class {
-        type = 'map';
+        constructor() {
+            this.type = 'map';
+            this.fitWorld = jest.fn();
+        }
     };
 
     /**
