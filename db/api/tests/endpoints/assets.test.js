@@ -5,7 +5,7 @@ const { createTestAsset } = require('../utils');
 
 const ENDPOINT = '/api/v1/assets';
 /* global BigInt */
-describe('GET assets', () => {
+describe('GET/POST assets', () => {
     const ASSET1 = { latitude: 1, longitude: 2 };
     const ASSET2 = { latitude: 3, longitude: 4 };
     const ASSET3 = { latitude: -2.1, longitude: 1.12 };
