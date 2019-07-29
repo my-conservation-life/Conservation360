@@ -21,18 +21,29 @@
             ></lightning-input>
 
             <br>
-            
+
+            <c-create-asset-property
+            class="location-lattitude"
+            property={lattitude}
+            ></c-create-asset-property>
+
+            <c-create-asset-property
+            class="location-longitude"
+            property={longitude}
+            ></c-create-asset-property>
+
+            <br>
+
             <header>Properties</header>
             <c-create-asset-list
+            class="property-list"
             properties={propertiesValue}
             ></c-create-asset-list>
 
             <br>
 
-            <div class="slds-list_inline">
-                <lightning-button variant="destructive" label="Cancel"></lightning-button>
-                <lightning-button variant="success" label="Create"></lightning-button>
-            </div>
+            <lightning-button variant="success" label="Save" onclick={saveAsset}></lightning-button>
+            <p><lightning-formatted-text class="status-text" value="" ></lightning-formatted-text></p>
 
         </div>
     </lightning-card>
