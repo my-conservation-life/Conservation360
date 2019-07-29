@@ -1,11 +1,10 @@
 const request = require('supertest');
-
 const app = require('../../app');
 const { setup, teardown, loadSQL } = require('../setup');
 const { createTestAsset } = require('../utils');
 
 const ENDPOINT = '/api/v1/assets';
-
+/* global BigInt */
 describe('GET assets', () => {
     const ASSET1 = { latitude: 1, longitude: 2 };
     const ASSET2 = { latitude: 3, longitude: 4 };
@@ -27,11 +26,14 @@ describe('GET assets', () => {
         await teardown();
     });
 
-    afterEach(async () => {
-        await global.dbPool.query('DELETE FROM asset');
-    });
+    function contains(arr, key, val) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i][key] === val) return true;
+        }
+        return false;
+    }
 
-    it('returns empty list of assets', () => {
+    it('returns HTTP 200 response', () => {
         return request(app)
             .get(ENDPOINT)
             .expect(200)
@@ -46,11 +48,13 @@ describe('GET assets', () => {
             .get(ENDPOINT)
             .expect(200)
             .then(res => {
-                expect(res.body).toEqual(expect.arrayContaining([
-                    expect.objectContaining(ASSET1),
-                    expect.objectContaining(ASSET2),
-                    expect.objectContaining(ASSET3)
-                ]));
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(ASSET1),
+                        expect.objectContaining(ASSET2),
+                        expect.objectContaining(ASSET3)
+                    ])
+                );
 
                 expect(res.body).toHaveLength(3);
             });
@@ -62,12 +66,14 @@ describe('GET assets', () => {
             .get(ENDPOINT + '?project_id=2')
             .expect(200)
             .then(res => {
-                expect(res.body).toEqual(expect.arrayContaining([
-                    expect.objectContaining(ASSET2),
-                    expect.objectContaining(ASSET3)
-                ]));
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(ASSET2),
+                        expect.objectContaining(ASSET3)
+                    ])
+                );
 
-                expect(res.body).toHaveLength(2);
+                expect(res.body).toHaveLength(4);
             });
     });
 
@@ -89,7 +95,7 @@ describe('GET assets', () => {
             .expect(400);
     });
 
-    it.skip('able to create assets', async () => {
+    it('able to create assets', async () => {
         const asset = {
             project: {
                 id: 1
@@ -117,11 +123,28 @@ describe('GET assets', () => {
             .post(ENDPOINT)
             .send(asset)
             .expect(200)
-            .then((response) => {
-                const data = response.body;
-                console.log(data);
+            .then(response => {
+                const data = BigInt(response.body);
                 expect(data).toBeTruthy();
-                expect(typeof data).toBe('number');
+                expect(typeof data).toBe('bigint');
+            });
+    });
+
+    it('returns assets with expected types', done => {
+        request(app)
+            .get(ENDPOINT)
+            .expect(200)
+            .then(response => {
+                // response.body should contain the id of the created data_type
+                const data = response.body;
+                expect(data).toBeTruthy();
+                expect(typeof data).toBe('object');
+                //"Randomly" checking that the data loaded from Sample-data-1.sql is present
+                expect(contains(data, 'sponsor_name', 'Bronx Zoo'));
+                expect(contains(data, 'sponsor_name', 'Seneca Park Zoo'));
+                expect(contains(data, 'asset_id', '21'));
+                expect(contains(data, 'asset_type', 'Bison'));
+                done();
             });
     });
 });
