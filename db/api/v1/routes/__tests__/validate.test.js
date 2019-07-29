@@ -159,6 +159,12 @@ describe('validate.type.assetDefinition', () => {
         expect(result.isFailure()).toBe(true);
     });
 
+    it('accepts undefined description', () => {
+        assetDefinition.description = undefined;
+        const result = type.assetDefinition(assetDefinition);
+        expect(result.isSuccess()).toBe(true);
+    });
+
     // Test Properties
     it('rejects undefined properties', () => {
         assetDefinition.properties = undefined;
