@@ -16,7 +16,7 @@ export default class GenerateAssetCode extends LightningElement {
 
     // The code to be written down
     // Also used for displaying messages in the input box
-    @track code
+    @track code;
 
     // A list of all Access_Code records in salesforce
     @wire(getListUi, {
@@ -48,9 +48,9 @@ export default class GenerateAssetCode extends LightningElement {
 
         // Get all assets in the database
         assets.find().then( assetObjects => {
-            var id = 0;
-            var i;
-            var map = {};
+            let id = 0;
+            let i;
+            let map = {};
 
             // Do not generate a new code if the existing access codes have not loaded
             if (!this.accessCodeObjects) throw Error('Access_Codes failed to load.');
