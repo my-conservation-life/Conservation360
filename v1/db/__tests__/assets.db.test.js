@@ -15,18 +15,18 @@ describe('assets.db.find', () => {
 
 
     it('executes correct DB query when no projectId is specified', async () => {
-        await find();
+        await find(undefined, undefined, undefined);
 
         expect(query).toHaveBeenCalledTimes(1);
-        expect(query.mock.calls[0][0]).toEqual(expect.not.stringContaining('WHERE '));
+        expect(query.mock.calls[0][0]).toEqual(expect.not.stringContaining('AND project_id '));
     });
 
     it('executes correct DB query when projectId is specified', async () => {
-        await find(1);
+        await find(undefined, 54, undefined);
 
         expect(query).toHaveBeenCalledTimes(1);
-        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('WHERE project_id = $1'));
-        expect(query.mock.calls[0][1]).toEqual([1]);
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('AND project_id'));
+        expect(query.mock.calls[0][1]).toEqual([54]);
     });
 
     it('returns an array of asset rows', async () => {
