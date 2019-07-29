@@ -53,7 +53,8 @@ describe('c-map-project-assets', () => {
             latLng: jest.fn(),
             map: jest.fn(() => ({
                 type: 'map',
-                fitBounds: fitBounds
+                fitBounds: fitBounds,
+                fitWorld: jest.fn()
             })),
             marker: jest.fn(),
             tileLayer: jest.fn(() => ({
