@@ -64,7 +64,7 @@ describe('c-map-project-assets', () => {
 
     it('retrieves assets and bounding box for project 2', () =>
         load(2).then(() => {
-            expect(assets.find).toHaveBeenCalledWith(2);
+            expect(assets.find).toHaveBeenCalledWith({ projectId: 2 });
             expect(bboxAssets.get).toHaveBeenCalledWith(2);
         })
     );

@@ -18,7 +18,7 @@ export default class MapProjectAssets extends LightningElement {
      * Starts the download for asset details and bounding box early.
      */
     connectedCallback() {
-        this.assetsPromise = assets.find(parseInt(this.projectId, 10));
+        this.assetsPromise = assets.find({ projectId: parseInt(this.projectId, 10) });
         this.assetsBboxPromise = bboxAssets.get(parseInt(this.projectId, 10));
     }
 

@@ -10,12 +10,13 @@ const findAssetTypes = async () => {
             asset_type
     `;
 
-    return global.pool.query(query);
+    return global.dbPool.query(query);
 };
 
 const findAssetProperties = async () => {
     let query = `
         SELECT
+            id,
             asset_type_id,
             name,
             data_type,
@@ -25,7 +26,7 @@ const findAssetProperties = async () => {
             property
     `;
 
-    return global.pool.query(query);
+    return global.dbPool.query(query);
 };
 
 /**
@@ -97,7 +98,7 @@ const find = async () => {
  * @param {object} assetDefinition - a valid my conservation life asset definition
  */
 const create = async (assetDefinition) => {
-    const client = await global.pool.connect();
+    const client = await global.dbPool.connect();
 
     try {
         await utils.db.beginTransaction(client);

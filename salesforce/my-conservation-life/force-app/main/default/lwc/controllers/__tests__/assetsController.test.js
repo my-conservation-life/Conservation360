@@ -22,19 +22,13 @@ describe('assets.find', () => {
     });
 
     it('fetches with projectId', async () => {
-        const assetArray = await assets.find(2);
+        const assetArray = await assets.find({ projectId: 2 });
         expect(fetch.mock.calls[0][0]).toBe(ASSETS_ENDPOINT + '?project_id=2');
         expect(assetArray).toEqual(EXPECTED_ASSETS);
     });
 
     it('fetches all assets when projectId is a string', async () => {
-        const assetsArray = await assets.find('3');
-        expect(fetch.mock.calls[0][0]).toBe(ASSETS_ENDPOINT);
-        expect(assetsArray).toEqual(EXPECTED_ASSETS);
-    });
-
-    it('fetches all assets when projectId is 0', async () => {
-        const assetsArray = await assets.find(0);
+        const assetsArray = await assets.find({ projectId: '3' });
         expect(fetch.mock.calls[0][0]).toBe(ASSETS_ENDPOINT);
         expect(assetsArray).toEqual(EXPECTED_ASSETS);
     });

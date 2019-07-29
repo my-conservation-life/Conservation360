@@ -1,5 +1,5 @@
 -- Install PostGIS
-CREATE EXTENSION postgis;
+CREATE EXTENSION IF NOT EXISTS postgis;
 
 --
 -- PostgreSQL database dump
@@ -7,16 +7,6 @@ CREATE EXTENSION postgis;
 
 -- Dumped from database version 11.2 (Ubuntu 11.2-1.pgdg16.04+1)
 -- Dumped by pg_dump version 11.2
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET row_security = off;
 
 ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_data_type_fkey";
 ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_asset_type_id_fkey";
@@ -76,7 +66,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE "public"."asset" (
-    "id" integer NOT NULL,
+    "id" bigint NOT NULL,
     "project_id" integer,
     "asset_type_id" integer NOT NULL,
     "location" "public"."geometry"(Point)
@@ -101,7 +91,7 @@ CREATE VIEW "public"."asset_expandedlocation" AS
 --
 
 CREATE SEQUENCE "public"."asset_id_seq"
-    AS integer
+    AS bigint
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -121,7 +111,7 @@ ALTER SEQUENCE "public"."asset_id_seq" OWNED BY "public"."asset"."id";
 --
 
 CREATE TABLE "public"."asset_property" (
-    "asset_id" integer NOT NULL,
+    "asset_id" bigint NOT NULL,
     "property_id" integer NOT NULL,
     "value" "text" NOT NULL
 );
@@ -417,3 +407,8 @@ ALTER TABLE ONLY "public"."property"
 -- PostgreSQL database dump complete
 --
 
+INSERT INTO data_type (name) VALUES ('boolean');
+INSERT INTO data_type (name) VALUES ('number');
+INSERT INTO data_type (name) VALUES ('datetime');
+INSERT INTO data_type (name) VALUES ('location');
+INSERT INTO data_type (name) VALUES ('text');
