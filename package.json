@@ -4,10 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node server.js",
     "test": "jest",
-    "test:unit": "jest",
-    "test:unit:coverage": "jest --coverage"
+    "test:unit": "jest --testPathIgnorePatterns /tests/",
+    "test:unit:coverage": "jest --coverage",
+    "test:integration": "jest /tests/ --runInBand"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "eslint": "^5.16.0",
-    "jest": "^24.8.0"
+    "jest": "^24.8.0",
+    "supertest": "^4.0.2"
   }
 }

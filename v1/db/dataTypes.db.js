@@ -6,7 +6,7 @@ const find = async () => {
             data_type
     `;
 
-    const db = await global.pool.query(query);
+    const db = await global.dbPool.query(query);
     return db.rows;
 };
 
