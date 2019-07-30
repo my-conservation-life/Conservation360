@@ -6,6 +6,9 @@ import { getListUi } from 'lightning/uiListApi';
 import ACCESS_CODE_OBJECT from '@salesforce/schema/Access_Code__c';
 import ID_FIELD from '@salesforce/schema/Access_Code__c.Asset_Id__c';
 
+// A boolean used for identifying if asset generation is locked
+let locked = false;
+
 /**
  * GenerateAssetCode is used to generate a new asset code for use
  * in a donatable product. The code is written down, and sold with
@@ -25,6 +28,9 @@ export default class GenerateAssetCode extends LightningElement {
     })
     listView;
 
+    // An internal list for tracking asset ids that have been assigned to an Access_Code
+    assigned = {};
+
     /**
      * acceessCodeObjects returns an array of all
      * Access_Code objects stored in salesforce
@@ -39,34 +45,38 @@ export default class GenerateAssetCode extends LightningElement {
      */
     generateCode() {
 
-        // Initialize the access code object
-        const fields = {};
-        const recordInput = { apiName: ACCESS_CODE_OBJECT.objectApiName, fields };
-        
+        // Disable the generate button temporarily
+        this.template.querySelector('.gen-btn').disabled = true;
+
         // Inform the user that generation is in process
         this.code = 'Generating code...';
 
         // Get all assets in the database
         assets.find().then( assetObjects => {
-            let id = 0;
-            let i;
-            let map = {};
-
-            // Do not generate a new code if the existing access codes have not loaded
+            
+            // Do not generate a code if the existing access codes have not loaded
             if (!this.accessCodeObjects) throw Error('Access_Codes failed to load.');
 
-            // Map all of the asset ids currently being tracked in access codes
+            // Do not generate a code if generation is locked
+            if (locked) return;
+
+            // If it is not locked, lock it
+            locked = true;
+
+            // Mark all of the asset ids currently being tracked in access codes
+            let i;
             for (let accessCodeObject of this.accessCodeObjects) {
                 i = accessCodeObject.fields.Asset_Id__c.value;
-                map[i] = true;
+                this.assigned[i] = true;
             }
 
-            // Look for an asset that is not being tracked
+            // Look for an asset id that is not being tracked
+            let id = 0;
             for (let assetObject of assetObjects) {
                 i = parseInt(assetObject.asset_id, 10);
-                if (map[i] === undefined) {
+                if (this.assigned[i] === undefined) {
                     
-                    // Use the id of the first untracked asset that is found
+                    // Use the first untracked asset id that is found
                     id = i;
                     break;
                 }
@@ -76,18 +86,31 @@ export default class GenerateAssetCode extends LightningElement {
             if (id < 1) throw Error('There are no untracked assets.');
 
             // Use the found asset id to create a new access code
+            const fields = {};
+            const recordInput = { apiName: ACCESS_CODE_OBJECT.objectApiName, fields };
             fields[ID_FIELD.fieldApiName] = id;
             createRecord(recordInput).then(assetCode => {
             
+                // Track this new asset code in the internal list
+                this.assigned[id] = true;
+
                 // Display the newly generated code
                 this.code = assetCode.id;
+
+                // Unlock generation on success
+                locked = false;
+                this.template.querySelector('.gen-btn').disabled = false;
             
             });
         }).catch(() => {
 
             // Display a simple error message if an access code was not generated
             this.code = 'Error: code not generated';
-        
+
+            // Unlock generation on failure
+            locked = false;
+            this.template.querySelector('.gen-btn').disabled = false;
         });
+        // No finally statement because then a blocked call would unlock generation
     }
 }
