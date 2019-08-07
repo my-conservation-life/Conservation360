@@ -18,21 +18,23 @@ export default class App extends LightningElement {
 
       ret.push({
           label: 'Default: Any',
-          value: ''
+          value: '0'
       });
 
       ret.push({
           label: 'Seneca Park Zoo',
           value: '1'
       });
+    
       if (ret.sizeOf === 0) {
           return [
               {
                   label: 'Default: Any',
-                  value: ''
+                  value: '0'
               }
           ];
       }
+    
       return ret;
   }
   @track
@@ -43,21 +45,25 @@ export default class App extends LightningElement {
       //Push all projects to return
       ret.push({
           label: 'Default: Any',
-          value: ''
+          value: '0'
       });
       ret.push({
-          label: 'Madagascar Reforesting Project',
+          label: 'Madagascar Lemur Conservation',
           value: '1'
       });
       ret.push({
-          label: 'ID = 2 [Sample]',
+          label: 'Madagascar Reforesting',
           value: '2'
+      });
+      ret.push({
+          label: 'African Elephant Conservation',
+          value: '3'
       });
       if (ret.sizeOf === 0) {
           return [
               {
                   label: 'Default: Any',
-                  value: ''
+                  value: '0'
               }
           ];
       }
@@ -70,15 +76,31 @@ export default class App extends LightningElement {
 
       ret.push({
           label: 'Default: Any',
-          value: ''
+          value: '0'
       });
       ret.push({
-          label: 'Tree',
+          label: 'Ring Tailed Lemur',
           value: '1'
       });
       ret.push({
-          label: 'ID = 2 [Sample]',
+          label: 'Brown Mouse Lemur',
           value: '2'
+      });
+      ret.push({
+          label: 'Silky Sifaka',
+          value: '3'
+      });
+      ret.push({
+          label: 'Tree',
+          value: '4'
+      });
+      ret.push({
+          label: 'Elephant',
+          value: '5'
+      });
+      ret.push({
+          label: 'Baobab',
+          value: '6'
       });
       if (ret.sizeOf === 0) {
           return [
