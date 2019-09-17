@@ -27,6 +27,12 @@ body {
     text-align: center;
 }
 
+#synopsis {
+	display: inline-block;
+	max-width: 40%;
+	text-align: left;
+}
+
 @keyframes fadein {
     from {
         opacity: 0;
@@ -37,3 +43,4 @@ body {
         bottom: 0px;
     }
 }
+
