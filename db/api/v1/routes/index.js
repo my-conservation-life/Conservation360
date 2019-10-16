@@ -7,7 +7,8 @@ const {
     assets,
     assetDefinitions,
     bboxAssets,
-    dataTypes
+    dataTypes,
+    projects
 } = require('../controllers');
 
 // Assets
@@ -38,5 +39,21 @@ router.get(
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);
+
+// Projects
+router.get(
+    '/projects',
+    // validate(param.query, 'sponsor_name', type.sponsorName), // Optional Sponsor Name Parameter
+    validate(param.query, 'id', type.id), // Optional Project ID Parameter
+    validate(param.query, 'sponsor_id', type.id), // Optional Sponsor ID Parameter
+    // validate(param.query, 'name', type.project), // Optional Project Name Parameter
+    // validate(param.query, 'region', type.region ), // Optional Region or Polygon Param
+    projects.find
+);
+
+// Example URI
+// router.post('/projects', projects.create) // Create a new Project
+// Example URI
+// router.put('/projects/:id', projects.update) // Update an existing project
 
 module.exports = router;

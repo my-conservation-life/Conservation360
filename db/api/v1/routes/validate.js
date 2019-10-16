@@ -205,6 +205,8 @@ const parseAssetDefinition = (assetDefinition) => {
     return ParseResult.success(assetDefinition);
 };
 
+// TODO: Add tests for project validation
+
 module.exports = {
     validate,
 
