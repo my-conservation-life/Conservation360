@@ -29,7 +29,7 @@ const find = async (id, sponsorId/*, name, region */) => {
         values.push(id);
         query = query + `AND id = $${values.length}` + ' ';
     }
-    if ((typeof id !== 'undefined') & (id > 0)) {
+    if ((typeof sponsorId !== 'undefined') & (sponsorId > 0)) {
         values.push(sponsorId);
         query = query + `AND sponsor_id = $${values.length}` + ' ';
     }
