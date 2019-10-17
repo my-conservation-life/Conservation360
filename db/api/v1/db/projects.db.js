@@ -9,7 +9,7 @@ const utils = require('../utils');
 
 
 const QUERY_FIND = `SELECT id, sponsor_id, name, description
-FROM projects
+FROM project 
 WHERE TRUE `;
 
 /**
