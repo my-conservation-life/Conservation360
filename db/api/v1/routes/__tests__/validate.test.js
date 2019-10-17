@@ -111,6 +111,30 @@ describe('validate.type.id', () => {
     });
 });
 
+describe('validate.type.projectName', () => {
+    it('rejects null', () => {
+        const result = type.projectName(null);
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects the empty string', () => {
+        const result = type.projectName('');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('accepts "a"', () => {
+        const result = type.projectName('a');
+        expect(result.isSuccess()).toBeTruthy();
+        expect(result.value).toBe('a');
+    });
+
+    it('accepts "Madagascar Reforestation"', () => {
+        const result = type.projectName('Madagascar Reforestation');
+        expect(result.isSuccess()).toBeTruthy();
+        expect(result.value).toBe('Madagascar Reforestation');
+    });
+});
+
 describe('validate.type.assetDefinition', () => {
     let assetDefinition;
 

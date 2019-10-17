@@ -46,7 +46,7 @@ router.get(
     // validate(param.query, 'sponsor_name', type.sponsorName), // Optional Sponsor Name Parameter
     validate(param.query, 'id', type.id), // Optional Project ID Parameter
     validate(param.query, 'sponsor_id', type.id), // Optional Sponsor ID Parameter
-    // validate(param.query, 'name', type.project), // Optional Project Name Parameter
+    validate(param.query, 'name', type.projectName), // Optional Project Name Parameter
     // validate(param.query, 'region', type.region ), // Optional Region or Polygon Param
     projects.find
 );

@@ -19,10 +19,11 @@ WHERE TRUE `;
  * 
  * @param {*} id the ID of the Project
  * @param {*} sponsorId the ID of the Sponsor for the Project
+ * @param {*} name the name of the Project
  * @returns {object[]|undefined} array of projects with fields (id, sponsor_id, name, and description), or undefined if all params are invalid.
  * @throws error if the DB query failed to execute
  */
-const find = async (id, sponsorId/*, name, region */) => {
+const find = async (id, sponsorId, name/*, region */) => {
     let query = QUERY_FIND;
     let values = [];
     if ((typeof id !== 'undefined') & (id > 0)) {
@@ -32,6 +33,11 @@ const find = async (id, sponsorId/*, name, region */) => {
     if ((typeof sponsorId !== 'undefined') & (sponsorId > 0)) {
         values.push(sponsorId);
         query = query + `AND sponsor_id = $${values.length}` + ' ';
+    }
+    // Name search is case insensitive.
+    if ((typeof name !== 'undefined') & (name.length > 0)) {
+        values.push(name);
+        query = query + `AND LOWER(name) = LOWER($${values.length})` + ' ';
     }
 
     const result = await global.dbPool.query(query, values);

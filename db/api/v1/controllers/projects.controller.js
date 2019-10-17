@@ -14,13 +14,14 @@ const projectsDb = require('../db/projects.db');
  * @param {*} next - The next Express middleware function in the stack
  */
 const find = async (req, res, next) => {
+    // const sponsor_name = req.valid.sponsor_name;
     const id = req.valid.id;
     const sponsorId = req.valid.sponsor_id;
-    // const name = req.valid.sponsor_name;
+    const name = req.valid.name;
     // const region = req.valid.region;
 
     try {
-        const projects = await projectsDb.find(id, sponsorId/*, name, region */);
+        const projects = await projectsDb.find(id, sponsorId, name/*, region */);
         res.json(projects);
     } catch (error) {
         next(error);

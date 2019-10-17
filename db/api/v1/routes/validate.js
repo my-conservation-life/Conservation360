@@ -138,6 +138,19 @@ const parseString = (name, minLength = 0, maxLength = Number.MAX_SAFE_INTEGER) =
 };
 
 /**
+ * Validates a Project's name. Does not allow empty strings.
+ * 
+ * @param {*} name - the name of the project to parse
+ * @returns {ParseResult} parse success with a valid name or a parse failure
+ */
+const parseProjectName = (name) => {
+    const MIN_NAME_LENGTH = 1;
+    return (parseString(name, MIN_NAME_LENGTH) 
+        ? ParseResult.success(name) 
+        : ParseResult.failure(`Project Names must be a at least ${MIN_NAME_LENGTH} character(s) long`));
+};
+
+/**
  * Validates if it is a valid my conservation life data type
  * 
  * @param {string} dataType - the string to validate
@@ -205,8 +218,6 @@ const parseAssetDefinition = (assetDefinition) => {
     return ParseResult.success(assetDefinition);
 };
 
-// TODO: Add tests for project validation
-
 module.exports = {
     validate,
 
@@ -215,9 +226,11 @@ module.exports = {
         body: extractBodyParam
     },
 
+    // TODO: Project Parse from param.body
     type: {
         id: parseId,
-        assetDefinition: parseAssetDefinition
+        assetDefinition: parseAssetDefinition,
+        projectName: parseProjectName
     },
 
     ParseResult
