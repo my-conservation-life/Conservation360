@@ -26,16 +26,16 @@ WHERE TRUE `;
 const find = async (id, sponsorId, name/*, region */) => {
     let query = QUERY_FIND;
     let values = [];
-    if ((typeof id !== 'undefined') & (id > 0)) {
+    if ((typeof id !== 'undefined') && (id > 0)) {
         values.push(id);
         query = query + `AND id = $${values.length}` + ' ';
     }
-    if ((typeof sponsorId !== 'undefined') & (sponsorId > 0)) {
+    if ((typeof sponsorId !== 'undefined') && (sponsorId > 0)) {
         values.push(sponsorId);
         query = query + `AND sponsor_id = $${values.length}` + ' ';
     }
     // Name search is case insensitive.
-    if ((typeof name !== 'undefined') & (name.length > 0)) {
+    if ((typeof name !== 'undefined') && (name.length > 0)) {
         values.push(name);
         query = query + `AND LOWER(name) = LOWER($${values.length})` + ' ';
     }
