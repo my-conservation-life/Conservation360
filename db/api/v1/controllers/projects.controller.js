@@ -26,9 +26,7 @@ const find = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-
 };
-
 
 /**
  * Creates a new Project in the database.
