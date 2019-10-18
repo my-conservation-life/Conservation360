@@ -103,14 +103,14 @@ describe('projects.controller.create', () => {
     let req;
     let res;
     let next;
-    let expected_projects;
+    let project;
 
     // Reset variables before each test
     beforeEach(() => {
         // Clear the request
         req = {
             valid: {},
-            query: {}
+            body: {}
         };
 
         // Clear the response
@@ -122,11 +122,30 @@ describe('projects.controller.create', () => {
 
         next = jest.fn();
 
-        expected_projects = [{}];
-        projectsDb.create = jest.fn(async () => expected_projects);
+        project = { sponsor_id : '1', name: 'testProject', description: 'A description'};
+        projectsDb.create = jest.fn(async () => 4);
     });
 
-    it('TODO: creates a project and responds', async () =>{
-        expect(false).toBeTruthy();
+    it('accesses DB and sends JSON response when a valid project is provided', async () => {
+        req.valid.project = project;
+        await create(req, res, next);
+        expect(projectsDb.create).toHaveBeenCalledWith(project);
+        expect(res.json).toHaveBeenCalledWith(4);
+    });
+
+    it('ignores an undefined/invalidated project', async () => {
+        const getUndefinedProject = jest.fn(() => undefined);
+        Object.defineProperty(req.body, 'project', { get: getUndefinedProject });
+        await create(req, res, next);
+        expect(projectsDb.create).toHaveBeenCalledWith(undefined);
+        expect(getUndefinedProject).not.toHaveBeenCalled();
+    });
+
+    it('catches DB access exceptions to pass them to the Express error handler', async () => {
+        const DB_ERROR = new Error();
+        projectsDb.create = jest.fn(async () => { throw DB_ERROR; });
+        await create(req, res, next);
+        expect(next).toHaveBeenCalledWith(DB_ERROR);
+        expect(res.json).not.toHaveBeenCalled();
     });
 });

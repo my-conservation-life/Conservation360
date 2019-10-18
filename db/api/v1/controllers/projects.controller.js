@@ -36,12 +36,10 @@ const find = async (req, res, next) => {
  * @param {*} next - The next Express middleware function in the stack
  */
 const create = async (req, res, next) => {
-
-    // Parse parameters
-    // const project = req.body;
-
+    const project = req.valid.project;
     try {
-        // const projects = await projectsDb.create(project); // TODO: implm
+        const projectId = await projectsDb.create(project);
+        res.json(projectId);
     } catch (error) {
         next(error);
     }
