@@ -239,6 +239,68 @@ describe('validate.type.assetDefinition', () => {
     });
 });
 
+describe('validate.type.project', () => {
+    let project;
+
+    beforeEach(() => {
+        project = {
+            'sponsor_id': '1',
+            'name': 'tname1',
+            'description': 'tdesc1'
+        };
+    });
+
+    it('accepts a valid project', () => {
+        const result = type.project(project);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('accepts an empty description', () => {
+        project.description = '';
+        const result = type.project(project);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('accepts an undefined description', () => {
+        project.description = undefined;
+        const result = type.project(project);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('accepts a missing description', () => {
+        delete project.description;
+        const result = type.project(project);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('rejects empty name', () => {
+        project.name = '';
+        const result = type.project(project);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Project Names must be a at least')
+        );
+    });
+
+    it('rejects "a" as a sponsor_id', () => {
+        project.sponsor_id = 'a';
+        const result = type.project(project);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Expected a number between 1 and')
+        );
+    });
+
+    it('rejects "0" as a sponsor_id', () => {
+        project.sponsor_id = '0';
+        const result = type.project(project);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Expected a number between 1 and')
+        );
+    });
+});
+
 describe('validate.param.query', () => {
     it('extracts 2 from query string', () => {
         const req = {

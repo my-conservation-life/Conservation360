@@ -1,5 +1,7 @@
 const utils = require('../utils');
 
+const MIN_PROJECT_NAME_LENGTH = 1;
+
 /**
  * Constructs Express middleware that validates an optional parameter.
  * 
@@ -144,10 +146,9 @@ const parseString = (name, minLength = 0, maxLength = Number.MAX_SAFE_INTEGER) =
  * @returns {ParseResult} parse success with a valid name or a parse failure
  */
 const parseProjectName = (name) => {
-    const MIN_NAME_LENGTH = 1;
-    return (parseString(name, MIN_NAME_LENGTH) 
+    return (parseString(name, MIN_PROJECT_NAME_LENGTH) 
         ? ParseResult.success(name) 
-        : ParseResult.failure(`Project Names must be a at least ${MIN_NAME_LENGTH} character(s) long`));
+        : ParseResult.failure(`Project Names must be a at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
 };
 
 /**
@@ -218,6 +219,36 @@ const parseAssetDefinition = (assetDefinition) => {
     return ParseResult.success(assetDefinition);
 };
 
+/**
+ * Validates if its a valid Project
+ * 
+ * @param {*} project - A My Conservation Life Project that contains a sponsor_id, a name, and optionally a description
+ * @returns {ParseResult} a successful ParseResult if it is a valid Project
+ */
+const parseProject = (project) => {
+    const sponsor_id = project.sponsor_id;
+    const name = project.name;
+    const description = project.description;
+
+    // Validate the Sponsor ID
+    const result_id = parseId(sponsor_id);
+    if (result_id.isFailure()) 
+        return result_id;
+
+    // Validate the Project Name
+    const result_name = parseProjectName(name);
+    if (result_name.isFailure()) 
+        return result_name;
+
+    // Validate the Project Description if there was one provided
+    if (!utils.shared.isUndefined(description)) {
+        if (!parseString(description))
+            return ParseResult.failure('assetDefinition description must be a string');
+    }
+
+    return ParseResult.success(project);
+};
+
 module.exports = {
     validate,
 
@@ -226,10 +257,10 @@ module.exports = {
         body: extractBodyParam
     },
 
-    // TODO: Project Parse from param.body
     type: {
         id: parseId,
         assetDefinition: parseAssetDefinition,
+        project: parseProject,
         projectName: parseProjectName
     },
 

@@ -40,19 +40,23 @@ router.get(
 // Data Types
 router.get('/dataTypes', dataTypes.find);
 
+
+// TODO: Allow Finding Projects by sponsor name (once unique) and by region
 // Projects
 router.get(
     '/projects',
-    // validate(param.query, 'sponsor_name', type.sponsorName), // Optional Sponsor Name Parameter
     validate(param.query, 'id', type.id), // Optional Project ID Parameter
     validate(param.query, 'sponsor_id', type.id), // Optional Sponsor ID Parameter
     validate(param.query, 'name', type.projectName), // Optional Project Name Parameter
-    // validate(param.query, 'region', type.region ), // Optional Region or Polygon Param
     projects.find
 );
 
-// Example URI
-// router.post('/projects', projects.create) // Create a new Project
+// TODO: Maybe allow for creating projects with A Sponsor Name (once unique)
+// Create projects
+router.post('/projects', 
+    validate(param.body, 'project', type.project, true),
+    projects.create
+);
 // Example URI
 // router.put('/projects/:id', projects.update) // Update an existing project
 
