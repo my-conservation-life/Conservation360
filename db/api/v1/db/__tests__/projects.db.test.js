@@ -11,8 +11,6 @@ describe('projects.db.find', () => {
     let query;  // Mock Query to check if queries are formatted properly
     let rows;   // Mock result set
 
-    // TODO: Don't we have to set up and reset database to run this test?
-
     // Clear variables before each test is executed.
     beforeEach(() => {
         rows = [];
@@ -82,18 +80,61 @@ describe('projects.db.find', () => {
 
 describe('projects.db.create', () => {
 
-    let query; // TODO: what is this?
-    let rows;  // TODO: what is this?
+    let query;      // A mock query function
+    let release;    // A mock release function
+    let rows;       // A mock query return data
+    let pId;        // A project ID that is a property of the returned rows data
+    let client;     // A mock Client 
 
-    // Clear variables before each test is executed.
+    // Reset Mock before each test
     beforeEach(() => {
-        rows = [];
+        pId = 2;
+        rows = [{ 'id': pId }];
         query = jest.fn(async () => ({ rows }));
-        global.dbPool = { query };
+        release = jest.fn(() => { return undefined; });
+        global.dbPool.connect = jest.fn(async () => { return client; });
+        client = { query, release };
     });
 
-    it('TODO: inserts a new project', async () => {
-        expect(false).toBeTruthy();
+    it('executes correct queries with valid project', async () => {
+        const project = {'sponsor_id': '1', 'name': 'Seneca Park Zoo', 'description' : 'adescript'};
+        await create(project);
+        expect(query).toHaveBeenCalledTimes(3); // Once for Begin Transaction, Once for Create Project, Once for Commit
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
+        expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('INSERT INTO project'));
+        expect(query.mock.calls[2][0]).toEqual(expect.stringContaining('END TRANSACTION'));
+    });
+
+    it('returns project id when transaction is successful', async () => {
+        const project = {'sponsor_id': '1', 'name': 'Seneca Park Zoo', 'description' : 'adescript'};
+        const actualRowId = await create(project);
+        expect(actualRowId).toEqual(pId);
+    });
+
+    it('throws exception when query throws', async () => {
+        query = jest.fn(async () => { throw new Error(); });
+        client.query = query;
+        await expect(create()).rejects.toThrow();
+    });
+
+    it('releases client after successful create', async () => {
+        const project = {'sponsor_id': '1', 'name': 'Seneca Park Zoo', 'description' : 'adescript'};
+        await create(project);
+        expect(query).toHaveBeenCalledTimes(3); // Once for Begin Transaction, Once for Create Project, Once for Commit
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
+        expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('INSERT INTO project'));
+        expect(query.mock.calls[2][0]).toEqual(expect.stringContaining('END TRANSACTION'));
+        expect(release).toHaveBeenCalledTimes(1);
+    });
+
+    it('roles back and releases client after query throws', async () => {
+        query = jest.fn(async () => { throw new Error(); });
+        client.query = query;
+        await expect(create()).rejects.toThrow();
+        expect(query).toHaveBeenCalledTimes(2); // call in beginTransaction and rollbackTransaction
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
+        expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('ROLLBACK'));
+        expect(release).toHaveBeenCalledTimes(1);
     });
 
 });
