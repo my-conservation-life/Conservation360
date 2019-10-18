@@ -86,6 +86,18 @@ describe('GET/POST Projects', () => {
             });
     });
 
+    // Test getting a Project by Sponsor ID
+    it('returns bad request (HTTP 400) when given an invalid argument', async () => {
+        await request(app)
+            .get(ENDPOINT + '?sponsor_id=a')
+            .expect(400)
+            .then((res) => {
+                expect(res.body['errors']).toHaveLength(1);
+                expect(res.body['errors'][0]).toHaveProperty('problem', 'Failed to validate the argument "a" for the parameter "sponsor_id"');
+                expect(res.body['errors'][0]).toHaveProperty('reason', 'Expected a number between 1 and 2147483647');
+            });
+    });
+
     // Test getting a Project by Project Name
     it('able to filter by Project Name', async () => {
         await request(app)
