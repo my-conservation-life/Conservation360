@@ -55,7 +55,6 @@ describe('GET/POST Projects', () => {
 
     // Test getting all Projects from the database
     it('able to get all Projects', async () => {
-
         await request(app)
             .get(ENDPOINT)
             .expect(200)
@@ -73,13 +72,63 @@ describe('GET/POST Projects', () => {
     });
 
     // Test getting a Project by Sponsor ID
-    it('TODO: able to filter by Sponsor ID', async () => {
-        expect(false).toBeTruthy();
+    it('able to filter by Sponsor ID', async () => {
+        await request(app)
+            .get(ENDPOINT + '?sponsor_id=2')
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(EXPECTED_PROJECT3)
+                    ])
+                );
+                expect(res.body).toHaveLength(1);
+            });
     });
 
     // Test getting a Project by Project Name
-    it('TODO: able to filter by Project Name', async () => {
-        expect(false).toBeTruthy();
+    it('able to filter by Project Name', async () => {
+        await request(app)
+            .get(ENDPOINT + '?name=Lemur%20Protection')
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(EXPECTED_PROJECT2)
+                    ])
+                );
+                expect(res.body).toHaveLength(1);
+            });
+    });
+
+    // Test getting a Project by Project Name is case insensitive
+    it('filters by Project Name is case insensitive', async () => {
+        await request(app)
+            .get(ENDPOINT + '?name=lEmUR%20PRoTECtIon')
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(EXPECTED_PROJECT2)
+                    ])
+                );
+                expect(res.body).toHaveLength(1);
+            });
+    });
+
+    // Test getting a Project by Sponsor ID and Project Name
+    it('able to filter by Sponsor ID and Project Name', async () => {
+        await request(app)
+            .get(ENDPOINT + '?sponsor_id=1&name=Madagascar%20Reforesting%20Project')
+            .expect(200)
+            .then((res) => {
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(EXPECTED_PROJECT1)
+                    ])
+                );
+                expect(res.body).toHaveLength(1);
+            });
     });
 
     // Test Creating a new Project
