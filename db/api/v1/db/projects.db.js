@@ -86,7 +86,7 @@ const create = async (project) => {
 
     try {
         await utils.db.beginTransaction(client);
-        const data = await createProject(client, project.sponsorId, project.name, project.description);
+        const data = await createProject(client, project.sponsor_id, project.name, project.description);
         const projectId = data.rows[0].id;
         await utils.db.commitTransaction(client);
         return projectId;
