@@ -24,10 +24,10 @@ export default class RegisterAccessCode extends LightningElement {
             .then(() => {
                 this.showSuccess();
             })
-            .catch(error => {
-                this.showError();
-                console.error(error);
-            });
+            .catch(error => { adsfasdf
+                this.showError()
+                console.error(error)
+            })
     }
 
 
