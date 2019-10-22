@@ -53,11 +53,19 @@ router.get(
 
 // TODO: Maybe allow for creating projects with A Sponsor Name (once unique)
 // Create projects
-router.post('/projects', 
+router.post(
+    '/projects', 
     validate(param.body, 'project', type.project, true),
     projects.create
 );
-// Example URI
-// router.put('/projects/:id', projects.update) // Update an existing project
+
+// TODO: Document endpoints OPEN API
+// Update Existing Project
+router.put(
+    '/projects/:id',
+    validate(param.params, 'id', type.id, true),
+    validate(param.body, 'project', type.project, true),
+    projects.update
+);
 
 module.exports = router;

@@ -209,6 +209,171 @@ describe('POST Project', () => {
                 expect(res.body['errors'][0]).toHaveProperty('reason', 'Expected a number between 1 and 2147483647');
             });
     });
+});
 
+describe('PUT Projects', () => {
+
+    let expected_id;    // The ID of the project we are manipulating
+
+    const projectBefore = {
+        'project': {
+            'sponsor_id': '1',
+            'name': 'nameBefore',
+            'description': 'descriptionBefore'
+        }
+    };
+
+    const projectAfter = {
+        'project': {
+            'sponsor_id': '2',
+            'name': 'nameAfter',
+            'description': 'descriptionAfter'
+        }
+    };
+
+    // Projects Test Setup
+    beforeAll(async () => {
+        jest.setTimeout(30000);
+        await setup();
+        await loadSQL('../schema/sample-data-emptyProjects.sql');
+    });
+
+    // Clean up after the tests are finished.
+    afterAll(async () => {
+        await teardown();
+    });
+
+    it('returns HTTP 200 and updates an existing Project', async () => {
+        // Insert a new project into the database and get its ID
+        await request(app)
+            .post(ENDPOINT)
+            .send(projectBefore)
+            .expect(200)
+            .then((response) => {
+                const data = response.body;
+                expected_id = data;
+                expect(data).toBeTruthy();
+                expect(typeof data).toBe('number');
+            });
+
+        // Make sure the Insertion was successful
+        await request(app)
+            .get(ENDPOINT + `?id=${expected_id}`)
+            .expect(200)
+            .then((res) => {
+                let expected_new_project = {
+                    id: expected_id,
+                    sponsor_id: parseInt(projectBefore.project.sponsor_id, 10),
+                    name: projectBefore.project.name,
+                    description: projectBefore.project.description
+                };
+
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(expected_new_project)
+                    ])
+                );
+
+                expect(res.body).toHaveLength(1);
+            });
+
+        // Update Project with New information
+        await request(app)
+            .put(ENDPOINT + `/${expected_id}`)
+            .send(projectAfter)
+            .expect(200)
+            .then((response) => {
+                const data = response.body;
+                expect(data).toBe(expected_id);
+                expect(typeof data).toBe('number');
+            });
+
+        // Make sure the update was successful
+        await request(app)
+            .get(ENDPOINT + `?id=${expected_id}`)
+            .expect(200)
+            .then((res) => {
+                let expected_updated_project = {
+                    id: expected_id,
+                    sponsor_id: parseInt(projectAfter.project.sponsor_id, 10),
+                    name: projectAfter.project.name,
+                    description: projectAfter.project.description
+                };
+
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(expected_updated_project)
+                    ])
+                );
+
+                expect(res.body).toHaveLength(1);
+            });
+    });
+
+    it('returns a bad request (HTTP 400) when updating with an invaid project ', async () => {
+        const badProject = {
+            'project': {
+                'sponsor_id': 'a',
+                'name': 'badName',
+                'description': 'badDescription'
+            }
+        };
+
+        await request(app)
+            .put(ENDPOINT + `/${expected_id}`)
+            .send(badProject)
+            .expect(400)
+            .then((res) => {
+                // Check to see that we got an error
+                expect(res.body['errors']).toHaveLength(1);
+                expect(res.body['errors'][0]).toHaveProperty('problem', 'Failed to validate the argument "[object Object]" for the parameter "project"');
+                expect(res.body['errors'][0]).toHaveProperty('reason', 'Expected a number between 1 and 2147483647');
+            });
+
+        // Make sure the project has not been updated
+        await request(app)
+            .get(ENDPOINT + `?id=${expected_id}`)
+            .expect(200)
+            .then((res) => {
+                let expected_updated_project = {
+                    id: expected_id,
+                    sponsor_id: parseInt(projectAfter.project.sponsor_id, 10),
+                    name: projectAfter.project.name,
+                    description: projectAfter.project.description
+                };
+
+                expect(res.body).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(expected_updated_project)
+                    ])
+                );
+
+                expect(res.body).toHaveLength(1);
+            });
+    });
+
+
+    it('returns a bad request (HTTP 400) when updating with an id param ', async () => {
+
+        const project1 = {
+            'project': {
+                'sponsor_id': 'a',
+                'name': 'tname',
+                'description': 'tdesc'
+            }
+        };
+
+        await request(app)
+            .put(ENDPOINT + '/a')
+            .send(project1)
+            .expect(400)
+            .then((res) => {
+                // Check to see that we got an error
+                expect(res.body['errors']).toHaveLength(1);
+                expect(res.body['errors'][0]).toHaveProperty('problem', 'Failed to validate the argument "a" for the parameter "id"');
+                expect(res.body['errors'][0]).toHaveProperty('reason', 'Expected a number between 1 and 2147483647');
+            });
+
+    });
 
 });

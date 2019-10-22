@@ -45,7 +45,28 @@ const create = async (req, res, next) => {
     }
 };
 
+/**
+ * Updates an existing Project with 
+ * 
+ * @param {*} req - The incoming Express request
+ * @param {*} res - The outgoing Express Response
+ * @param {*} next - The next Express middleware function in the stack
+ */
+const update = async (req, res, next) => {
+    // The ID of the Project to update
+    const projectId = req.valid.id;
+    // A valid Project to replace the existing one with 
+    const project = req.valid.project;
+    try {
+        const success = await projectsDb.update(projectId, project);
+        res.json(success);
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     find,
-    create
+    create,
+    update
 };

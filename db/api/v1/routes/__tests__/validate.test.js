@@ -345,4 +345,28 @@ describe('validate.param.body', () => {
     });
 });
 
-// TODO: Project Validation Tests
+describe('validate.param.params', () => {
+    it('extracts 7 from params string', () => {
+        const req = {
+            body: {
+                test: 'Not in Here'
+            },
+            params: {
+                test: '7'
+            }
+        };
+
+        const result = param.params(req, 'test');
+        expect(result).toBe('7');
+    });
+
+    it('returns undefined when extracting a parameter from params that does not exist', () => {
+        const req = {
+            body: {},
+            params: {}
+        };
+
+        const result = param.params(req, 'test');
+        expect(result).toBe(undefined);
+    });
+});

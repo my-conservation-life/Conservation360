@@ -4,7 +4,7 @@
  * TODO: Insert License
  */
 
-const { find, create } = require('../projects.db');
+const { find, create, update } = require('../projects.db');
 
 describe('projects.db.find', () => {
 
@@ -97,7 +97,7 @@ describe('projects.db.create', () => {
     });
 
     it('executes correct queries with valid project', async () => {
-        const project = {'sponsor_id': '1', 'name': 'Seneca Park Zoo', 'description' : 'adescript'};
+        const project = {'sponsor_id': '1', 'name': 'Madagascar Reforesting Project', 'description' : 'Replanting Trees in Madagascar'};
         await create(project);
         expect(query).toHaveBeenCalledTimes(3); // Once for Begin Transaction, Once for Create Project, Once for Commit
         expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
@@ -106,7 +106,7 @@ describe('projects.db.create', () => {
     });
 
     it('returns project id when transaction is successful', async () => {
-        const project = {'sponsor_id': '1', 'name': 'Seneca Park Zoo', 'description' : 'adescript'};
+        const project = {'sponsor_id': '1', 'name': 'Madagascar Reforesting Project', 'description' : 'Replanting Trees in Madagascar'};
         const actualRowId = await create(project);
         expect(actualRowId).toEqual(pId);
     });
@@ -118,7 +118,7 @@ describe('projects.db.create', () => {
     });
 
     it('releases client after successful create', async () => {
-        const project = {'sponsor_id': '1', 'name': 'Seneca Park Zoo', 'description' : 'adescript'};
+        const project = {'sponsor_id': '1', 'name': 'Madagascar Reforesting Project', 'description' : 'Replanting Trees in Madagascar'};
         await create(project);
         expect(query).toHaveBeenCalledTimes(3); // Once for Begin Transaction, Once for Create Project, Once for Commit
         expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
@@ -136,5 +136,66 @@ describe('projects.db.create', () => {
         expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('ROLLBACK'));
         expect(release).toHaveBeenCalledTimes(1);
     });
+});
 
+describe('projects.db.update', () => {
+
+    let query;      // A mock query function
+    let release;    // A mock release function
+    let rows;       // A mock query return data
+    let pId;        // A project ID of the project to be updated
+    let client;     // A mock Client 
+
+    // Reset Mock before each test
+    beforeEach(() => {
+        pId = 7;
+        rows = [{ 'id': pId }];
+        query = jest.fn(async () => ({ rows }));
+        release = jest.fn(() => { return undefined; });
+        global.dbPool.connect = jest.fn(async () => { return client; });
+        client = { query, release };
+    });
+
+    it('executes correct queries with valid project', async () => {
+        const project = {'sponsor_id': '2', 'name': 'Bison Protection', 'description' : 'Rebuild the midwest bison population!'};
+        await update(pId, project);
+        expect(query).toHaveBeenCalledTimes(3); // Once for Begin Transaction, Once for Create Project, Once for Commit
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
+        expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('UPDATE project'));
+        expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('(sponsor_id, name, description) ='));
+        expect(query.mock.calls[2][0]).toEqual(expect.stringContaining('END TRANSACTION'));
+    });
+
+    it('returns project id when transaction is successful', async () => {
+        const project = {'sponsor_id': '1', 'name': 'Bison Protection', 'description' : 'Rebuild the midwest bison population!'};
+        const actualRowId = await update(pId, project);
+        expect(actualRowId).toEqual(pId);
+    });
+
+    it('throws exception when query throws', async () => {
+        query = jest.fn(async () => { throw new Error(); });
+        client.query = query;
+        await expect(update()).rejects.toThrow();
+    });
+
+    it('releases client after successful create', async () => {
+        const project = {'sponsor_id': '1', 'name': 'Bison Protection', 'description' : 'Rebuild the midwest bison population!'};
+        await update(pId, project);
+        expect(query).toHaveBeenCalledTimes(3); // Once for Begin Transaction, Once for Create Project, Once for Commit
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
+        expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('UPDATE project'));
+        expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('(sponsor_id, name, description) ='));
+        expect(query.mock.calls[2][0]).toEqual(expect.stringContaining('END TRANSACTION'));
+        expect(release).toHaveBeenCalledTimes(1);
+    });
+
+    it('roles back and releases client after query throws', async () => {
+        query = jest.fn(async () => { throw new Error(); });
+        client.query = query;
+        await expect(update()).rejects.toThrow();
+        expect(query).toHaveBeenCalledTimes(2); // call in beginTransaction and rollbackTransaction
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
+        expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('ROLLBACK'));
+        expect(release).toHaveBeenCalledTimes(1);
+    });
 });

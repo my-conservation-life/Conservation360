@@ -110,6 +110,15 @@ const extractQueryParam = (req, paramName) => req.query[paramName];
 const extractBodyParam = (req, paramName) => req.body[paramName];
 
 /**
+ * Extracts the parameter from the request's params.
+ * 
+ * @param {*} req - Express request
+ * @param {string} paramName - the parameter to extract from req.params
+ * @returns {*} the extracted parameter
+ */
+const extractParamsParam = (req, paramName) => req.params[paramName];
+
+/**
  * Parse a database id value from a string.
  * @param {string} idStr - the string to parse into an id
  * @returns {ParseResult} parse success with a number value, or a parse failure
@@ -254,7 +263,8 @@ module.exports = {
 
     param: {
         query: extractQueryParam,
-        body: extractBodyParam
+        body: extractBodyParam,
+        params: extractParamsParam
     },
 
     type: {
