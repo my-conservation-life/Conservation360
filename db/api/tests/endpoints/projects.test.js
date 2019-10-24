@@ -55,7 +55,6 @@ describe('GET Projects', () => {
                         expect.objectContaining(EXPECTED_PROJECT3)
                     ])
                 );
-
                 expect(res.body).toHaveLength(3);
             });
     });
@@ -126,8 +125,6 @@ describe('GET Projects', () => {
                 expect(res.body).toHaveLength(1);
             });
     });
-
-
 });
 
 describe('POST Project', () => {
@@ -183,7 +180,6 @@ describe('POST Project', () => {
                         expect.objectContaining(expected_new_project)
                     ])
                 );
-
                 expect(res.body).toHaveLength(1);
             });
 
@@ -212,8 +208,8 @@ describe('POST Project', () => {
 });
 
 describe('PUT Projects', () => {
-
-    let expected_id;    // The ID of the project we are manipulating
+    // The ID of the project we are manipulating
+    let expected_id;
 
     const projectBefore = {
         'project': {
@@ -311,6 +307,7 @@ describe('PUT Projects', () => {
     });
 
     it('returns a bad request (HTTP 400) when updating with an invaid project ', async () => {
+        // A Project that should fail validation
         const badProject = {
             'project': {
                 'sponsor_id': 'a',
@@ -353,9 +350,7 @@ describe('PUT Projects', () => {
             });
     });
 
-
     it('returns a bad request (HTTP 400) when updating with an id param', async () => {
-
         const project1 = {
             'project': {
                 'sponsor_id': 'a',
@@ -374,7 +369,5 @@ describe('PUT Projects', () => {
                 expect(res.body['errors'][0]).toHaveProperty('problem', 'Failed to validate the argument "a" for the parameter "id"');
                 expect(res.body['errors'][0]).toHaveProperty('reason', 'Expected a number between 1 and 2147483647');
             });
-
     });
-
 });

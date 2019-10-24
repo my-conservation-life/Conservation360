@@ -7,6 +7,7 @@
 
 const utils = require('../utils');
 
+// A query to select projects from the database
 const QUERY_FIND = `
     SELECT 
         id,
@@ -19,6 +20,7 @@ const QUERY_FIND = `
         TRUE 
 `;
 
+// A query to create a new project in the database
 const QUERY_CREATE = `
     INSERT INTO project 
         (sponsor_id, name, description) 
@@ -27,6 +29,7 @@ const QUERY_CREATE = `
     RETURNING id 
 `;
 
+// A query to replace an existing project. 
 const QUERY_UPDATE = `
     UPDATE project 
     SET 
@@ -53,6 +56,7 @@ const createProject = async (client, sponsorId, name, description) => {
 };
 
 /**
+ * Updates an existing project. This does a full replace of the old project.
  * 
  * @param {*} client - node postgres client
  * @param {*} projectId - The ID of the Project to Update
@@ -68,15 +72,15 @@ const updateProject = async (client, projectId, sponsorId, name, description) =>
 };
 
 /**
- * find is used to find Projects.
- * 
- * Returns Projects that match the query parameters.
+ * Finds projects that match the provided parameters. Gets all projects if all parameters are undefined.
  * 
  * @param {number} id the ID of the Project
  * @param {number} sponsorId the ID of the Sponsor for the Project
  * @param {string} name the name of the Project
  * @returns {object[]|undefined} array of projects with fields (id, sponsor_id, name, and description), or undefined if all params are invalid.
  * @throws error if the DB query failed to execute
+ * 
+ * @returns {*} an array of projects that match the parameters.
  */
 const find = async (id, sponsorId, name) => {
     let query = QUERY_FIND;
@@ -105,6 +109,8 @@ const find = async (id, sponsorId, name) => {
  * @param {object} project - a valid my conservation life Project
  * @returns {number} the project ID upon successful commit
  * @throws error if a query fails to execute.
+ * 
+ * @returns {number} the Id of the created project
  */
 const create = async (project) => {
     const client = await global.dbPool.connect();
@@ -128,8 +134,9 @@ const create = async (project) => {
  * 
  * @param {number} projectId - the ID of the project to update
  * @param {object} project - a valid my conservation life Project
- * @returns {number} the project ID upon successful commit
  * @throws error if a query fails to execute.
+ * 
+ * @returns {number} the project ID upon successful commit
  */
 const update = async (projectId, project) => {
     const client = await global.dbPool.connect();

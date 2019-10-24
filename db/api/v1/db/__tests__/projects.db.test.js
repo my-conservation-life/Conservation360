@@ -7,7 +7,6 @@
 const { find, create, update } = require('../projects.db');
 
 describe('projects.db.find', () => {
-
     let query;  // Mock Query to check if queries are formatted properly
     let rows;   // Mock result set
 
@@ -60,13 +59,13 @@ describe('projects.db.find', () => {
     });
 
     it('returns an array of project rows', async () => {
+        // Expected body of the response object
         rows =  [
             { id: 1, sponsor_id: 5, name: 'Madagascar Reforestation', description: 'Planting a bunch of trees in Madagascar'},
             { id: 2, sponsor_id: 1, name: 'Lemur Protection', description: 'Save the Lemurs! Help Zooboomafu.'},
         ];
 
         const actualRows = await find();
-
         expect(actualRows).toEqual(rows);
     });
 
@@ -75,11 +74,9 @@ describe('projects.db.find', () => {
         global.dbPool.query = query;
         await expect(find()).rejects.toThrow();
     });
-
 });
 
 describe('projects.db.create', () => {
-
     let query;      // A mock query function
     let release;    // A mock release function
     let rows;       // A mock query return data
@@ -139,7 +136,6 @@ describe('projects.db.create', () => {
 });
 
 describe('projects.db.update', () => {
-
     let query;      // A mock query function
     let release;    // A mock release function
     let rows;       // A mock query return data

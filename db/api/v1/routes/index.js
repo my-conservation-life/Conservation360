@@ -41,8 +41,7 @@ router.get(
 router.get('/dataTypes', dataTypes.find);
 
 
-// TODO: Allow Finding Projects by sponsor name (once unique) and by region
-// Projects
+// Retrieve Projects
 router.get(
     '/projects',
     validate(param.query, 'id', type.id), // Optional Project ID Parameter
@@ -51,7 +50,6 @@ router.get(
     projects.find
 );
 
-// TODO: Maybe allow for creating projects with A Sponsor Name (once unique)
 // Create projects
 router.post(
     '/projects', 
@@ -59,7 +57,6 @@ router.post(
     projects.create
 );
 
-// TODO: Document endpoints OPEN API
 // Update Existing Project
 router.put(
     '/projects/:id',

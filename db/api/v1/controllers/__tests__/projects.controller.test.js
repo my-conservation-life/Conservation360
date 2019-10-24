@@ -30,7 +30,6 @@ describe('projects.controller.find', () => {
         };
 
         next = jest.fn();
-
         expected_projects = [{}];
         projectsDb.find = jest.fn(async () => expected_projects);
     });
@@ -48,7 +47,7 @@ describe('projects.controller.find', () => {
         expect(res.json).toHaveBeenCalledWith(expected_projects);
     });
 
-    it('TODO: accesses DB and sends JSON response when sponsor_id is provided', async () => {
+    it('accesses DB and sends JSON response when sponsor_id is provided', async () => {
         req.valid['sponsor_id'] = 8;
         await find(req, res, next);
         expect(projectsDb.find).toHaveBeenCalledWith(undefined, 8, undefined);
@@ -120,7 +119,6 @@ describe('projects.controller.create', () => {
         };
 
         next = jest.fn();
-
         project = { sponsor_id : '1', name: 'testProject', description: 'A description'};
         projectsDb.create = jest.fn(async () => 4);
     });
@@ -149,9 +147,7 @@ describe('projects.controller.create', () => {
     });
 });
 
-
 describe('projects.controller.update', () => {
-
     let req;
     let res;
     let next;
@@ -175,9 +171,7 @@ describe('projects.controller.update', () => {
         };
 
         id = 4;
-
         next = jest.fn();
-
         project = { sponsor_id : '1', name: 'testProject', description: 'A description'};
         projectsDb.update = jest.fn(async () => 4);
     });
