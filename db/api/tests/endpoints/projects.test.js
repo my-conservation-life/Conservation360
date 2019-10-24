@@ -319,6 +319,7 @@ describe('PUT Projects', () => {
             }
         };
 
+        // Update an existing project that should fail validation
         await request(app)
             .put(ENDPOINT + `/${expected_id}`)
             .send(badProject)
@@ -353,7 +354,7 @@ describe('PUT Projects', () => {
     });
 
 
-    it('returns a bad request (HTTP 400) when updating with an id param ', async () => {
+    it('returns a bad request (HTTP 400) when updating with an id param', async () => {
 
         const project1 = {
             'project': {
