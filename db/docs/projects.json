@@ -1,0 +1,146 @@
+{
+  "/projects": {
+    "get": {
+      "description": "Returns all projects the user has access to",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "query",
+          "required": false,
+          "description": "the project identifier",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "sponsor_id",
+          "in": "query",
+          "required": false,
+          "description": "the id of the sponsor of the project",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "description": "the name of the project",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Projects returned",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schema/project"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post": {
+      "description": "Creates a new project",
+      "requestBody": {
+        "description": "A project",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schema/project"
+            },
+            "examples": {
+              "project-create-example": {
+                "summary": "A valid project",
+                "description": "A conservation project sponsored by some org",
+                "value": {
+                  "sponsor_id": "3",
+                  "name": "Madagascar Reforestation Project",
+                  "description": "Replanting Trees on Madagascar"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "the id of the project created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/projects/{id}": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "the project identifier",
+        "schema": {
+          "type": "integer"
+        }
+      }
+    ],
+    "put": {
+      "requestBody": {
+        "description": "A project",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schema/project"
+            },
+            "examples": {
+              "project-update-example": {
+                "summary": "A valid project",
+                "description": "A conservation project sponsored by some org",
+                "value": {
+                  "id": "2",
+                  "sponsor_id": "3",
+                  "name": "Madagascar Reforestation Project",
+                  "description": "Replanting Trees on Madagascar"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "the id of the project created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
