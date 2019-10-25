@@ -1,8 +1,6 @@
 /**
  * Projects table database interaction layer. These functions are exported to
  * provide the ability to query Project specific data.
- * 
- * TODO: Insert License
  */
 
 const utils = require('../utils');

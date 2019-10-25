@@ -1,10 +1,9 @@
 /**
  * Tests for the Projects enpoint layer.
- * 
- * TODO: Insert License
  */
 
 const request = require('supertest');
+const querystring = require('querystring');
 const app = require('../../app');
 const { setup, teardown, loadSQL } = require('../setup');
 
@@ -60,8 +59,9 @@ describe('GET Projects', () => {
     });
 
     it('able to filter by Sponsor ID', async () => {
+        const idQuery = querystring.encode({sponsor_id: '2'});
         await request(app)
-            .get(ENDPOINT + '?sponsor_id=2')
+            .get(ENDPOINT + `?${idQuery}`)
             .expect(200)
             .then((res) => {
                 expect(res.body).toEqual(
@@ -74,8 +74,9 @@ describe('GET Projects', () => {
     });
 
     it('returns bad request (HTTP 400) when finding with an invalid argument', async () => {
+        const badIdQuery = querystring.encode({sponsor_id: 'a'});
         await request(app)
-            .get(ENDPOINT + '?sponsor_id=a')
+            .get(ENDPOINT + `?${badIdQuery}`)
             .expect(400)
             .then((res) => {
                 expect(res.body['errors']).toHaveLength(1);
@@ -85,8 +86,9 @@ describe('GET Projects', () => {
     });
 
     it('able to filter by Project Name', async () => {
+        const nameQuery = querystring.encode({name: 'Lemur Protection'});
         await request(app)
-            .get(ENDPOINT + '?name=Lemur%20Protection')
+            .get(ENDPOINT + `?${nameQuery}`)
             .expect(200)
             .then((res) => {
                 expect(res.body).toEqual(
@@ -99,8 +101,9 @@ describe('GET Projects', () => {
     });
 
     it('filters by Project Name is case insensitive', async () => {
+        const nameQuery = querystring.encode({name: 'lEmUR PRoTECtIon'});
         await request(app)
-            .get(ENDPOINT + '?name=lEmUR%20PRoTECtIon')
+            .get(ENDPOINT + `?${nameQuery}`)
             .expect(200)
             .then((res) => {
                 expect(res.body).toEqual(
@@ -113,8 +116,9 @@ describe('GET Projects', () => {
     });
 
     it('able to filter by Sponsor ID and Project Name', async () => {
+        const comboQuery = querystring.encode({sponsor_id: '1', name: 'Madagascar Reforesting Project' });
         await request(app)
-            .get(ENDPOINT + '?sponsor_id=1&name=Madagascar%20Reforesting%20Project')
+            .get(ENDPOINT + `?${comboQuery}`)
             .expect(200)
             .then((res) => {
                 expect(res.body).toEqual(
@@ -164,8 +168,9 @@ describe('POST Project', () => {
             });
 
         // Use the ID to find the record and validate that the project has the correct information
+        const idQuery = querystring.encode({id: expected_id});
         await request(app)
-            .get(ENDPOINT + `?id=${expected_id}`)
+            .get(ENDPOINT + `?${idQuery}`)
             .expect(200)
             .then((res) => {
                 let expected_new_project = {
@@ -253,8 +258,9 @@ describe('PUT Projects', () => {
             });
 
         // Make sure the Insertion was successful
+        const idQuery = querystring.encode({id: expected_id});
         await request(app)
-            .get(ENDPOINT + `?id=${expected_id}`)
+            .get(ENDPOINT + `?${idQuery}`)
             .expect(200)
             .then((res) => {
                 let expected_new_project = {
@@ -286,7 +292,7 @@ describe('PUT Projects', () => {
 
         // Make sure the update was successful
         await request(app)
-            .get(ENDPOINT + `?id=${expected_id}`)
+            .get(ENDPOINT + `?${idQuery}`)
             .expect(200)
             .then((res) => {
                 let expected_updated_project = {
@@ -329,8 +335,9 @@ describe('PUT Projects', () => {
             });
 
         // Make sure the project has not been updated
+        const idQuery = querystring.encode({id: expected_id});
         await request(app)
-            .get(ENDPOINT + `?id=${expected_id}`)
+            .get(ENDPOINT + `?${idQuery}`)
             .expect(200)
             .then((res) => {
                 let expected_updated_project = {

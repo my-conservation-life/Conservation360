@@ -1,7 +1,5 @@
 /**
- * Tests for Projects controller layer.
- * 
- * TODO: Insert License
+ * Tests for Projects controller layer. 
  */
 
 const { find, create, update } = require('../projects.controller');

@@ -1,7 +1,5 @@
 /**
  * Tests for Projects database layer.
- * 
- * TODO: Insert License
  */
 
 const { find, create, update } = require('../projects.db');
