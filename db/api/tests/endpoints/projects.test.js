@@ -9,7 +9,7 @@ const { setup, teardown, loadSQL } = require('../setup');
 
 const ENDPOINT = '/api/v1/projects';
 
-const EXPECTED_PROJECT1 = { id: 1, sponsor_id: 1, name: 'Madagascar Reforesting Project', description: 'Replating Trees in Madacascar' };
+const EXPECTED_PROJECT1 = { id: 1, sponsor_id: 1, name: 'Madagascar Reforesting Project', description: 'Replanting Trees in Madagascar' };
 const EXPECTED_PROJECT2 = { id: 2, sponsor_id: 1, name: 'Lemur Protection', description: 'Save the Lemurs! Long live Zooboomafu!' };
 const EXPECTED_PROJECT3 = { id: 3, sponsor_id: 2, name: 'Bison Protection', description: 'Rebuilding the Bison population in North America.' };
 
