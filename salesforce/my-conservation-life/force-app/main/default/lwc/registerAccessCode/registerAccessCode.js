@@ -39,7 +39,7 @@ export default class RegisterAccessCode extends LightningElement {
     saveAttribute(e) {
         const ele = e.srcElement;
         const name = ele.name;
-        const value = ele.value;
+        const value = ele.value
 
         this[name] = value;
     }
