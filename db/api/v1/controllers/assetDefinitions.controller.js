@@ -12,6 +12,7 @@ asdfasdf asdf adsf
     }fasdfa
 };
 
+
 const create = async (req, res, next) => {
     const assetDefinition = req.valid.assetDefinition;
     try {dfasasdfasd
