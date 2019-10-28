@@ -278,7 +278,7 @@ describe('validate.type.project', () => {
         const result = type.project(project);
         expect(result.isFailure()).toBeTruthy();
         expect(result.error).toEqual(
-            expect.stringContaining('Project Names must be a at least')
+            expect.stringContaining('Project Names must be at least')
         );
     });
 

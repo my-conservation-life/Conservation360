@@ -157,7 +157,7 @@ const parseString = (name, minLength = 0, maxLength = Number.MAX_SAFE_INTEGER) =
 const parseProjectName = (name) => {
     return (parseString(name, MIN_PROJECT_NAME_LENGTH) 
         ? ParseResult.success(name) 
-        : ParseResult.failure(`Project Names must be a at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
+        : ParseResult.failure(`Project Names must be at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
 };
 
 /**
