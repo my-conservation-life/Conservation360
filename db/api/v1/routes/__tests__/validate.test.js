@@ -111,6 +111,30 @@ describe('validate.type.id', () => {
     });
 });
 
+describe('validate.type.projectName', () => {
+    it('rejects null', () => {
+        const result = type.projectName(null);
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects the empty string', () => {
+        const result = type.projectName('');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('accepts "a"', () => {
+        const result = type.projectName('a');
+        expect(result.isSuccess()).toBeTruthy();
+        expect(result.value).toBe('a');
+    });
+
+    it('accepts "Madagascar Reforestation"', () => {
+        const result = type.projectName('Madagascar Reforestation');
+        expect(result.isSuccess()).toBeTruthy();
+        expect(result.value).toBe('Madagascar Reforestation');
+    });
+});
+
 describe('validate.type.assetDefinition', () => {
     let assetDefinition;
 
@@ -215,6 +239,68 @@ describe('validate.type.assetDefinition', () => {
     });
 });
 
+describe('validate.type.project', () => {
+    let project;
+
+    beforeEach(() => {
+        project = {
+            'sponsor_id': '1',
+            'name': 'tname1',
+            'description': 'tdesc1'
+        };
+    });
+
+    it('accepts a valid project', () => {
+        const result = type.project(project);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('accepts an empty description', () => {
+        project.description = '';
+        const result = type.project(project);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('accepts an undefined description', () => {
+        project.description = undefined;
+        const result = type.project(project);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('accepts a missing description', () => {
+        delete project.description;
+        const result = type.project(project);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('rejects empty name', () => {
+        project.name = '';
+        const result = type.project(project);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Project Names must be at least')
+        );
+    });
+
+    it('rejects "a" as a sponsor_id', () => {
+        project.sponsor_id = 'a';
+        const result = type.project(project);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Expected a number between 1 and')
+        );
+    });
+
+    it('rejects "0" as a sponsor_id', () => {
+        project.sponsor_id = '0';
+        const result = type.project(project);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Expected a number between 1 and')
+        );
+    });
+});
+
 describe('validate.param.query', () => {
     it('extracts 2 from query string', () => {
         const req = {
@@ -255,6 +341,32 @@ describe('validate.param.body', () => {
         };
 
         const result = param.body(req, 'test');
+        expect(result).toBe(undefined);
+    });
+});
+
+describe('validate.param.params', () => {
+    it('extracts 7 from params string', () => {
+        const req = {
+            body: {
+                test: 'Not in Here'
+            },
+            params: {
+                test: '7'
+            }
+        };
+
+        const result = param.params(req, 'test');
+        expect(result).toBe('7');
+    });
+
+    it('returns undefined when extracting a parameter from params that does not exist', () => {
+        const req = {
+            body: {},
+            params: {}
+        };
+
+        const result = param.params(req, 'test');
         expect(result).toBe(undefined);
     });
 });

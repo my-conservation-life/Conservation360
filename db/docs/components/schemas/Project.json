@@ -1,0 +1,27 @@
+{
+  "Project": {
+    "type": "object",
+    "required": [
+      "id",
+      "sponsor_id"
+    ],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "description": "the unique id of the project"
+      },
+      "sponsor_id": {
+        "type": "integer",
+        "description": "the id of the sponsor of the project"
+      },
+      "name": {
+        "type": "string",
+        "description": "the name of the project"
+      },
+      "description": {
+        "type": "string",
+        "description": "the discription of the project"
+      }
+    }
+  }
+}
