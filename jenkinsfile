@@ -1,0 +1,98 @@
+pipeline {
+    agent any
+    environment {
+        def apiDir = "${env.WORKSPACE}/db/api"
+        def lwcDir = "${env.WORKSPACE}/salesforce/my-conservation-life"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([
+                $class: 'GitSCM', 
+                branches: [[name: '*/master']], 
+                doGenerateSubmoduleConfigurations: false, 
+                extensions: [], 
+                submoduleCfg: [], 
+                userRemoteConfigs: [[url: 'https://github.com/my-conservation-life/my-conservation-life.git']]
+                ])
+                sh "cp /var/lib/jenkins/workspace/.env ${env.WORKSPACE}/db/api/tests"
+            }
+        }
+        stage('Build API') {
+            steps {
+                sh """
+                    cd ${apiDir}
+                    sudo npm install
+                    sudo npm audit fix
+                    sudo npm update
+                """
+            }
+        }
+        stage('Test API') {
+            steps {
+                sh """
+                    cd ${apiDir}
+                    sudo npm test -- --detectOpenHandles
+                """
+            }
+        }
+        stage('Package API') {
+            steps { 
+                sh """
+                    cd ${apiDir}
+                    sudo npm pack
+                    sudo mv ./api*.tgz $WORKSPACE/
+                """
+            }
+        }
+        stage('Build LWC') {
+            steps {
+                sh """
+                    cd ${lwcDir}
+                    sudo npm install
+                    sudo npm audit fix
+                    sudo npm update
+                """
+            }
+        }
+        stage('Test LWC') {
+            steps {
+                sh """
+                    cd ${lwcDir}
+                    sudo npm test
+                """
+            }
+        }
+        stage('Package LWC') {
+            steps { 
+                sh """
+                    cd ${lwcDir}
+                    sudo npm pack
+                    sudo mv ./my-conservation-life*.tgz $WORKSPACE/
+                """
+            }
+        }
+        stage('Archive API & LWC') {
+            steps {
+                sh """ cd $WORKSPACE """
+                archiveArtifacts artifacts: 'api*.tgz, my-conservation-life*.tgz', fingerprint: false
+            }
+        }
+        stage('Clean') {
+            steps {
+                sh """
+                    cd $WORKSPACE
+                    sudo rm -rf salesforce/ db/ LICENSE README.md package-lock.json
+                """
+            }
+        }
+    }
+    post {
+        success {
+            slackSend color: '#00FF00', message: "Build ${env.BUILD_NUMBER} finished successfully (<${env.BUILD_URL}|Open>)"       
+        }
+        failure {
+            slackSend color: '#FF0000', message: "Build ${env.BUILD_NUMBER} FAILED (<${env.BUILD_URL}|Open>)"
+        }
+    }
+}
