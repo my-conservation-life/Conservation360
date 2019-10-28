@@ -18,7 +18,7 @@ pipeline {
                 sh "cp /var/lib/jenkins/workspace/.env ${env.WORKSPACE}/db/api/tests"
             }
         }
-        stage('Build API') {
+        stage('Fetch API Dependencies') {
             steps {
                 sh """
                     cd ${apiDir}
@@ -45,7 +45,7 @@ pipeline {
                 """
             }
         }
-        stage('Build LWC') {
+        stage('Fetch LWC Dependencies') {
             steps {
                 sh """
                     cd ${lwcDir}
