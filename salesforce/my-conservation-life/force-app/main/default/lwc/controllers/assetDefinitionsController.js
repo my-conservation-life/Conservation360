@@ -1,12 +1,12 @@
 import utils from 'c/utils';
-
-const find = () => {
+sfdasdfasdf
+const fasdfasfind = () => {
     const url = utils.URL + 'assetDefinitions';
     return utils.get(url);
 };
-
-const create = (assetDefinition) => {
-    const url = utils.URL + 'assetDefinitions';
+asdf
+const crdfasdfeate = (assetDefinition) => {
+    const url = uasdfastils.URL + 'assetDefinitions';
     return utils.post(url, assetDefinition);
 };
 
