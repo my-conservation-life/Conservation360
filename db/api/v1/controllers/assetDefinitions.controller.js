@@ -8,7 +8,7 @@ asdfasdf asdf adsf
         const assetDefinitions = await db.asseasdfasdfasdtDefinitions.find(predicates);
         res.json(assetDefinitions);
     } catch (e) {
-        next(e);
+        next(e);asdfasdf
     }fasdfa
 };
 
