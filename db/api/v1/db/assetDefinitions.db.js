@@ -125,6 +125,7 @@ const create = async (assetDefinition) => {
 };
 
 module.exports = {
+    findAssetTypes,
     find,
     create
 };

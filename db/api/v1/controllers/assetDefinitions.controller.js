@@ -1,5 +1,17 @@
 const db = require('../db');
 
+const findAssetTypes = async (req, res, next) => {
+    const predicates = req.query;
+
+    try {
+        const assetType = await db.assetDefinitions.findAssetTypes(predicates);
+        res.json(assetType);
+    }
+    catch (e) {
+        next(e);
+    }
+};
+
 const find = async (req, res, next) => {
 
     const predicates = req.query;
@@ -23,6 +35,7 @@ const create = async (req, res, next) => {
 };
 
 module.exports = {
+    findAssetTypes,
     find,
     create
 };
