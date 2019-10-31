@@ -27,8 +27,19 @@ const post = (url, data) => {
     }).then(handleFetchErrors);
 };
 
+const put = (url, data) => {
+    return fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }).then(handleFetchErrors);
+};
+
 export default {
     URL,
     get,
-    post
+    post,
+    put
 };
