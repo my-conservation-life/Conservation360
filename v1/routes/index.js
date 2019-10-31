@@ -29,6 +29,9 @@ router.post('/assets', assets.create);
 router.get('/assetDefinitions', assetDefinitions.find);
 router.post('/assetDefinitions', validate(param.body, 'assetDefinition', type.assetDefinition, true), assetDefinitions.create);
 
+// Asset Types
+router.get('/assetTypes', assetDefinitions.findAssetTypes);
+
 // Bounding Box of Assets
 router.get(
     '/bbox-assets',
