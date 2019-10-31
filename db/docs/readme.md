@@ -1,0 +1,1 @@
+These docs follow the OpenAPI v3.0.2 standard found at https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md

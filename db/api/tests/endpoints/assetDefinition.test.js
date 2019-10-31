@@ -4,7 +4,7 @@ const { setup, teardown, loadSQL } = require('../setup');
 
 describe('GET/POST assetDefinitions', () => {
     beforeAll(async () => {
-        jest.setTimeout(30000)
+        jest.setTimeout(30000);
         await setup();
 
         // create some default asset definitions
