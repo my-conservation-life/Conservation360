@@ -1,0 +1,43 @@
+<template>
+    <lightning-card>
+        <div class="slds-m-around_medium">
+            <div class="slds-grid slds-gutters slds-grid_vertical">
+                <div class="slds-col slds-medium-size_1-of-3  slds-small-size_1-of-1">
+                    <lightning-input 
+                        name="sponsor-id"
+                        label="Sponsor ID"
+                        type="text"
+                        value={sponsorId}
+                        placeholder="The Sponsor's ID."
+                        onchange={handleChange}
+                        disabled
+                    ></lightning-input>
+                    <lightning-input 
+                        name="project-name"
+                        label="Project Name"
+                        type="text"
+                        value={projectName}
+                        placeholder="The name of the project."
+                        onchange={handleChange}
+                        required
+                    ></lightning-input>
+                    <lightning-input 
+                        name="project-description"
+                        label="Project Description"
+                        type="text"
+                        value={projectDescription}
+                        placeholder="The description of the project"
+                        onchange={handleChange}
+                        required
+                    ></lightning-input>
+                </div>
+            </div>
+
+            <!-- <lightning-button variant="destructive" label="Cancel"></lightning-button> -->
+            <lightning-button variant="success" label="Save" onclick={saveProject}></lightning-button>
+            <p><lightning-formatted-text class="status-text" value="" ></lightning-formatted-text></p>
+            <p if:true={hasSuccess} class="success">Sucessfuly saved</p>
+            <p if:true={hasError} class="error">An error has occured. Refresh and try again.</p>
+        </div>
+    </lightning-card>
+</template>

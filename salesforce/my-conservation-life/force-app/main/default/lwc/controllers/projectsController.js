@@ -1,5 +1,4 @@
 import utils from 'c/utils';
-const url = require('url');
 
 const ENDPOINT = utils.URL + 'projects';
 
