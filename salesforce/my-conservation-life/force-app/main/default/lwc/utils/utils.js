@@ -28,6 +28,10 @@ const post = (url, data) => {
 };
 
 const put = (url, data) => {
+
+    console.log(url);
+    console.log(JSON.stringify(data));
+
     return fetch(url, {
         method: 'PUT',
         headers: {

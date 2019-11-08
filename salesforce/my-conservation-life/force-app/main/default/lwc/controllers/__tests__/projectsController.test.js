@@ -8,7 +8,7 @@ const createMockFetchJson = (jsonObject) => jest.fn(() => Promise.resolve({ ok: 
 const PROJECTS_ENDPOINT = utils.URL + 'projects';
 
 describe('projects.find', () => {
-
+    
     const EXPECTED_PROJECTS = [];
     let fetch;
 

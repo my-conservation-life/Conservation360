@@ -33,7 +33,7 @@ const find = (filters = {}) => {
  * Creates a project in the open source database.
  * 
  * @param {Object} [project] - An api-readble object representing a project
- * @param {number} [project.sponsor_id] - the ID of the project's sponsor
+ * @param {string} [project.sponsor_id] - the ID of the project's sponsor
  * @param {string} [project.name] - the name of the project
  * @param {string} [project.description] - the description of the project
  * 
@@ -50,16 +50,16 @@ const create = (project) => {
  * 
  * @param {number} id - The ID of the project to update
  * @param {Object} project - An api-readable object representing a project
- * @param {number} [project.id] - The ID of the project. This should match the other id parameter.
- * @param {number} [project.sponsor_id] - the ID of the project's sponsor
+ * @param {string} [project.id] - The ID of the project. This should match the other id parameter.
+ * @param {string} [project.sponsor_id] - the ID of the project's sponsor
  * @param {string} [project.name] - the name of the project
  * @param {string} [project.description] - the description of the project
  * 
  * @return {Promise<number>} promise the ID of the updated project
  */
 const update = (id, project) => {
-    const updateURL = new URL(`/${id}`, ENDPOINT);
-    return utils.put(updateURL.href, project);
+    const updateURL = new URL(ENDPOINT + `/${id}`);
+    return utils.put(updateURL.href, {'project': project});
 };
     
 export default {
