@@ -27,7 +27,7 @@ describe('projects.find', () => {
 
     it('finds without Project ID', async () => {
         // name and sponsor id
-        const params = {name: 'foo', sponsor_id: '2'};
+        const params = {sponsor_id: '2', name: 'foo'};
         const query = querystring.encode(params);
         const assetArray = await projects.find(params);
         expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `?${query}`);
@@ -36,7 +36,7 @@ describe('projects.find', () => {
 
     it('finds without Sponsor ID', async () => {
         // name and project id
-        const params = {name: 'foo', id: '2'};
+        const params = {id: '2', name: 'foo'};
         const query = querystring.encode(params);
         const assetArray = await projects.find(params);
         expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `?${query}`);
@@ -83,35 +83,37 @@ describe('projects.find', () => {
 describe('projects.create', () => {
 
     const EXPECTED_ID = 4;
+    const EXPECTED_RESPONSE = [];
     let fetch;
 
     beforeEach(() => {
-        fetch = createMockFetchCreateJson(EXPECTED_ID);
+        fetch = createMockFetchFindJson(EXPECTED_RESPONSE);
         global.fetch = fetch;
     });
 
     it('creates with a valid project', async () => {
         const createdId = projects.create({sponsor_id: '1', name: 'MyProject', description: 'foo'});
         expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT);
-        expect(createdId.toString()).toEqual(EXPECTED_ID.toString());  
+        expect(createdId).toEqual(EXPECTED_RESPONSE);  
     });
 });
 
 describe('projects.update', () => {
 
     const EXPECTED_ID = 2;
+    const EXPECTED_RESPONSE = [];
     const UPDATED_PROJECT = {id: '2', sponsor_id: '1', name: 'foo', description: 'baz'};
 
     let fetch;
 
     beforeEach(() => {
-        fetch = createMockFetchUpdateJson(EXPECTED_ID, UPDATED_PROJECT);
+        fetch = createMockFetchFindJson(EXPECTED_RESPONSE);
         global.fetch = fetch;
     });
 
     it('updates a valid project', async () => {
         const updatedID = projects.update(EXPECTED_ID, UPDATED_PROJECT);
         expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `/${EXPECTED_ID}`);
-        expect(updatedID.toString()).toEqual(EXPECTED_ID.toString());  
+        expect(updatedID).toEqual(EXPECTED_RESPONSE);  
     });
 });
