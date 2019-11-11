@@ -1,8 +1,10 @@
 <template>
     <lightning-card>
         <div class="slds-m-around_medium">
+
             <!-- Inputs -->
             <div class="slds-grid slds-gutters slds-grid_vertical">
+
                 <!-- ID and Name Inputs -->
                 <div class="slds-col slds-medium-size_2-of-3  slds-small-size_1-of-1">
                     <lightning-input name="sponsor-id" label="Sponsor ID" type="text" value={sponsorId}
@@ -25,10 +27,11 @@
                 <p>
                     <lightning-formatted-text class="status-text" value=""></lightning-formatted-text>
                 </p>
+
+                <!-- Display Feedback to user -->
                 <p if:true={hasSuccess} class="success">Successfully saved</p>
                 <p if:true={hasError} class="error">An error has occured. Refresh and try again.</p>
             </div>
-
         </div>
     </lightning-card>
 </template>

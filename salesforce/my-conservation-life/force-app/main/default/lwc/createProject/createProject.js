@@ -21,6 +21,7 @@ export default class CreateProject extends LightningElement {
     @track hasSuccess = false;
     @track hasError = false;
 
+    // Handle when the user types something into one of the inputs
     handleChange(event) {
         const field = event.target.name;
         if (field === 'sponsor-id') {
@@ -32,16 +33,14 @@ export default class CreateProject extends LightningElement {
         }
     }
     
+    // Save the new Project
     saveProject() {
-
         // Display to the user that this task is in progress
         this.template.querySelector('.status-text').value = 'Saving...';
-
-        let valid = true;
-        if (/*is valid*/valid)        // Todo validate from
-            this.sendProject();
+        this.sendProject();
     }
 
+    // Create a request to create a new Project in the open source database
     @api
     sendProject() {
         // The new project from the lwc inputs
@@ -53,6 +52,7 @@ export default class CreateProject extends LightningElement {
             }
         };
 
+        // Send the new project to the DB server
         this.c.projects.create(newProject)
             .then(json => {
                 this.hasSuccess = true;
@@ -63,5 +63,4 @@ export default class CreateProject extends LightningElement {
                 console.error(e);
             });
     }
-
 }

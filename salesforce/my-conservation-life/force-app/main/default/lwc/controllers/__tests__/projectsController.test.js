@@ -3,7 +3,9 @@ import projects from '../projectsController';
 
 const querystring = require('querystring');
 
-const createMockFetchJson = (jsonObject) => jest.fn(() => Promise.resolve({ ok: true, json: () => jsonObject }));
+const createMockFetchFindJson = (jsonObject) => jest.fn(() => Promise.resolve({ ok: true, json: () => jsonObject }));
+const createMockFetchCreateJson = (projectId) => jest.fn(() => Promise.resolve({ ok: true, json: () => projectId }));
+const createMockFetchUpdateJson = (projectId, jsonProject) => jest.fn(() => Promise.resolve({ ok: true, json: () => projectId}));
 
 const PROJECTS_ENDPOINT = utils.URL + 'projects';
 
@@ -13,14 +15,14 @@ describe('projects.find', () => {
     let fetch;
 
     beforeEach(() => {
-        fetch = createMockFetchJson(EXPECTED_PROJECTS);
+        fetch = createMockFetchFindJson(EXPECTED_PROJECTS);
         global.fetch = fetch;
     });
 
     it('finds all', async () => {
         const assetArray = await projects.find();
         expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT);
-        expect(assetArray).toEqual(EXPECTED_PROJECTS);    
+        expect(assetArray).toEqual(EXPECTED_PROJECTS);
     });
 
     it('finds without Project ID', async () => {
@@ -74,14 +76,36 @@ describe('projects.find', () => {
 
 describe('projects.create', () => {
 
-    it('TODO: Write tests', async () => {
-        expect(false).toBeTruthy();
+    const EXPECTED_ID = 4;
+    let fetch;
+
+    beforeEach(() => {
+        fetch = createMockFetchCreateJson(EXPECTED_ID);
+        global.fetch = fetch;
+    });
+
+    it('creates with a valid project', async () => {
+        const createdId = projects.create({sponsor_id: '1', name: 'MyProject', description: 'foo'});
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT);
+        expect(createdId).toEqual(EXPECTED_ID);  
     });
 });
 
 describe('projects.update', () => {
 
-    it('TODO: Write tests', async () => {
-        expect(false).toBeTruthy();
+    const EXPECTED_ID = 2;
+    const UPDATED_PROJECT = {id: '2', sponsor_id: '1', name: 'foo', description: 'baz'};
+
+    let fetch;
+
+    beforeEach(() => {
+        fetch = createMockFetchCreateJson(EXPECTED_ID, UPDATED_PROJECT);
+        global.fetch = fetch;
+    });
+
+    it('updates a valid project', async () => {
+        const updatedID = projects.update(EXPECTED_ID, UPDATED_PROJECT);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `${EXPECTED_ID}`);
+        expect(updatedID.toString()).toEqual(EXPECTED_ID.toString());  
     });
 });

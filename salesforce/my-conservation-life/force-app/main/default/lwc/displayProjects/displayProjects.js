@@ -36,13 +36,14 @@ const columns = [
 ];
 
 export default class DisplayProjects extends LightningElement {
-    
     @track data = [];
     @track columns = columns;
     @track tableLoadingState = true;
     @track showModal = false;
     @track currentRecord;
     @track isEditForm = false;
+    @track updateHasSuccess = false;
+    @track updateHasError = false;
     hasRendered = false;
     updatedProject = {'id': undefined, 'sponsor_id': undefined, 'name': undefined, 'description': undefined};
 
@@ -56,9 +57,7 @@ export default class DisplayProjects extends LightningElement {
         }
     }
 
-    /**
-     * Update table with latest queries
-     */
+    // Pull projects from db into the table view
     updateTable() {
         projects
             .find({ /** All Projects */ })
@@ -69,10 +68,12 @@ export default class DisplayProjects extends LightningElement {
         this.tableLoadingState = false;
     }
 
+    // Handles when the user clicks edit on a project
     handleRowAction(event) {
         let actionName = event.detail.action.name;
         let row = event.detail.row;
 
+        // Switch on which menu item was selected
         switch (actionName) {
         case 'edit':
             this.editCurrentRecord(row);
@@ -82,6 +83,7 @@ export default class DisplayProjects extends LightningElement {
         }
     }
 
+    // Handle editing of the project that needs to be updated.
     handleChange(event) {
         const field = event.target.name;
         if (field === 'project-name') {
@@ -91,6 +93,7 @@ export default class DisplayProjects extends LightningElement {
         }
     }
 
+    // Set the update project object to the selected project.
     editCurrentRecord(currentRow) {
         this.showModal = true;
         this.isEditForm = true;
@@ -108,15 +111,18 @@ export default class DisplayProjects extends LightningElement {
                 // success, should return the ID of the updated project
                 console.log(json);
                 this.updateTable();
+                this.updateHasSuccess = true;
             })
             .catch(e => {
                 // error
                 console.error(e);
+                this.updateHasError = true;
             });
 
         this.closeModal();
     }
 
+    // Hides the edit modal
     closeModal() {
         this.showModal = false;
     }
