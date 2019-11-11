@@ -33,6 +33,10 @@ router.post('/assetDefinitions', validate(param.body, 'assetDefinition', type.as
 // Asset Types
 router.get('/assetTypes', assetDefinitions.findAssetTypes);
 
+// Asset Properties
+router.get('/properties', assetDefinitions.findPropertiesByAssetTypeId);
+router.post('properties', assetDefinitions.updateProperty);
+
 // Bounding Box of Assets
 router.get(
     '/bbox-assets',

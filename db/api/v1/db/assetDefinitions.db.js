@@ -1,5 +1,37 @@
 const utils = require('../utils');
 
+const findPropertiesByAssetTypeId = async(assetTypeId) => {
+    let query = `
+        SELECT
+            id,
+            name
+        FROM
+            property
+        WHERE
+            asset_type_id=$1
+    `;
+
+    const values = [assetTypeId];
+
+    return global.dbPool.query(query, values);
+};
+
+const updateProperty = async(assetId, assetTypeId, newValue) => {
+    const client = await global.dbPool.connect();
+
+    let query = `
+        UPDATE asset_property
+        SET value=$3
+        WHERE
+            asset_id=$1 AND
+            asset_type_id=$2
+    `;
+
+    const  values = [assetId, assetTypeId, newValue];
+
+    return client.query(query, values);
+};
+
 const findAssetTypes = async () => {
     let query = `
         SELECT
@@ -125,6 +157,8 @@ const create = async (assetDefinition) => {
 };
 
 module.exports = {
+    findPropertiesByAssetTypeId,
+    updateProperty,
     findAssetTypes,
     find,
     create
