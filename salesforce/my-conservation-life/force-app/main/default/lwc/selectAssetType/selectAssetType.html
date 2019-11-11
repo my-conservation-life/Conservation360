@@ -1,7 +1,7 @@
 <template>
     <lightning-combobox
         name="AssetTypeComboBox"
-        label="Select Asset Type"
+        label="Asset Type"
         value={value}
         placeholder="Select Asset Type"
         options={options}
@@ -9,5 +9,6 @@
         required>
     </lightning-combobox>
 
-    <p>Selected value is: {value}</p>
+    <p>Value: {value}</p>
+    <p>Description: {description}</p>
 </template>
