@@ -99,7 +99,7 @@ describe('projects.update', () => {
     let fetch;
 
     beforeEach(() => {
-        fetch = createMockFetchCreateJson(EXPECTED_ID, UPDATED_PROJECT);
+        fetch = createMockFetchUpdateJson(EXPECTED_ID, UPDATED_PROJECT);
         global.fetch = fetch;
     });
 
