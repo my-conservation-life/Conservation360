@@ -3,9 +3,8 @@ import { assetDefinitions } from 'c/controllers';
 
 export default class SelectAssetType extends LightningElement {
     @track options = [];
-    @track value = '';
+    @track assetTypeString = '';
     @track description = '';
-    descriptions = new Map();
 
     connectedCallback() {
         var i = 0;
@@ -16,18 +15,14 @@ export default class SelectAssetType extends LightningElement {
 
                 for (i; i < data.rows.length; i++) {
                     const assetType = data.rows[i];
-                    const optionLabel = `${assetType.id}: ${assetType.name}`;
-                    const id = assetType.id.toString();
+                    const assetTypeString = JSON.stringify(assetType);
 
-                    this.descriptions.set(id, assetType.description);
-                    const option = {label: optionLabel, value: id};
+                    const optionLabel = `${assetType.id}: ${assetType.name}`;
+                    const option = {label: optionLabel, value: assetTypeString};
                     typeOptions.push(option);
                 }
-                console.log('Callback');
-                console.log(typeOptions);
 
                 this.options = typeOptions;
-                console.log(this.options);
             })
             .catch(e => {
                 console.error(e);
@@ -35,7 +30,16 @@ export default class SelectAssetType extends LightningElement {
     }
 
     handleChange(event) {
-        this.value = event.detail.value;
-        this.description = this.descriptions.get(this.value);
+        const assetTypeString = event.detail.value;
+        this.assetTypeString = assetTypeString;
+
+        const assetType = JSON.parse(assetTypeString);
+        const description = assetType.description;
+        if (description !== null) {
+            this.description = assetType.description;
+        }
+        else {
+            this.description = 'No description found.';
+        }
     }
 }
