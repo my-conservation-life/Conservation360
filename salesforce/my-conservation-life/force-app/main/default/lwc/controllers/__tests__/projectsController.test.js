@@ -3,9 +3,7 @@ import projects from '../projectsController';
 
 const querystring = require('querystring');
 
-const createMockFetchFindJson = (jsonObject) => jest.fn(() => Promise.resolve({ ok: true, json: () => jsonObject }));
-const createMockFetchCreateJson = (projectId) => jest.fn(() => Promise.resolve({ ok: true, json: () => projectId }));
-const createMockFetchUpdateJson = (projectId, jsonProject) => jest.fn(() => Promise.resolve({ ok: true, json: () => projectId}));
+const createMockFetch = (jsonObject) => jest.fn(() => Promise.resolve({ ok: true, json: () => jsonObject }));
 
 let PROJECTS_URL = new URL(utils.URL);
 PROJECTS_URL.pathname += '/projects';
@@ -16,7 +14,7 @@ describe('projects.find', () => {
     let fetch;
 
     beforeEach(() => {
-        fetch = createMockFetchFindJson(EXPECTED_PROJECTS);
+        fetch = createMockFetch(EXPECTED_PROJECTS);
         global.fetch = fetch;
     });
 
@@ -83,12 +81,11 @@ describe('projects.find', () => {
 
 describe('projects.create', () => {
 
-    const EXPECTED_ID = 4;
-    const EXPECTED_RESPONSE = [];
+    const EXPECTED_RESPONSE = {};
     let fetch;
 
     beforeEach(() => {
-        fetch = createMockFetchFindJson(EXPECTED_RESPONSE);
+        fetch = createMockFetch(EXPECTED_RESPONSE);
         global.fetch = fetch;
     });
 
@@ -102,13 +99,13 @@ describe('projects.create', () => {
 describe('projects.update', () => {
 
     const EXPECTED_ID = 2;
-    const EXPECTED_RESPONSE = [];
+    const EXPECTED_RESPONSE = {};
     const UPDATED_PROJECT = {id: '2', sponsor_id: '1', name: 'foo', description: 'baz'};
 
     let fetch;
 
     beforeEach(() => {
-        fetch = createMockFetchFindJson(EXPECTED_RESPONSE);
+        fetch = createMockFetch(EXPECTED_RESPONSE);
         global.fetch = fetch;
     });
 
