@@ -5,6 +5,7 @@ export default class SelectAssetType extends LightningElement {
     @track options = [];
     @track value = '';
     @track description = '';
+    descriptions = new Map();
 
     connectedCallback() {
         var i = 0;
@@ -16,15 +17,17 @@ export default class SelectAssetType extends LightningElement {
                 for (i; i < data.rows.length; i++) {
                     const assetType = data.rows[i];
                     const optionLabel = `${assetType.id}: ${assetType.name}`;
+                    const id = assetType.id.toString();
 
-                    const option = {label: optionLabel, value: assetType.id.toString()};
+                    this.descriptions.set(id, assetType.description);
+                    const option = {label: optionLabel, value: id};
                     typeOptions.push(option);
                 }
-                // console.log('Callback');
-                // console.log(aOptions);
+                console.log('Callback');
+                console.log(typeOptions);
 
                 this.options = typeOptions;
-                // console.log(this.options);
+                console.log(this.options);
             })
             .catch(e => {
                 console.error(e);
@@ -33,7 +36,6 @@ export default class SelectAssetType extends LightningElement {
 
     handleChange(event) {
         this.value = event.detail.value;
-        this.description = event.detail.description;
-        // console.log(this.description);
+        this.description = this.descriptions.get(this.value);
     }
 }
