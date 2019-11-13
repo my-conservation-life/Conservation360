@@ -7,7 +7,8 @@ const createMockFetchFindJson = (jsonObject) => jest.fn(() => Promise.resolve({ 
 const createMockFetchCreateJson = (projectId) => jest.fn(() => Promise.resolve({ ok: true, json: () => projectId }));
 const createMockFetchUpdateJson = (projectId, jsonProject) => jest.fn(() => Promise.resolve({ ok: true, json: () => projectId}));
 
-const PROJECTS_ENDPOINT = utils.URL + 'projects';
+let PROJECTS_URL = new URL(utils.URL);
+PROJECTS_URL.pathname += '/projects';
 
 describe('projects.find', () => {
     
@@ -21,7 +22,7 @@ describe('projects.find', () => {
 
     it('finds all', async () => {
         const assetArray = await projects.find();
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href);
         expect(assetArray).toEqual(EXPECTED_PROJECTS);
     });
 
@@ -30,7 +31,7 @@ describe('projects.find', () => {
         const params = {sponsor_id: '2', name: 'foo'};
         const query = querystring.encode(params);
         const assetArray = await projects.find(params);
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `?${query}`);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `?${query}`);
         expect(assetArray).toEqual(EXPECTED_PROJECTS);    
     });
 
@@ -39,7 +40,7 @@ describe('projects.find', () => {
         const params = {id: '2', name: 'foo'};
         const query = querystring.encode(params);
         const assetArray = await projects.find(params);
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `?${query}`);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `?${query}`);
         expect(assetArray).toEqual(EXPECTED_PROJECTS);
     });
 
@@ -48,7 +49,7 @@ describe('projects.find', () => {
         const params = {id: '1', sponsor_id: '2'};
         const query = querystring.encode(params);
         const assetArray = await projects.find(params);
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `?${query}`);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `?${query}`);
         expect(assetArray).toEqual(EXPECTED_PROJECTS);   
     });
 
@@ -57,7 +58,7 @@ describe('projects.find', () => {
         const params = {name: 'foo'};
         const query = querystring.encode(params);
         const assetArray = await projects.find(params);
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `?${query}`);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `?${query}`);
         expect(assetArray).toEqual(EXPECTED_PROJECTS);  
     });
 
@@ -66,7 +67,7 @@ describe('projects.find', () => {
         const params = {sponsor_id: '1'};
         const query = querystring.encode(params);
         const assetArray = await projects.find(params);
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `?${query}`);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `?${query}`);
         expect(assetArray).toEqual(EXPECTED_PROJECTS);  
     });
 
@@ -75,7 +76,7 @@ describe('projects.find', () => {
         const params = {id: '2'};
         const query = querystring.encode(params);
         const assetArray = await projects.find(params);
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `?${query}`);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `?${query}`);
         expect(assetArray).toEqual(EXPECTED_PROJECTS);  
     });
 });
@@ -93,7 +94,7 @@ describe('projects.create', () => {
 
     it('creates with a valid project', async () => {
         const createdId = projects.create({sponsor_id: '1', name: 'MyProject', description: 'foo'});
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href);
         expect(createdId).toEqual(EXPECTED_RESPONSE);  
     });
 });
@@ -113,7 +114,7 @@ describe('projects.update', () => {
 
     it('updates a valid project', async () => {
         const updatedID = projects.update(EXPECTED_ID, UPDATED_PROJECT);
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_ENDPOINT + `/${EXPECTED_ID}`);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `/${EXPECTED_ID}`);
         expect(updatedID).toEqual(EXPECTED_RESPONSE);  
     });
 });
