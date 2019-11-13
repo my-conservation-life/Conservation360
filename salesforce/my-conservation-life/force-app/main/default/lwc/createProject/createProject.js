@@ -1,13 +1,15 @@
-import { LightningElement, track, api } from 'lwc';
-import controllers from 'c/controllers';
+import { LightningElement, track, api, wire } from 'lwc';
+import { CurrentPageReference } from 'lightning/navigation';
+import { projects } from 'c/controllers';
+import { fireEvent } from 'c/pubsub';
+
 
 /**
  * CreateProject is used to create new conservation project.
  */
 export default class CreateProject extends LightningElement {
 
-    // Controller object used to access the database
-    c = controllers;
+    @wire(CurrentPageReference) pageRef;
 
     // The ID of the project's sponsor
     @track sponsorId = 1; // Todo: somehow we need to get the current sponsor ID
@@ -20,6 +22,7 @@ export default class CreateProject extends LightningElement {
 
     @track hasSuccess = false;
     @track hasError = false;
+
 
     // Handle when the user types something into one of the inputs
     handleChange(event) {
@@ -53,9 +56,10 @@ export default class CreateProject extends LightningElement {
         };
 
         // Send the new project to the DB server
-        this.c.projects.create(newProject)
+        projects.create(newProject)
             .then(json => {
                 this.hasSuccess = true;
+                fireEvent(this.pageRef, 'projectCreated', {});
                 console.log(json);
             })
             .catch(e => {

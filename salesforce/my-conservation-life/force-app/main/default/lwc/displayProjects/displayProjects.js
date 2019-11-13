@@ -1,5 +1,8 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import { projects } from 'c/controllers';
+import { CurrentPageReference } from 'lightning/navigation';
+import { registerListener, unregisterAllListeners } from 'c/pubsub';
+
 
 const actions = [
     { label: 'Edit', name: 'edit' }
@@ -36,6 +39,9 @@ const columns = [
 ];
 
 export default class DisplayProjects extends LightningElement {
+
+    @wire(CurrentPageReference) pageRef;
+
     @track data = [];
     @track columns = columns;
     @track tableLoadingState = true;
@@ -47,6 +53,15 @@ export default class DisplayProjects extends LightningElement {
     hasRendered = false;
     updatedProject = {'id': undefined, 'sponsor_id': undefined, 'name': undefined, 'description': undefined};
 
+    // Listen for when a project is created so that we can refresh the table
+    connectedCallback() {
+        registerListener('projectCreated', this.updateTableEventHandler, this);
+    }
+
+    disconnectedCallback() {
+        unregisterAllListeners(this);
+    }
+
     renderedCallback() {
         // rendered callback may be called multiple times and we do not 
         // want to keep hitting the servers
@@ -55,6 +70,13 @@ export default class DisplayProjects extends LightningElement {
             this.updateTable();
             this.hasRendered = true;
         }
+    }
+
+    // Wrapping the update table method in an event handler with a parameter
+    // so that the pubsub module will work properly.
+    updateTableEventHandler(event)
+    {
+        this.updateTable();
     }
 
     // Pull projects from db into the table view
