@@ -59,6 +59,9 @@ export default class CreateProject extends LightningElement {
         projects.create(newProject)
             .then(json => {
                 this.hasSuccess = true;
+                this.template.querySelector('.status-text').value = '';
+                this.projectName = '';
+                this.projectDescription = '';
                 fireEvent(this.pageRef, 'projectCreated', {});
                 console.log(json);
             })
