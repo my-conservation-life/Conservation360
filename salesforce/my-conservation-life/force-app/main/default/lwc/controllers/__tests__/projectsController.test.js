@@ -81,7 +81,7 @@ describe('projects.find', () => {
 
 describe('projects.create', () => {
 
-    const EXPECTED_RESPONSE = 2;
+    const EXPECTED_RESPONSE = Promise({});
     let fetch;
 
     beforeEach(() => {
@@ -98,7 +98,7 @@ describe('projects.create', () => {
 
 describe('projects.update', () => {
 
-    const EXPECTED_ID = 2;
+    const EXPECTED_ID = Promise({});
     const EXPECTED_RESPONSE = 2;
     const UPDATED_PROJECT = {id: '2', sponsor_id: '1', name: 'foo', description: 'baz'};
 
