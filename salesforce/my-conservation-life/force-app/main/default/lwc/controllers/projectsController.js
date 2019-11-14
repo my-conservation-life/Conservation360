@@ -7,9 +7,9 @@ PROJECTS_URL.pathname += '/projects';
  * Find projects matching the provided filters
  *
  * @param {Object} [filters] - Mapping of parameter name to value to filter by
- * @param {number} [filters.id] - ID of the project to filter by
- * @param {number} [filters.sponsor_id] - ID of the Sponsor to filter by
- * @param {number} [filters.name] - Name of the Project to filter by
+ * @param {Number} [filters.id] - ID of the project to filter by
+ * @param {Number} [filters.sponsor_id] - ID of the Sponsor to filter by
+ * @param {Number} [filters.name] - Name of the Project to filter by
  *
  * @returns {Promise<Array>} promise of an array of Projects
  */
@@ -38,7 +38,7 @@ const find = (filters = {}) => {
  * @param {string} [project.name] - the name of the project
  * @param {string} [project.description] - the description of the project
  * 
- * @returns {Promise<number>} promise the ID of the newly created project
+ * @returns {Promise<Number>} promise the ID of the newly created project
  */
 const create = (project) => {
     const createURL = new URL(PROJECTS_URL.href);
@@ -49,14 +49,14 @@ const create = (project) => {
  * Updates an existing Project in the open source database. This does a full replace
  * of the project.
  * 
- * @param {number} id - The ID of the project to update
+ * @param {Number} id - The ID of the project to update
  * @param {Object} project - An api-readable object representing a project
  * @param {string} [project.id] - The ID of the project. This should match the other id parameter.
  * @param {string} [project.sponsor_id] - the ID of the project's sponsor
  * @param {string} [project.name] - the name of the project
  * @param {string} [project.description] - the description of the project
  * 
- * @return {Promise<number>} promise the ID of the updated project
+ * @return {Promise<Number>} promise the ID of the updated project
  */
 const update = (id, project) => {
     const updateURL = new URL(PROJECTS_URL.href);
