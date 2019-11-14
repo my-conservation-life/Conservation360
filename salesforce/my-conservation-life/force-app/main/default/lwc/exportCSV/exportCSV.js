@@ -1,5 +1,5 @@
 import { LightningElement, track } from 'lwc';
-import controllers from 'c/controllers';
+import assetDefinitionsController from 'c/controllers';
 
 export default class ExportCSV extends LightningElement {
 
@@ -14,7 +14,8 @@ export default class ExportCSV extends LightningElement {
     c = controllers;
 
     get options() {
-        let assetTypes = controllers.assetDefinitionsController.getAssetTypes();
+        let assetTypes = assetDefinitionsController.getAssetTypes();
+        console.log('<' + assetTypes + '>');
         // return this.c.assetDefinitions.find().then(assetDefinitions => {
         //     // Must stringify because LWC must use primitives, no support for lists/objects
         //     const definitionsString = JSON.stringify(assetDefinitions);
