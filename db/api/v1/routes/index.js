@@ -21,6 +21,8 @@ router.get(
 
 router.post('/assets', assets.create);
 
+router.get('/asset_types', assets.getAssetTypes);
+
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);
 // router.put('/assets/:id', assets.update); //example update
