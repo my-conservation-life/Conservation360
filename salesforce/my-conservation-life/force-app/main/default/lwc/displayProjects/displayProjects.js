@@ -65,8 +65,7 @@ export default class DisplayProjects extends LightningElement {
     renderedCallback() {
         // rendered callback may be called multiple times and we do not 
         // want to keep hitting the servers
-        if (!this.hasRendered)
-        {
+        if (!this.hasRendered) {
             this.updateTable();
             this.hasRendered = true;
         }
@@ -74,8 +73,7 @@ export default class DisplayProjects extends LightningElement {
 
     // Wrapping the update table method in an event handler with a parameter
     // so that the pubsub module will work properly.
-    updateTableEventHandler(event)
-    {
+    updateTableEventHandler(event) {
         this.updateTable();
     }
 

@@ -13,6 +13,13 @@ describe('projects.find', () => {
     const EXPECTED_PROJECTS = [];
     let fetch;
 
+    async function findProjectTestHelper(params, expected){
+        const query = querystring.encode(params);
+        const projectArray = await projects.find(params);
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `?${query}`);
+        expect(projectArray).toEqual(expected);  
+    }
+
     beforeEach(() => {
         fetch = createMockFetch(EXPECTED_PROJECTS);
         global.fetch = fetch;
@@ -72,11 +79,11 @@ describe('projects.find', () => {
     it('finds with Project ID only', async () => {
         // project id
         const params = {id: '2'};
-        const query = querystring.encode(params);
-        const assetArray = await projects.find(params);
-        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL.href + `?${query}`);
-        expect(assetArray).toEqual(EXPECTED_PROJECTS);  
+        findProjectTestHelper(params, EXPECTED_PROJECTS);
     });
+
+
+
 });
 
 describe('projects.create', () => {
