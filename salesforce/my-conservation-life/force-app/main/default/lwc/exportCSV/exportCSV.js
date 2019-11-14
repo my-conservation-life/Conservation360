@@ -1,5 +1,5 @@
 import { LightningElement, track } from 'lwc';
-import { controllers, assetDefinitionsController } from 'c/controllers';
+import { controllers, assetTypes } from 'c/controllers';
 
 export default class ExportCSV extends LightningElement {
 
@@ -14,47 +14,10 @@ export default class ExportCSV extends LightningElement {
     c = controllers;
 
     get options() {
-        let assetTypes = assetDefinitionsController.getAssetTypes();
-        if (false) {
-            console.log('<' + assetTypes + '>');
-        } else {
-            console.log('broken?');
-        }
-        // return this.c.assetDefinitions.find().then(assetDefinitions => {
-        //     // Must stringify because LWC must use primitives, no support for lists/objects
-        //     const definitionsString = JSON.stringify(assetDefinitions);
+        let asset_types = assetTypes.getAssetTypes();
 
-        //     // Generate empty values for the @track arrays
-        //     const types = [];
-        //     const ids = {};
-        //     const descriptions = {};
-        //     const propertiesCollection = {};
+        console.log(asset_types);
 
-        //     // Use the query results to populate the @track arrays
-        //     if (definitionsString) {
-        //         const definitions = JSON.parse(definitionsString);
-        //         for (let definition of definitions) {
-        //             const name = definition.assetType.name;
-        //             const type = {
-        //                 label: name,
-        //                 value: name,
-        //             };
-        //             types.push(type);
-        //             ids[name] = definition.assetType.id;
-        //             descriptions[name] = definition.assetType.description;
-        //             propertiesCollection[name] = definition.properties;
-        //         }
-        //     }
-
-        //     // Set the values of the @track arrays
-        //     this.typeOptions = types;
-        //     this.typeIdOptions = ids;
-        //     this.descriptionOptions = descriptions;
-        //     this.propertiesOptions = propertiesCollection;
-        // }).then(() => {
-        //     return this.typeIdOptions;
-        // });
-        console.log(assetTypes);
         return [
             { label: 'First', value: '1' },
             { label: 'Second', value: '2' }

@@ -1,4 +1,6 @@
 import utils from 'c/utils';
+// var urljoin = require('url-join');
+
 
 const find = () => {
     const url = utils.URL + 'assetDefinitions';
@@ -11,7 +13,8 @@ const create = (assetDefinition) => {
 };
 
 const getAssetTypes = () => {
-    const url = urljoin(utils.URL, 'asset_types');
+    // const url = urljoin(utils.URL, 'getAssetTypes');
+    const url = utils.URL + 'assetTypes';
     return utils.get(url);
 };
 
