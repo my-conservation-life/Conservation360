@@ -17,5 +17,6 @@ const getAssetTypesController = () => {
 
 export default {
     find,
-    create
+    create,
+    getAssetTypesController
 };
