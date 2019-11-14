@@ -100,7 +100,7 @@ describe('projects.update', () => {
 
     it('updates a valid project', async () => {
         const updatedID = projects.update(EXPECTED_ID, UPDATED_PROJECT);
-        expect(fetch.mock.calls[0][0]).toBe(urljoin(PROJECTS_URL.href, `${EXPECTED_ID}`));
+        expect(fetch.mock.calls[0][0]).toBe(urljoin(PROJECTS_URL, `${EXPECTED_ID}`));
         expect(updatedID).toEqual(EXPECTED_RESPONSE);  
     });
 });
