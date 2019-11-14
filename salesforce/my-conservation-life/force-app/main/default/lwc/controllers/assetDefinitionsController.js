@@ -10,7 +10,7 @@ const create = (assetDefinition) => {
     return utils.post(url, assetDefinition);
 };
 
-const getAssetTypesController = () => {
+const getAssetTypes = () => {
     const url = urljoin(utils.URL, 'asset_types');
     return utils.get(url);
 };
@@ -18,5 +18,5 @@ const getAssetTypesController = () => {
 export default {
     find,
     create,
-    getAssetTypesController
+    getAssetTypes
 };
