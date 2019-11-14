@@ -1,7 +1,8 @@
 import utils from 'c/utils';
 
-const PROJECTS_URL = new URL(utils.URL);
-PROJECTS_URL.pathname += '/projects';
+const urljoin = require('url-join');
+
+const PROJECTS_URL = urljoin(utils.URL, 'projects');
 
 /**
  * Find projects matching the provided filters
@@ -15,7 +16,7 @@ PROJECTS_URL.pathname += '/projects';
  */
 const find = (filters = {}) => {
     const { id, sponsor_id, name } = filters;
-    const findURL = new URL(PROJECTS_URL.href);
+    const findURL = new URL(PROJECTS_URL);
 
     if ((typeof id !== 'undefined') && (id > 0)) {
         findURL.searchParams.append('id', id);
@@ -41,7 +42,7 @@ const find = (filters = {}) => {
  * @returns {Promise<Number>} promise the ID of the newly created project
  */
 const create = (project) => {
-    const createURL = new URL(PROJECTS_URL.href);
+    const createURL = new URL(PROJECTS_URL);
     return utils.post(createURL.href, project);
 };
 
@@ -59,8 +60,7 @@ const create = (project) => {
  * @return {Promise<Number>} promise the ID of the updated project
  */
 const update = (id, project) => {
-    const updateURL = new URL(PROJECTS_URL.href);
-    updateURL.pathname += `/${id}`;
+    const updateURL = new URL(urljoin(PROJECTS_URL, `${id}`));
     return utils.put(updateURL.href, {'project': project});
 };
     
