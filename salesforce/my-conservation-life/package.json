@@ -12,5 +12,8 @@
     "eslint": "^5.16.0",
     "@salesforce/eslint-config-lwc": "^0.3.0",
     "@salesforce/lwc-jest": "^0.4.14"
+  },
+  "dependencies": {
+    "url-join": "^4.0.1"
   }
 }

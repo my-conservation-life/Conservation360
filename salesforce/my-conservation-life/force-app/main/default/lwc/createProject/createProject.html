@@ -1,0 +1,37 @@
+<template>
+    <lightning-card title="Create a Conservation Project" icon-name="custom:custom83">
+        <div class="slds-m-around_medium">
+
+            <!-- Inputs -->
+            <div class="slds-grid slds-gutters slds-grid_vertical">
+
+                <!-- ID and Name Inputs -->
+                <div class="slds-col slds-medium-size_2-of-3  slds-small-size_1-of-1">
+                    <lightning-input name="sponsor-id" label="Sponsor ID" type="text" value={sponsorId}
+                        placeholder="The Sponsor's ID." onchange={handleChange} disabled></lightning-input>
+                    <lightning-input name="project-name" label="Project Name" type="text" value={projectName}
+                        placeholder="The name of the project." onchange={handleChange} required></lightning-input>
+                </div>
+
+                <!-- Description Text Area -->
+                <div class="slds-col slds-medium-size_3-of-3  slds-small-size_1-of-1">
+                    <lightning-textarea name="project-description" label="Project Description"
+                        value={projectDescription} placeholder="The description of the project" onchange={handleChange}
+                        required></lightning-textarea>
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <div class="slds-m-top_small slds-m-bottom_medium">
+                <lightning-button variant="success" label="Save" onclick={saveProject}></lightning-button>
+                <p>
+                    <lightning-formatted-text class="status-text" value=""></lightning-formatted-text>
+                </p>
+
+                <!-- Display Feedback to user -->
+                <p if:true={hasSuccess} class="success">Successfully saved</p>
+                <p if:true={hasError} class="error">An error has occured. Refresh and try again.</p>
+            </div>
+        </div>
+    </lightning-card>
+</template>
