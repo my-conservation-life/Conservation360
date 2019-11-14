@@ -1,5 +1,7 @@
 const utils = require('../utils');
 
+const MIN_PROJECT_NAME_LENGTH = 1;
+
 /**
  * Constructs Express middleware that validates an optional parameter.
  * 
@@ -108,6 +110,15 @@ const extractQueryParam = (req, paramName) => req.query[paramName];
 const extractBodyParam = (req, paramName) => req.body[paramName];
 
 /**
+ * Extracts the parameter from the request's params.
+ * 
+ * @param {*} req - Express request
+ * @param {string} paramName - the parameter to extract from req.params
+ * @returns {*} the extracted parameter
+ */
+const extractParamsParam = (req, paramName) => req.params[paramName];
+
+/**
  * Parse a database id value from a string.
  * @param {string} idStr - the string to parse into an id
  * @returns {ParseResult} parse success with a number value, or a parse failure
@@ -135,6 +146,18 @@ const parseString = (name, minLength = 0, maxLength = Number.MAX_SAFE_INTEGER) =
     if (name.length > maxLength) return false;
 
     return true;
+};
+
+/**
+ * Validates a Project's name. Does not allow empty strings.
+ * 
+ * @param {*} name - the name of the project to parse
+ * @returns {ParseResult} parse success with a valid name or a parse failure
+ */
+const parseProjectName = (name) => {
+    return (parseString(name, MIN_PROJECT_NAME_LENGTH) 
+        ? ParseResult.success(name) 
+        : ParseResult.failure(`Project Names must be at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
 };
 
 /**
@@ -205,17 +228,50 @@ const parseAssetDefinition = (assetDefinition) => {
     return ParseResult.success(assetDefinition);
 };
 
+/**
+ * Validates if its a valid Project
+ * 
+ * @param {*} project - A My Conservation Life Project that contains a sponsor_id, a name, and optionally a description
+ * @returns {ParseResult} a successful ParseResult if it is a valid Project
+ */
+const parseProject = (project) => {
+    const sponsor_id = project.sponsor_id;
+    const name = project.name;
+    const description = project.description;
+
+    // Validate the Sponsor ID
+    const result_id = parseId(sponsor_id);
+    if (result_id.isFailure()) 
+        return result_id;
+
+    // Validate the Project Name
+    const result_name = parseProjectName(name);
+    if (result_name.isFailure()) 
+        return result_name;
+
+    // Validate the Project Description if there was one provided
+    if (!utils.shared.isUndefined(description)) {
+        if (!parseString(description))
+            return ParseResult.failure('assetDefinition description must be a string');
+    }
+
+    return ParseResult.success(project);
+};
+
 module.exports = {
     validate,
 
     param: {
         query: extractQueryParam,
-        body: extractBodyParam
+        body: extractBodyParam,
+        params: extractParamsParam
     },
 
     type: {
         id: parseId,
-        assetDefinition: parseAssetDefinition
+        assetDefinition: parseAssetDefinition,
+        project: parseProject,
+        projectName: parseProjectName
     },
 
     ParseResult
