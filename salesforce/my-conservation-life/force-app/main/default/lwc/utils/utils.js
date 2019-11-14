@@ -11,6 +11,7 @@ const handleFetchErrors = (response) => {
 const get = (url) => {
     return fetch(url, {
         method: 'GET',
+        mode: 'no-cors', // TODO remove this once the bug is fixed
         headers: {
             'Content-Type': 'application/json'
         }
