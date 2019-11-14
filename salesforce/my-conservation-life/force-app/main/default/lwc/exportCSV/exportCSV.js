@@ -15,7 +15,10 @@ export default class ExportCSV extends LightningElement {
 
     get options() {
         let assetTypes = assetDefinitionsController.getAssetTypes();
-        console.log('<' + assetTypes + '>');
+        if false:
+            console.log('<' + assetTypes + '>');
+        else:
+            console.log('broken?');
         // return this.c.assetDefinitions.find().then(assetDefinitions => {
         //     // Must stringify because LWC must use primitives, no support for lists/objects
         //     const definitionsString = JSON.stringify(assetDefinitions);
