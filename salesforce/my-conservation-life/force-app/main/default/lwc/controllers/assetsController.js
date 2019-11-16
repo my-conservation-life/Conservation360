@@ -33,8 +33,14 @@ const create = (asset) => {
     const url = utils.URL + 'assets';
     return utils.post(url, asset);
 };
+
+const sendCSV = (csv) => {
+    const url = utils.URL + 'csv';
+    return utils.put(url, csv);
+};
     
 export default {
     find,
-    create
+    create,
+    sendCSV
 };

@@ -1,7 +1,12 @@
 <template>
-    <lightning-input type="file"
-                     label="Import CSV"
-                     accept=".csv"
-                     onchange={getCSV}>
-    </lightning-input>
+    <form action="/csv" method="put" enctype="multipart/form-data">
+        <lightning-input type="file"
+                         name="csv"
+                         label="Import CSV"
+                         accept=".csv"
+                         onchange={setCSV}>
+        </lightning-input>
+    </form>
+
+    <lightning-button variant="brand" label="Import" title="Import CSV" onclick={sendCSV} class="slds-m-left_x-small"></lightning-button>
 </template>
