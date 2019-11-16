@@ -31,7 +31,12 @@ const create = async (req, res, next) => {
     }
 };
 
+const storeCSV = async(req, res, next) => {
+    console.log(req.files['csv'][0]);
+};
+
 module.exports = {
     find,
-    create
+    create,
+    storeCSV
 };

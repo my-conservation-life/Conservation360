@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const upload = multer({dest: 'https://my-conservation-life-dev1.herokuapp.com/api/v1/'});
 const router = express.Router();
 
 const { validate, param, type } = require('./validate');
@@ -43,6 +45,9 @@ router.get(
     validate(param.query, 'project_id', type.id),
     bboxAssets.get
 );
+
+// CSV for importing data
+router.put('/csv', upload.single('csv'), assets.storeCSV);
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);
