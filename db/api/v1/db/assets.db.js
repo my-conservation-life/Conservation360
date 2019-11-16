@@ -139,6 +139,7 @@ const create = async (asset) => {
 
 const storeCSV = async(csv) => {
     console.log(csv);
+    return(csv);
 };
 
 module.exports = {
