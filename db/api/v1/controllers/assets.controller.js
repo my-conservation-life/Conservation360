@@ -32,7 +32,13 @@ const create = async (req, res, next) => {
 };
 
 const storeCSV = async(req, res, next) => {
-    console.log(req.files['csv'][0]);
+    const csv = req.files['csv'][0];
+    try {
+        const storedCSV = await assetsDb.storeCSV(csv);
+        console.log(storedCSV);
+    } catch (error) {
+        next(error);
+    }
 };
 
 module.exports = {
