@@ -1,8 +1,6 @@
 import utils from 'c/utils';
 
-const urljoin = require('url-join');
-
-const PROJECTS_URL = urljoin(utils.URL, 'projects');
+const PROJECTS_URL = utils.URL + 'projects';
 
 /**
  * Find projects matching the provided filters
@@ -60,7 +58,7 @@ const create = (project) => {
  * @return {Promise<Number>} promise the ID of the updated project
  */
 const update = (id, project) => {
-    const updateURL = new URL(urljoin(PROJECTS_URL, `${id}`));
+    const updateURL = new URL(PROJECTS_URL + `/${id}`);
     return utils.put(updateURL.href, {'project': project});
 };
     

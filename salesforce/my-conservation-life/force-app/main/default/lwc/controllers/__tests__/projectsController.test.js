@@ -2,11 +2,10 @@ import utils from 'c/utils';
 import projects from '../projectsController';
 
 const querystring = require('querystring');
-const urljoin = require('url-join');
 
 const createMockFetch = (jsonObject) => jest.fn(() => Promise.resolve({ ok: true, json: () => jsonObject }));
 
-let PROJECTS_URL = urljoin(utils.URL, 'projects');
+let PROJECTS_URL = utils.URL + 'projects';
 
 describe('projects.find', () => {
     
@@ -16,7 +15,7 @@ describe('projects.find', () => {
     async function findProjectTestHelper(params, expected){
         const query = querystring.encode(params);
         const projectArray = await projects.find(params);
-        expect(fetch.mock.calls[0][0]).toBe(urljoin(PROJECTS_URL, `?${query}`));
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL + `?${query}`);
         expect(projectArray).toEqual(expected);  
     }
 
@@ -100,7 +99,7 @@ describe('projects.update', () => {
 
     it('updates a valid project', async () => {
         const updatedID = projects.update(EXPECTED_ID, UPDATED_PROJECT);
-        expect(fetch.mock.calls[0][0]).toBe(urljoin(PROJECTS_URL, `${EXPECTED_ID}`));
+        expect(fetch.mock.calls[0][0]).toBe(PROJECTS_URL + `/${EXPECTED_ID}`);
         expect(updatedID).toEqual(EXPECTED_RESPONSE);  
     });
 });
