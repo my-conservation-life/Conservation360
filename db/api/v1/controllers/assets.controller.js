@@ -34,6 +34,7 @@ const create = async (req, res, next) => {
 const storeCSV = async(req, res, next) => {
     const csv = req.body;
     try {
+        res.set({'Access-Control-Allow-Origin': '*'});
         const string = await assetsDb.storeCSV(csv);
         res.json({'file': csv});
     } catch (error) {
