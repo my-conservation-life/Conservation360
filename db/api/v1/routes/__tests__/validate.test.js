@@ -111,6 +111,86 @@ describe('validate.type.id', () => {
     });
 });
 
+describe('validate.type.latitude', () => {
+    it('rejects strings', () => {
+        const result = type.latitude('hello world');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects empty strings', () => {
+        const result = type.latitude('');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('accepts 90.0', () => {
+        const result = type.latitude('90.0');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(90.0);
+    });
+
+    it('accepts -90.0', () => {
+        const result = type.latitude('-90.0');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(-90.0);
+    });
+
+    it('accepts 80.78373163637', () => {
+        const result = type.latitude('80.78373163637');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(80.78373163637);
+    });
+
+    it('rejects 90.000391', () => {
+        const result = type.latitude('90.000391');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects -90.000391', () => {
+        const result = type.latitude('-90.000391');
+        expect(result.isFailure()).toBe(true);
+    });
+});
+
+describe('validate.type.longitude', () => {
+    it('rejects strings', () => {
+        const result = type.longitude('hello world');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects empty strings', () => {
+        const result = type.longitude('');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('accepts 180.0', () => {
+        const result = type.longitude('180.0');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(180.0);
+    });
+
+    it('accepts -180.0', () => {
+        const result = type.longitude('-180.0');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(-180.0);
+    });
+
+    it('accepts 80.78373163637', () => {
+        const result = type.longitude('80.78373163637');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(80.78373163637);
+    });
+
+    it('rejects 180.042391', () => {
+        const result = type.longitude('180.042391');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects -180.042391', () => {
+        const result = type.longitude('-180.042391');
+        expect(result.isFailure()).toBe(true);
+    });
+});
+
 describe('validate.type.projectName', () => {
     it('rejects null', () => {
         const result = type.projectName(null);

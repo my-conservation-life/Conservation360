@@ -132,6 +132,36 @@ const parseId = (idStr) => {
 };
 
 /**
+ * Parse a latitude value from a string
+ * 
+ * @param {string} latStr - A string that is parsable into a floating point number
+ * @returns {ParseResult} - Parse success with a float value that is a latitude, or a failure message
+ */
+const parseLatitude = (latStr) => {
+    const lat = parseFloat(latStr);
+    const isValid = (!isNaN(lat) && (lat >= -90 && lat <= 90));
+
+    return isValid ?
+        ParseResult.success(lat) :
+        ParseResult.failure('Latitudes must be numbers between -90 and 90');
+};
+
+/**
+ * Parse a longitude value from a string
+ * 
+ * @param {string} lonStr - A string that is parsable into a floating point number
+ * @returns {ParseResult} - Parse success with a float value that is a longitude, or a failure message
+ */
+const parseLongitude = (lonStr) => {
+    const lon = parseFloat(lonStr);
+    const isValid = (!isNaN(lon) && (lon >= -180 && lon <= 180));
+
+    return isValid ?
+        ParseResult.success(lon) :
+        ParseResult.failure('Longitudes must be numbers between -180 and 180');
+};
+
+/**
  *  Validates if it is a string and within min/max length
  * 
  * @param {*} name - the variable to parse
@@ -270,6 +300,8 @@ module.exports = {
     type: {
         id: parseId,
         assetDefinition: parseAssetDefinition,
+        latitude: parseLatitude,
+        longitude: parseLongitude,
         project: parseProject,
         projectName: parseProjectName
     },

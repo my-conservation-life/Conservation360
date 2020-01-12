@@ -8,8 +8,19 @@ const {
     assetDefinitions,
     bboxAssets,
     dataTypes,
+    geometrySearch,
     projects
 } = require('../controllers');
+
+// Geometry Searches
+router.get(
+    '/assets/geometrySearch/envelope',
+    validate(param.query, 'minimumLatitude', type.latitude),
+    validate(param.query, 'minimumLongitude', type.longitude),
+    validate(param.query, 'maximumLatitude', type.latitude),
+    validate(param.query, 'maximumLongitude', type.longitude),
+    geometrySearch.envelopeFind
+);
 
 // Assets
 router.get(
