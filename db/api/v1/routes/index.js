@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const multer = require('multer');
+const upload = multer();
+
 const { validate, param, type } = require('./validate');
 
 const {
@@ -35,7 +38,7 @@ router.get('/assetTypes', assetDefinitions.findAssetTypes);
 
 // Asset Properties
 router.get('/properties', assetDefinitions.findPropertiesByAssetTypeId);
-router.post('properties', assetDefinitions.updateProperty);
+router.post('/properties', assetDefinitions.updateProperty);
 
 // Bounding Box of Assets
 router.get(
@@ -45,7 +48,7 @@ router.get(
 );
 
 // CSV for importing data
-router.put('/csv', assets.storeCSV);
+router.put('/csv', upload.single('csv'), assets.storeCSV);
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);

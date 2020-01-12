@@ -32,9 +32,10 @@ const create = async (req, res, next) => {
 };
 
 const storeCSV = async(req, res, next) => {
-    const csv = req.body;
+    const csv = req.file;
     try {
-        const string = await assetsDb.storeCSV(csv);
+        const file = await assetsDb.storeCSV(csv);
+        res.json({message: 'Response sent.'});
     } catch (error) {
         next(error);
     }
