@@ -43,7 +43,7 @@ const storeCSV = async(req, res, next) => {
     const csv = req.file;
     try {
         const file = await assetsDb.storeCSV(csv);
-        res.json({message: file.name});
+        res.json({message: file});
     } catch (error) {
         next(error);
     }
