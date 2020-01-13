@@ -31,6 +31,14 @@ const create = async (req, res, next) => {
     }
 };
 
+const getCSV = async(req, res, next) => {
+    try {
+        res.download('/Plant__c export .csv');
+    } catch (error) {
+        next(error);
+    }
+};
+
 const storeCSV = async(req, res, next) => {
     const csv = req.file;
     try {
@@ -44,5 +52,6 @@ const storeCSV = async(req, res, next) => {
 module.exports = {
     find,
     create,
+    getCSV,
     storeCSV
 };
