@@ -40,16 +40,16 @@ const getCSV = async(req, res, next) => {
 };
 
 const storeCSV = async(req, res, next) => {
-    const csv = req.file;
-    const files = req.files;
-    const csvName = req.file.originalname;
-    const csvPath = req.file.path;
-    try {
-        // const data = await assetsDb.storeCSV(csvPath);
-        res.json({file: csv, allFiles: files, filename: csvName, path: csvPath});
-    } catch (error) {
-        next(error);
-    }
+    // const csv = req.file;
+    // const files = req.files;
+    // const csvName = req.file.originalname;
+    // const csvPath = req.file.path;
+    // try {
+    //     // const data = await assetsDb.storeCSV(csvPath);
+    //     res.json({file: csv, allFiles: files, filename: csvName, path: csvPath});
+    // } catch (error) {
+    //     next(error);
+    // }
 };
 
 module.exports = {
