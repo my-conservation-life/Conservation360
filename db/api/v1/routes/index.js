@@ -3,18 +3,15 @@ const router = express.Router();
 const fs = require('fs-extra');
 
 const multer = require('multer');
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        // let path = '/uploads';
-        // fs.ensureDirSync(path);
-        cb(null, '/uploads');
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname);
-    }
-});
+// var multerStorage = multer.diskStorage({
+//     destination: '/uploads',
+//     filename: function(req, file, cb) {
+//         cb(null, file.originalname);
+//     }
+// });
 
-const upload = multer({storage: storage});
+// const upload = multer({storage: multerStorage});
+const upload = multer({dest: 'uploads/'});
 
 const { validate, param, type } = require('./validate');
 
