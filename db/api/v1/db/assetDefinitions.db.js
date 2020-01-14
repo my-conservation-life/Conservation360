@@ -126,5 +126,6 @@ const create = async (assetDefinition) => {
 
 module.exports = {
     find,
-    create
+    create,
+    findAssetTypes
 };
