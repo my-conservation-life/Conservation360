@@ -22,11 +22,6 @@ const create = async (req, res, next) => {
     }
 };
 
-module.exports = {
-    find,
-    create
-};
-
 const getAssetTypes = async (req, res, next) => {
     const predicates = req.query;
 
@@ -36,4 +31,10 @@ const getAssetTypes = async (req, res, next) => {
     } catch (e) {
         next(e);
     }
+};
+
+module.exports = {
+    find,
+    create,
+    getAssetTypes
 };
