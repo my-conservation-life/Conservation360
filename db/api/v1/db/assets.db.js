@@ -142,7 +142,10 @@ const create = async (asset) => {
 const storeCSV = async(csvPath) => {
     const rows = [];
 
-    fastCSV.fromPath(csvPath)
+    fastCSV.parseFile(csvPath)
+        .on('error', function(error) {
+            return(error);
+        })
         .on('data', function(data) {
             rows.push(data);
         })
