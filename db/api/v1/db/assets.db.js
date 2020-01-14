@@ -142,13 +142,13 @@ const create = async (asset) => {
 const storeCSV = async(csvPath) => {
     const rows = [];
 
-    // fastCSV.fromPath(csvPath)
-    //     .on('data', function(data) {
-    //         rows.push(data);
-    //     })
-    //     .on('end', function() {
-    //         console.log(rows);
-    //     });
+    fastCSV.fromPath(csvPath)
+        .on('data', function(data) {
+            rows.push(data);
+        })
+        .on('end', function() {
+            console.log(rows);
+        });
     return(rows);
 };
 
