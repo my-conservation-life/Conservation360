@@ -2,7 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
+var storage = multer.diskStorage({
+    destination: '/uploads',
+    filename: function(req, file, cb) {
+        cb(null, file.originalname, cb);
+    }
+});
+const upload = multer({storage: storage});
 
 const { validate, param, type } = require('./validate');
 
