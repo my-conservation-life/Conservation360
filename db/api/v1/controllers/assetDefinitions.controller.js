@@ -26,3 +26,14 @@ module.exports = {
     find,
     create
 };
+
+const getAssetTypes = async (req, res, next) => {
+    const predicates = req.query;
+
+    try {
+        const assetTypes = await db.assetDefinitions.findAssetTypes(predicates);
+        res.json(assetTypes);
+    } catch (e) {
+        next(e);
+    }
+};
