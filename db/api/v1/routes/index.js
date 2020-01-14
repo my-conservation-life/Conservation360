@@ -22,7 +22,7 @@ router.get(
 
 router.post('/assets', assets.create);
 
-router.get('/asset_types', assets.getAssetTypes);
+router.get('/asset_types', assetDefinitions.getAssetTypes);
 
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);
