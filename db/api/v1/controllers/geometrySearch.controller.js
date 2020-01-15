@@ -6,7 +6,7 @@ const geomDb = require('../db/geometrySearch.db');
 
 /**
  * Finds assests within a rectangle formed by two points (x,y):
- * p1(minLat, minLon) and p2(maxLat, maxLon)
+ * p1(minLon, minLat) and p2(maxLon, maxLat)
  * 
  * @param {*} req - Incoming request
  * @param {*} res - Outgoing response

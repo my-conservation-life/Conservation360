@@ -22,7 +22,8 @@ describe('GET assets/geometrySearch/envelope', () => {
     });
 
     it('returns 200 response', async () => {
-        const envelopeQuery = querystring.encode({minimumLatitude: '-1.1',
+        const envelopeQuery = querystring.encode({
+            minimumLatitude: '-1.1',
             minimumLongitude: '-1.1',
             maximumLatitude: '1.1',
             maximumLongitude: '1.1'
