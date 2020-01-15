@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs-extra');
+// const fs = require('fs-extra');
 
 const multer = require('multer');
 var multerStorage = multer.diskStorage({
