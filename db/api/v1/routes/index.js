@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 // const fs = require('fs-extra');
 
 const multer = require('multer');
@@ -22,6 +23,8 @@ const {
     dataTypes,
     projects
 } = require('../controllers');
+
+router.options('/*', cors());
 
 // Assets
 router.get(
