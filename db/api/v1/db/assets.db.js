@@ -1,6 +1,7 @@
 const utils = require('../utils');
 
-const fastCSV = require('fast-csv');
+// const fastCSV = require('fast-csv');
+const fs = require('fs');
 
 const QUERY_FIND = `SELECT
 sponsor.name AS sponsor_name,
@@ -142,17 +143,18 @@ const create = async (asset) => {
 const storeCSV = async(csvPath) => {
     const rows = [];
 
-    fastCSV.parseFile(csvPath)
-        .on('error', function(error) {
-            return(error);
-        })
-        .on('data', function(data) {
-            rows.push(data);
-        })
-        .on('end', function() {
-            console.log(rows);
-        });
-    return(rows);
+    // fastCSV.parseFile(csvPath)
+    //     .on('error', function(error) {
+    //         return(error);
+    //     })
+    //     .on('data', function(data) {
+    //         rows.push(data);
+    //     })
+    //     .on('end', function() {
+    //         console.log(rows);
+    //     });
+    let data = fs.readFile(csvPath);
+    return(data);
 };
 
 module.exports = {

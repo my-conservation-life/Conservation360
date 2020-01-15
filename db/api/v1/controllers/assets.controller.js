@@ -45,9 +45,9 @@ const storeCSV = async(req, res, next) => {
     const csvName = req.file.originalname;
     const csvPath = req.file.path;
     try {
-        // const data = await assetsDb.storeCSV(csvPath);
-        // res.json({file: csv, allFiles: files, filename: csvName, path: csvPath});
-        res.json({string: 'This is a string'});
+        const data = await assetsDb.storeCSV(csvPath);
+        res.json({file: csv, allFiles: files, filename: csvName, path: csvPath, content: data});
+        // res.json({string: 'This is a string'});
     } catch (error) {
         next(error);
     }
