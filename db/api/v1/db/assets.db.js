@@ -153,7 +153,7 @@ const storeCSV = async(csvPath) => {
     //     .on('end', function() {
     //         console.log(rows);
     //     });
-    let data = fs.readFile(csvPath);
+    let data = fs.createReadStream(csvPath, 'utf-8');
     return(data);
 };
 
