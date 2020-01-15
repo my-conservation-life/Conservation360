@@ -18,8 +18,6 @@ const envelopeFind = async (req, res, next) => {
     const maxLat = req.valid.maximumLatitude;
     const maxLon = req.valid.maximumLongitude;
 
-    // TODO: Make sure min <= max
-
     try {
         const assets = await geomDb.envelopeFind(minLat, minLon, maxLat, maxLon);
         res.json(assets);

@@ -25,19 +25,19 @@ const ENVELOPE_FIND = `
         JOIN sponsor s ON p.sponsor_id = s.id
         JOIN asset_type at ON a.asset_type_id = at.id
     WHERE
-        ST_Within(a.location, ST_MakeEnvelope(%1, %2, %3, %4))
+        ST_Within(a.location, ST_MakeEnvelope($1, $2, $3, $4))
     LIMIT
-        %5;
+        $5;
 `;
 
 /**
  * Finds assets within a rectangular area using the bottom left and top
  * right points of the rectangle.
  * 
- * @param {*} latMin - the minimum latitude (x coordinate) of the bounding box
- * @param {*} lonMin - the minimum longitude (y coordinate) of the bounding box
- * @param {*} latMax - the maximum latitude of the bounding box
- * @param {*} lonMax - the maximum latitude of the bounding box
+ * @param {number} latMin - the minimum latitude (x coordinate) of the bounding box
+ * @param {number} lonMin - the minimum longitude (y coordinate) of the bounding box
+ * @param {number} latMax - the maximum latitude of the bounding box
+ * @param {number} lonMax - the maximum latitude of the bounding box
  */
 const envelopeFind = async (latMin, lonMin, latMax, lonMax) => {
     const params = [latMin, lonMin, latMax, lonMax, QUERY_LIMIT];
