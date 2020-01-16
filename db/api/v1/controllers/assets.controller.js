@@ -1,7 +1,5 @@
 const assetsDb = require('../db/assets.db');
-// const csv = require('csvtojson');
-const csv = require('csv-parser');
-const fs = require('fs');
+const csv = require('csvtojson');
 
 const find = async (req, res, next) => {
     const sponsorId = req.valid.sponsor_id;
@@ -37,18 +35,10 @@ const create = async (req, res, next) => {
 const storeCSV = async(req, res, next) => {
     const csvFile = req.file;
     const csvPath = csvFile.path;
-
-    const rows = [];
     try {
-        // const json = await csv().fromFile(csvPath);
-        const data = fs.createReadStream(__dirname + csvPath)
-                        .pipe(csv())
-                        .on('data', (row) => {
-                            rows.push(row);
-                        });
-
-        // const success = await assetsDb.storeCSV(json);
-        res.json({file: csvFile, content: rows});
+        const json = await csv().fromFile(csvPath);
+        const success = await assetsDb.storeCSV(json);
+        res.json({file: csvFile, content: json});
     } catch (error) {
         next(error);
     }
