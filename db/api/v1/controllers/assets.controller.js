@@ -1,5 +1,4 @@
 const assetsDb = require('../db/assets.db');
-const fs = require('fs');
 
 const find = async (req, res, next) => {
     const sponsorId = req.valid.sponsor_id;
@@ -46,12 +45,8 @@ const storeCSV = async(req, res, next) => {
     const csvName = req.file.originalname;
     const csvPath = req.file.path;
     try {
-        // const readStream = await assetsDb.storeCSV(csvPath);
-        const readStream = fs.createReadStream(csvPath);
-        readStream.on('open', function() {
-            readStream.pipe(res);
-        });
-        res.json({file: csv, allFiles: files, filename: csvName, path: csvPath, content: readStream});
+        const data = await assetsDb.storeCSV(csvPath);
+        res.json({file: csv, allFiles: files, filename: csvName, path: csvPath, content: data});
         // res.json({string: 'This is a string'});
     } catch (error) {
         next(error);

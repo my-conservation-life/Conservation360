@@ -1,6 +1,7 @@
 const utils = require('../utils');
 
 // const fastCSV = require('fast-csv');
+const fs = require('fs');
 
 const QUERY_FIND = `SELECT
 sponsor.name AS sponsor_name,
@@ -152,7 +153,8 @@ const storeCSV = async(csvPath) => {
     //     .on('end', function() {
     //         console.log(rows);
     //     });
-    return(rows);
+    const content = fs.readFileSync(csvPath, {encoding: 'utf8'});
+    return(content);
 };
 
 module.exports = {
