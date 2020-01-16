@@ -13,6 +13,12 @@ const findAssetTypes = async () => {
     return global.dbPool.query(query);
 };
 
+const findAssetTypesCSV = async () => {
+    let query = `SELECT * from asset_type`;
+
+    return global.dbPool.query(query);
+};
+
 const findAssetProperties = async () => {
     let query = `
         SELECT
@@ -127,5 +133,6 @@ const create = async (assetDefinition) => {
 module.exports = {
     find,
     create,
-    findAssetTypes
+    findAssetTypes,
+    findAssetTypesCSV
 };
