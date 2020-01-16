@@ -141,8 +141,8 @@ const create = async (asset) => {
 };
 
 const storeCSV = async(csvPath) => {
-    const rows = [];
-
+    // const rows = [];
+    // 
     // fastCSV.parseFile(csvPath)
     //     .on('error', function(error) {
     //         return(error);
