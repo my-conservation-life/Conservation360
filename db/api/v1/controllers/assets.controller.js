@@ -41,7 +41,7 @@ const storeCSV = async(req, res, next) => {
     const rows = [];
     try {
         // const json = await csv().fromFile(csvPath);
-        const data = fs.createReadStream(csvPath)
+        const data = fs.createReadStream(__dirname + csvPath)
                         .pipe(csv())
                         .on('data', (row) => {
                             rows.push(row);
