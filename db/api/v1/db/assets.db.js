@@ -140,21 +140,8 @@ const create = async (asset) => {
     }
 };
 
-const storeCSV = async(csvPath) => {
-    // const rows = [];
-    // 
-    // fastCSV.parseFile(csvPath)
-    //     .on('error', function(error) {
-    //         return(error);
-    //     })
-    //     .on('data', function(data) {
-    //         rows.push(data);
-    //     })
-    //     .on('end', function() {
-    //         console.log(rows);
-    //     });
-    const content = fs.readFileSync(csvPath, {encoding: 'utf8'});
-    return(content);
+const storeCSV = async(csvJson) => {
+    return(csvJson);
 };
 
 module.exports = {

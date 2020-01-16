@@ -34,15 +34,10 @@ const create = async (req, res, next) => {
 
 const storeCSV = async(req, res, next) => {
     const csvFile = req.file;
-    const files = req.files;
-    const csvName = req.file.originalname;
-    const csvPath = req.file.path;
     try {
-        // const data = await assetsDb.storeCSV(csvPath);
         const json = await csv().fromFile(csvPath);
-
-        res.json({file: csvFile, allFiles: files, filename: csvName, path: csvPath, content: json});
-        // res.json({string: 'This is a string'});
+        const success = await assetsDb.storeCSV(json);
+        res.json({file: csvFile, content: json});
     } catch (error) {
         next(error);
     }
