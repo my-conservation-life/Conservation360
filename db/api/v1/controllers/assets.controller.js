@@ -34,6 +34,7 @@ const create = async (req, res, next) => {
 
 const storeCSV = async(req, res, next) => {
     const csvFile = req.file;
+    const csvPath = csvFile.path;
     try {
         const json = await csv().fromFile(csvPath);
         const success = await assetsDb.storeCSV(json);
@@ -46,6 +47,5 @@ const storeCSV = async(req, res, next) => {
 module.exports = {
     find,
     create,
-    getCSV,
     storeCSV
 };
