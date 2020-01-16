@@ -191,6 +191,19 @@ const parseProjectName = (name) => {
 };
 
 /**
+ * Validates if a radius string is a valid intenger.
+ * 
+ * @param {string} radiusString - the string to validate
+ * @returns {number} - the radius as an integer.
+ */
+const parseRadius = (radiusString) => {
+    const radius = parseInt(radiusString, 10);
+    return (isNaN(radius) || !utils.db.isValidDbInteger(radius))
+        ? ParseResult.failure(`Expected a number between 1 and ${utils.db.DB_INTEGER_MAX}`)
+        : ParseResult.success(radius);
+};
+
+/**
  * Validates if it is a valid my conservation life data type
  * 
  * @param {string} dataType - the string to validate
@@ -303,7 +316,8 @@ module.exports = {
         latitude: parseLatitude,
         longitude: parseLongitude,
         project: parseProject,
-        projectName: parseProjectName
+        projectName: parseProjectName,
+        radius: parseRadius
     },
 
     ParseResult

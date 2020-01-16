@@ -5,7 +5,10 @@ const app = require('../../app');
 const { setup, teardown, loadSQL } = require('../setup');
 const { createTestAsset } = require('../utils');
 
-const ENDPOINT = '/api/v1/assets/geometrySearch/envelope';
+const GEOMETRY_ENDPOINT = '/api/v1/assets/geometrySearch';
+const ENVELOPE_ENDPOINT = `${GEOMETRY_ENDPOINT}/envelope`;
+const DISTANCE_ENDPOINT = `${GEOMETRY_ENDPOINT}/distance`;
+
 
 describe('GET assets/geometrySearch/envelope', () => {
     beforeAll(async () => {
@@ -30,7 +33,7 @@ describe('GET assets/geometrySearch/envelope', () => {
         });
 
         await request(app)
-            .get(ENDPOINT + `?${envelopeQuery}`)
+            .get(ENVELOPE_ENDPOINT + `?${envelopeQuery}`)
             .expect(200);
     });
 
@@ -46,7 +49,7 @@ describe('GET assets/geometrySearch/envelope', () => {
         });
 
         await request(app)
-            .get(ENDPOINT + `?${envelopeQuery}`)
+            .get(ENVELOPE_ENDPOINT + `?${envelopeQuery}`)
             .expect(200)
             .then((res) => {
                 expect(res.body).toHaveLength(1);
@@ -54,5 +57,32 @@ describe('GET assets/geometrySearch/envelope', () => {
                 expect(retAsset.lat).toBe(.5);
                 expect(retAsset.lon).toBe(.25);
             });
+    });
+});
+
+describe('GET assets/geometrySearch/distance', () => {
+    beforeAll(async () => {
+        await setup();
+        await loadSQL('../schema/sample-data-emptyProjects.sql');
+    });
+
+    afterAll(async () => {
+        await teardown();
+    });
+
+    afterEach(async () => {
+        await global.dbPool.query('DELETE FROM asset');
+    });
+
+    it('returns 200 response', async () => {
+        const distanceQuery = querystring.encode({
+            latitude: '-1.1',
+            longitude: '-1.1',
+            radius: '1000',
+        });
+
+        await request(app)
+            .get(DISTANCE_ENDPOINT + `?${distanceQuery}`)
+            .expect(200);
     });
 });

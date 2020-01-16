@@ -215,6 +215,34 @@ describe('validate.type.projectName', () => {
     });
 });
 
+describe('validate.type.radius', () => {
+    it('rejects 0', () => {
+        const result = type.radius('0');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('accepts 1', () => {
+        const result = type.radius('1000');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(1000);
+    });
+
+    it('rejects negative numbers', () => {
+        const result = type.radius('-1000');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects the empty string', () => {
+        const result = type.radius('');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects alphabetic characters', () => {
+        const result = type.radius('abc');
+        expect(result.isFailure()).toBe(true);
+    });
+});
+
 describe('validate.type.assetDefinition', () => {
     let assetDefinition;
 

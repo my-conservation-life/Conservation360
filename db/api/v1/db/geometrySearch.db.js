@@ -17,8 +17,8 @@ const ENVELOPE_FIND = `
         p.name AS project_name,
         at.name AS asset_type,
         at.description AS asset_description,
-        ST_X(a.location) AS lat,
-        ST_Y(a.location) AS lon
+        ST_Y(a.location) AS lat,
+        ST_X(a.location) AS lon
     FROM
         asset a
         JOIN project p ON a.project_id = p.id
@@ -29,6 +29,46 @@ const ENVELOPE_FIND = `
     LIMIT
         $5;
 `;
+
+/**
+ * Finds assets with in a radius of a specified center point (x,y).
+ * The parameters are longitude, latitude, and radius in meters where
+ * x is the longitude and y is the latitude.
+ */
+const DISTANCE_FIND = `
+    SELECT 
+        a.id,
+        s.name AS sponsor_name,
+        p.name AS project_name,
+        at.name AS asset_type,
+        at.description AS asset_description,
+        ST_Y(a.location) AS lat,
+        ST_X(a.location) AS lon
+    FROM
+        asset a
+        JOIN project p ON a.project_id = p.id
+        JOIN sponsor s ON p.sponsor_id = s.id
+        JOIN asset_type at ON a.asset_type_id = at.id
+    WHERE
+        ST_DWithin(ST_SetSRID(a.location, 4326)::geography, 
+                   ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
+                   $3)
+    LIMIT 
+        $4;
+`;
+
+/**
+ * Finds assets within a specified radius of a center longitude, latitude point.
+ * 
+ * @param {number} lat - the center latitude
+ * @param {number} lon - the center longitude
+ * @param {number} radMeters - the distance from the center point
+ */
+const distanceFind = async (lat, lon, radMeters) => {
+    const params = [lon, lat, radMeters, QUERY_LIMIT];
+    const result = await global.dbPool.query(DISTANCE_FIND, params);
+    return result.rows;
+};
 
 /**
  * Finds assets within a rectangular area using the bottom left and top
@@ -46,5 +86,6 @@ const envelopeFind = async (latMin, lonMin, latMax, lonMax) => {
 };
 
 module.exports = {
+    distanceFind,
     envelopeFind
 };

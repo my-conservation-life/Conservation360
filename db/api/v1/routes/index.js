@@ -22,6 +22,15 @@ router.get(
     geometrySearch.envelopeFind
 );
 
+// Geometry Searches
+router.get(
+    '/assets/geometrySearch/distance',
+    validate(param.query, 'latitude', type.latitude),
+    validate(param.query, 'longitude', type.longitude),
+    validate(param.query, 'radiusMeters', type.radius),
+    geometrySearch.distanceFind
+);
+
 // Assets
 router.get(
     '/assets',
