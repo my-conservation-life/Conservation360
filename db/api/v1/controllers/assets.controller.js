@@ -32,14 +32,6 @@ const create = async (req, res, next) => {
     }
 };
 
-const getCSV = async(req, res, next) => {
-    try {
-        res.download('uploads/fire_nrt_V1_54876.csv');
-    } catch (error) {
-        next(error);
-    }
-};
-
 const storeCSV = async(req, res, next) => {
     const csvFile = req.file;
     const files = req.files;
