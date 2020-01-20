@@ -63,11 +63,13 @@ const create = async (req, res, next) => {
 const storeCSV = async(req, res, next) => {
     const csvFile = req.file;
     const csvPath = csvFile.path;
+
     const formData = req.body;
+    const assetTypeId = formData.get('assetTypeId');
     try {
         const json = await csv().fromFile(csvPath);
-        const success = await db.assetDefinitions.storeCSV(json);
-        res.json({form: formData, file: csvFile, content: json});
+        const properties = await db.assetDefinitions.storeCSV(assetTypeId, json);
+        res.json({form: formData, file: csvFile, content: json, properties: properties});
     } catch (error) {
         next(error);
     }

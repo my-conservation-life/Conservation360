@@ -156,8 +156,9 @@ const create = async (assetDefinition) => {
     }
 };
 
-const storeCSV = async(csvJson) => {
-    return(csvJson);
+const storeCSV = async(assetTypeId, csvJson) => {
+    const properties = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
+    return(properties);
 };
 
 module.exports = {
