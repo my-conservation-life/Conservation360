@@ -1,41 +1,5 @@
 const db = require('../db');
-
-const findPropertiesByAssetTypeId = async(req, res, next) => {
-    const predicates = req.query;
-
-    try {
-        const assetType = await db.assetDefinitions.findPropertiesByAssetTypeId(predicates);
-        res.json(assetType);
-    }
-    catch (e) {
-        next(e);
-    }
-};
-
-const updateProperty = async (req, res, next) => {
-    // const assetId;
-    // const assetTypeId;
-    // const value;
-    try {
-        // const property = await db.assetDefinitions.updateProperty(assetId, assetTypeId, value);
-        // res.json(property);
-    }
-    catch (e) {
-        next(e);
-    }
-};
-
-const findAssetTypes = async (req, res, next) => {
-    const predicates = req.query;
-
-    try {
-        const assetType = await db.assetDefinitions.findAssetTypes(predicates);
-        res.json(assetType);
-    }
-    catch (e) {
-        next(e);
-    }
-};
+const csv = require('csvtojson');
 
 const find = async (req, res, next) => {
 
@@ -59,10 +23,23 @@ const create = async (req, res, next) => {
     }
 };
 
+const storeCSV = async(req, res, next) => {
+    const csvFile = req.file;
+    const csvPath = csvFile.path;
+
+    const formData = req.body;
+    const assetTypeId = formData.get('assetTypeId');
+    try {
+        const json = await csv().fromFile(csvPath);
+        const properties = await db.assetDefinitions.processCSV(assetTypeId, json);
+        res.json({form: formData, file: csvFile, content: json, properties: properties});
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
-    findPropertiesByAssetTypeId,
-    updateProperty,
-    findAssetTypes,
     find,
-    create
+    create,
+    storeCSV
 };
