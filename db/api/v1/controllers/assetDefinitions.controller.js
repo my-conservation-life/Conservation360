@@ -13,6 +13,18 @@ const find = async (req, res, next) => {
     }
 };
 
+const findAssetTypes = async (req, res, next) => {
+    const predicates = req.query;
+
+    try {
+        const assetType = await db.assetDefinitions.findAssetTypes(predicates);
+        res.json(assetType);
+    }
+    catch (e) {
+        next(e);
+    }
+};
+
 const create = async (req, res, next) => {
     const assetDefinition = req.valid.assetDefinition;
     try {
@@ -40,6 +52,7 @@ const storeCSV = async(req, res, next) => {
 
 module.exports = {
     find,
+    findAssetTypes,
     create,
     storeCSV
 };
