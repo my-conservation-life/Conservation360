@@ -1,5 +1,4 @@
 const assetsDb = require('../db/assets.db');
-const csv = require('csvtojson');
 
 const find = async (req, res, next) => {
     const sponsorId = req.valid.sponsor_id;
@@ -32,21 +31,7 @@ const create = async (req, res, next) => {
     }
 };
 
-const storeCSV = async(req, res, next) => {
-    const csvFile = req.file;
-    const csvPath = csvFile.path;
-    const formData = req.body;
-    try {
-        const json = await csv().fromFile(csvPath);
-        const success = await assetsDb.storeCSV(json);
-        res.json({form: formData, file: csvFile, content: json});
-    } catch (error) {
-        next(error);
-    }
-};
-
 module.exports = {
     find,
     create,
-    storeCSV
 };

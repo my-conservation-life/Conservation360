@@ -1,8 +1,5 @@
 const utils = require('../utils');
 
-// const fastCSV = require('fast-csv');
-const fs = require('fs');
-
 const QUERY_FIND = `SELECT
 sponsor.name AS sponsor_name,
 project.name AS project_name,
@@ -140,12 +137,7 @@ const create = async (asset) => {
     }
 };
 
-const storeCSV = async(csvJson) => {
-    return(csvJson);
-};
-
 module.exports = {
     find,
-    create,
-    storeCSV
+    create
 };

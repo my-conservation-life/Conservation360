@@ -48,7 +48,7 @@ router.get(
 );
 
 // CSV for importing data
-router.put('/csv', upload.single('csv'), assets.storeCSV);
+router.put('/csv', upload.single('csv'), assetDefinitions.storeCSV);
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);

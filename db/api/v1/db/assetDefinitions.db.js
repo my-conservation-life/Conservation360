@@ -156,10 +156,15 @@ const create = async (assetDefinition) => {
     }
 };
 
+const storeCSV = async(csvJson) => {
+    return(csvJson);
+};
+
 module.exports = {
     findPropertiesByAssetTypeId,
     updateProperty,
     findAssetTypes,
     find,
-    create
+    create,
+    storeCSV
 };
