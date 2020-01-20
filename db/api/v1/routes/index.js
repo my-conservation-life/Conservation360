@@ -36,9 +36,6 @@ router.post('/assetDefinitions', validate(param.body, 'assetDefinition', type.as
 // Asset Types
 router.get('/assetTypes', assetDefinitions.findAssetTypes);
 
-// CSV for importing data
-router.put('/csv', upload.single('csv'), assetDefinitions.storeCSV);
-
 // Asset Properties
 router.get('/properties', assetDefinitions.findPropertiesByAssetTypeId);
 router.post('/properties', assetDefinitions.updateProperty);
@@ -49,6 +46,9 @@ router.get(
     validate(param.query, 'project_id', type.id),
     bboxAssets.get
 );
+
+// CSV for importing data
+router.put('/csv', upload.single('csv'), assets.storeCSV);
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);
