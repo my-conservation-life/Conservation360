@@ -1,14 +1,15 @@
 const utils = require('../utils');
 
-const PROPERTIES_QUERY = `SELECT
-    id,
-    asset_type_id,
-    name,
-    data_type,
-    required,
-    is_private
+const PROPERTIES_QUERY = `
+    SELECT
+        id,
+        asset_type_id,
+        name,
+        data_type,
+        required,
+        is_private
     FROM
-    property
+        property
 `;
 
 const findAssetTypes = async () => {
@@ -36,7 +37,7 @@ const findPropertiesByAssetTypeId = async(assetTypeId) => {
     const values = [];
     if ((typeof assetTypeId !== 'undefined') & (assetTypeId > 0)) {
         values.push(assetTypeId);
-        query = query + `AND asset_type_id = $${values.length}`;
+        query = query + ` WHERE asset_type_id = $${values.length}`;
     }
 
     return global.dbPool.query(query, values);
