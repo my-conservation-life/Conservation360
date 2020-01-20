@@ -1,17 +1,25 @@
 const utils = require('../utils');
 
-const findPropertiesByAssetTypeId = async(assetTypeId) => {
-    let query = `
-        SELECT
-            id,
-            name
-        FROM
-            property
-        WHERE
-            asset_type_id=$1
-    `;
+const PROPERTIES_QUERY = `
+    SELECT
+        id,
+        asset_type_id,
+        name,
+        data_type,
+        required,
+        is_private
+    FROM
+        property
+`;
 
-    const values = [assetTypeId];
+const findPropertiesByAssetTypeId = async(assetTypeId) => {
+    let query = PROPERTIES_QUERY;
+
+    const values = [];
+    if ((typeof assetTypeId !== 'undefined') & (assetTypeId > 0)) {
+        values.push(assetTypeId);
+        query = query + ` WHERE asset_type_id = $${values.length}`;
+    }
 
     return global.dbPool.query(query, values);
 };
@@ -46,17 +54,7 @@ const findAssetTypes = async () => {
 };
 
 const findAssetProperties = async () => {
-    let query = `
-        SELECT
-            id,
-            asset_type_id,
-            name,
-            data_type,
-            required,
-            is_private
-        FROM
-            property
-    `;
+    let query = PROPERTIES_QUERY;
 
     return global.dbPool.query(query);
 };
