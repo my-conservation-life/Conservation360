@@ -144,6 +144,7 @@ const processCSV = async(assetTypeId, csvJson) => {
 };
 
 module.exports = {
+    findAssetTypes,
     find,
     create,
     processCSV
