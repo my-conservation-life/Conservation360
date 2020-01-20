@@ -36,7 +36,7 @@ const findPropertiesByAssetTypeId = async(assetTypeId) => {
     const values = [];
     if ((typeof assetTypeId !== 'undefined') & (assetTypeId > 0)) {
         values.push(assetTypeId);
-        query = query + `AND sponsor_id = $${values.length}`;
+        query = query + `AND asset_type_id = $${values.length}`;
     }
 
     return global.dbPool.query(query, values);
