@@ -65,11 +65,11 @@ const storeCSV = async(req, res, next) => {
     const csvPath = csvFile.path;
 
     const formData = req.body;
-    const assetTypeId = formData.get('assetTypeId');
+    // const assetTypeId = formData.get('assetTypeId');
     try {
         const json = await csv().fromFile(csvPath);
         // const properties = await db.assetDefinitions.storeCSV(assetTypeId, json);
-        res.json({form: formData, file: csvFile, content: json, assetType: assetTypeId}); //properties: properties});
+        res.json({form: formData, file: csvFile, content: json}); //properties: properties});
     } catch (error) {
         next(error);
     }
