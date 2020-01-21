@@ -172,9 +172,9 @@ const storeCSV = async(assetTypeId, csvJson) => {
     const client = await global.dbPool.connect();
     var asset = null;
     var assetId = null;
-    // for (i = 0; i < csvJson.length; i++) {
-    //     asset = csvJson[i];
-    //     assetId = asset.asset_id;
+    for (i = 0; i < csvJson.length; i++) {
+        asset = csvJson[i];
+        assetId = asset.asset_id;
 
     //     const assetKeys = Object.keys(asset);
     //     var key;
@@ -185,7 +185,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
     //         propertyId = properties[key].id;
     //         // await createAssetProperty(client, assetId, propertyId, value);
     //     }
-    // }
+    }
     return(properties);
 };
 
