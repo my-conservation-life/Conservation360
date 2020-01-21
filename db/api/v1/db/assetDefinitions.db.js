@@ -12,6 +12,12 @@ const PROPERTIES_QUERY = `
         property
 `;
 
+const findProperties = async () => {
+    let query = PROPERTIES_QUERY;
+
+    return global.dbPool.query(query);
+};
+
 const findPropertiesByAssetTypeId = async(assetTypeId) => {
     let query = PROPERTIES_QUERY;
 
@@ -21,23 +27,18 @@ const findPropertiesByAssetTypeId = async(assetTypeId) => {
         query = query + ` WHERE asset_type_id = $${values.length}`;
     }
 
-    return global.dbPool.query(query, values);
-};
+    const propertyArray = global.dbPool.query(query, values).rows;
+    const properties = {};
 
-const updateProperty = async(assetId, assetTypeId, newValue) => {
-    const client = await global.dbPool.connect();
-
-    let query = `
-        UPDATE asset_property
-        SET value=$3
-        WHERE
-            asset_id=$1 AND
-            asset_type_id=$2
-    `;
-
-    const  values = [assetId, assetTypeId, newValue];
-
-    return client.query(query, values);
+    var i;
+    var property = null;
+    var propertyName = null;
+    for (i = 0; i < propertyArray.length; i++) {
+        property = propertyArray[i];
+        propertyName = property.name;
+        properties[propertyName] = property;
+    }
+    return (properties);
 };
 
 const findAssetTypes = async () => {
@@ -49,12 +50,6 @@ const findAssetTypes = async () => {
         FROM
             asset_type
     `;
-
-    return global.dbPool.query(query);
-};
-
-const findProperties = async () => {
-    let query = PROPERTIES_QUERY;
 
     return global.dbPool.query(query);
 };
@@ -154,18 +149,49 @@ const create = async (assetDefinition) => {
     }
 };
 
-const storeCSV = async(assetTypeId, csvJson) => {
-    const propertyArray = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
-    const properties = {};
+/**
+ * createAssetProperty is used to generate a row in
+ * the asset_property table
+ * @param {*} client The client being used to access the database
+ * @param {*} assetId The asset id that this property will be associated with
+ * @param {*} property The object containing the property's information
+ */
+const createAssetProperty = async (client, assetId, property) => {
+    
+    // Generate the SQL command
+    const query = `
+        INSERT INTO asset_property
+            (asset_id, property_id, value)
+        VALUES
+            ($1, $2, $3)
+    `;
 
-    var i;
-    var property = null;
-    var propertyName = null;
-    for (i = 0; i < propertyArray.length; i++) {
-        property = propertyArray[i];
-        propertyName = property.name;
-        properties[propertyName] = property;
-    }
+    // Generate the values to subsitute into the SQL command
+    const values = [assetId, property.id, property.value];
+
+    // Execute the SQL command
+    return client.query(query, values);
+
+};
+
+const updateProperty = async(assetId, assetTypeId, newValue) => {
+    const client = await global.dbPool.connect();
+
+    let query = `
+        UPDATE asset_property
+        SET value=$3
+        WHERE
+            asset_id=$1 AND
+            asset_type_id=$2
+    `;
+
+    const  values = [assetId, assetTypeId, newValue];
+
+    return client.query(query, values);
+};
+
+const storeCSV = async(assetTypeId, csvJson) => {
+    const properties = await findPropertiesByAssetTypeId(assetTypeId);
     return(properties);
 };
 
