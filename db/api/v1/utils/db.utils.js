@@ -32,15 +32,32 @@ const commitTransaction = async (client) => {
 };
 
 /**
- * Returns the postGis statement that turns a lat and a lon into a point
- * TODO: Move this to a utils file
+ * Returns a latitude and longitude as a string pair
  * 
  * @param {number} lon the points longitude (x)
  * @param {number} lat the points latitude (y)
- * @returns {string} a PostGIS point
+ * @returns {string} a PostGis linestring point pair
  */
-const makePoint = (lon, lat) => {
-    return `ST_MakePoint(${lon}, ${lat})`;
+const makeLineStringHelper = (lon, lat) => {
+    return `${lon} ${lat}`;
+};
+
+/**
+ * Creates a postgis LINESTRING from an array of latitude and longitude points
+ * 
+ * @param {Array} coordinatesList an array of x,y (longitude, latitude) points
+ * @returns {string} a postgis LINESTRING
+ */
+const makeLineString = (coordinatesList) => {
+
+    // An array of LINESTRING coordinate pairs 'lon lat'
+    let coordPairs = [];
+
+    coordinatesList.forEach(point => {
+        coordPairs.push(makeLineStringHelper(point.longitude, point.latitude));
+    });
+
+    return `LINESTRING(${coordPairs.join(',')})`;
 };
 
 /**
@@ -60,5 +77,5 @@ module.exports = {
     beginTransaction,
     commitTransaction,
     rollbackTransaction,
-    makePoint
+    makeLineString
 };

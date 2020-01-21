@@ -8,6 +8,7 @@ const { createTestAsset } = require('../utils');
 const GEOMETRY_ENDPOINT = '/api/v1/assets/geometrySearch';
 const ENVELOPE_ENDPOINT = `${GEOMETRY_ENDPOINT}/envelope`;
 const DISTANCE_ENDPOINT = `${GEOMETRY_ENDPOINT}/distance`;
+const POLYGON_ENDPOINT = `${GEOMETRY_ENDPOINT}/polygon`;
 
 
 describe('GET assets/geometrySearch/envelope', () => {
@@ -88,7 +89,30 @@ describe('GET assets/geometrySearch/distance', () => {
 });
 
 describe('GET assets/geometrySearch/polygon', () => {
-    it('TODO: Needs endpoint tests', async () => {
-        expect(false).toBeTruthy();
+
+    // Helper function
+    let pack = (lat, lon) => { return { latitude: lat, longitude: lon}; };
+
+    beforeAll(async () => {
+        await setup();
+        await loadSQL('../schema/sample-data-emptyProjects.sql');
+    });
+
+    afterAll(async () => {
+        teardown();
+    });
+
+    
+    afterEach(async () => {
+        await global.dbPool.query('DELETE FROM asset');
+    });
+
+    it('returns 200 response', async () => {
+
+        const validBody = { coordinates : [pack('13.3', '33'), pack('12', '44'), pack('12', '3')]};
+        await request(app)
+            .get(POLYGON_ENDPOINT)
+            .send(validBody)
+            .expect(200);
     });
 });

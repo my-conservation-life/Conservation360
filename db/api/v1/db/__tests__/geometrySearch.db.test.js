@@ -1,5 +1,5 @@
 const { distanceFind, envelopeFind, polygonFind } = require('../geometrySearch.db');
-const { makePoint } = require('../../utils/db.utils');
+const { makeLineString } = require('../../utils/db.utils');
 
 describe('geometrySearch.db.distanceFind', () => {
     let query;
@@ -62,8 +62,6 @@ describe('geometrySearch.db.polygonFind', () => {
 
         let polygonPoints = [];
 
-        let geoPointList = [];
-
         // Deep copy points into the polygon point list
         points.forEach(p => {
             polygonPoints.push(p);
@@ -72,16 +70,12 @@ describe('geometrySearch.db.polygonFind', () => {
         // close the polygon
         polygonPoints.push(points[0]);
 
-        // Create a list of ST_MakePoints for the db query.
-        polygonPoints.forEach(p => {
-            geoPointList.push(makePoint(p.longitude, p.latitude));
-        });
-
-        const pointString = geoPointList.join(',');
+        // Create the linestring
+        const lineString = makeLineString(polygonPoints);
         
         await polygonFind(points);
         expect(query).toHaveBeenCalledTimes(1);
-        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('ST_Within(a.location, ST_MakePolygon(ST_MakeLine(ARRAY[$1])))'));
-        expect(query.mock.calls[0][1][0]).toEqual(expect.stringContaining(pointString));
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('ST_Within(a.location, ST_MakePolygon(ST_GeomFromText($1)))'));
+        expect(query.mock.calls[0][1][0]).toEqual(expect.stringContaining(lineString));
     });
 });

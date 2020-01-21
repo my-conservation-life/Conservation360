@@ -2,7 +2,7 @@
  * Finds assets that are geospacially related.
  */
 
-const { makePoint } = require('../utils/db.utils');
+const { makeLineString } = require('../utils/db.utils');
 
 // Limit on how many rows may be returned on a find
 const QUERY_LIMIT = 50;
@@ -80,7 +80,7 @@ const POLYGON_FIND = `
         JOIN sponsor s ON p.sponsor_id = s.id
         JOIN asset_type at ON a.asset_type_id = at.id
     WHERE
-        ST_Within(a.location, ST_MakePolygon(ST_MakeLine(ARRAY[$1])))
+        ST_Within(a.location, ST_MakePolygon(ST_GeomFromText($1)))
     LIMIT
         $2;
 `;
@@ -120,16 +120,11 @@ const envelopeFind = async (latMin, lonMin, latMax, lonMax) => {
  * @param {Array} coordinatesList an Array of points
  */
 const polygonFind = async (coordinatesList) => {
+    // We copy the front coordinate to the back to ensure the line is "closed"
     coordinatesList.push(coordinatesList[0]);
+    const lineString = makeLineString(coordinatesList);
 
-    // An Array of ST_MakePoint(lon, lat)
-    let dbPointList = [];
-
-    coordinatesList.forEach(point => {
-        dbPointList.push(makePoint(point.longitude, point.latitude));
-    });
-
-    const params = [dbPointList.join(','), QUERY_LIMIT];
+    const params = [lineString, QUERY_LIMIT];
     const result = await global.dbPool.query(POLYGON_FIND, params);
     return result.rows;
 };

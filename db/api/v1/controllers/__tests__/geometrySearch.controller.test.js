@@ -115,7 +115,20 @@ describe('geometrySearch.controller.polygonFind', () => {
         geomDb.polygonFind = jest.fn(async () => expected);
     });
 
-    it('TODO: Needs tests', async () => {
-        expect(false).toBeTruthy();
+    it('queries the database with the correct parameters', async () => {
+        const pointArray = [{'latitude': 12.3, 'longitude': 11.1}, {'latitude': 13.3, 'longitude': -9.9}, {'latitude': -2.3, 'longitude': 2.9}];
+        req.valid['coordinates'] = pointArray;
+
+        await polygonFind(req, res, next);
+        expect(geomDb.polygonFind).toHaveBeenCalledWith(pointArray);
+        expect(res.json).toHaveBeenCalledWith(expected);
+    });
+
+    it('catches database access exceptions to pass them to the error handler', async () => {
+        const DB_ERROR = new Error();
+        geomDb.polygonFind = jest.fn(async () => { throw DB_ERROR; });
+        await polygonFind(req, res, next);
+        expect(next).toHaveBeenCalledWith(DB_ERROR);
+        expect(res.json).not.toHaveBeenCalled();
     });
 });
