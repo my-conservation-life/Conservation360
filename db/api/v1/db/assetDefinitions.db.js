@@ -182,7 +182,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
         for (const key in assetKeys) {
             if (key !== 'asset_id') {
                 value = asset[key];
-                propertyId = properties[key].id;
+                // propertyId = properties[key].id;
                 // await createAssetProperty(client, assetId, propertyId, value);
             }
         }
