@@ -166,6 +166,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
         propertyName = property.name;
         properties[propertyName] = property;
     }
+    properties['something'] = 'testing';
     return(properties);
 };
 
