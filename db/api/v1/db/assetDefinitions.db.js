@@ -155,7 +155,17 @@ const create = async (assetDefinition) => {
 };
 
 const storeCSV = async(assetTypeId, csvJson) => {
-    const properties = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
+    const propertyArray = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
+    const properties = {};
+
+    var i;
+    var property = null;
+    var propertyName = null;
+    for (i = 0; i < properties.length; i++) {
+        property = propertyArray[i];
+        propertyName = property.name;
+        properties[propertyName] = property;
+    }
     return(properties);
 };
 
