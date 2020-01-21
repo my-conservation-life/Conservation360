@@ -178,16 +178,16 @@ const storeCSV = async(assetTypeId, csvJson) => {
 
         var assetKeys = Object.keys(asset);
         var value;
-        var propertyId;
+        var property;
         for (const key in assetKeys) {
             if (key !== 'asset_id') {
                 value = asset[key];
-                // propertyId = properties[key].id;
+                property = properties[key];
                 // await createAssetProperty(client, assetId, propertyId, value);
             }
         }
     }
-    return(assetKeys);
+    return(properties);
 };
 
 const updateProperty = async(assetId, assetTypeId, newValue) => {
