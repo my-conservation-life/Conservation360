@@ -78,11 +78,17 @@ describe('GET assets/geometrySearch/distance', () => {
         const distanceQuery = querystring.encode({
             latitude: '-1.1',
             longitude: '-1.1',
-            radius: '1000',
+            radiusMeters: '1000',
         });
 
         await request(app)
             .get(DISTANCE_ENDPOINT + `?${distanceQuery}`)
             .expect(200);
+    });
+});
+
+describe('GET assets/geometrySearch/polygon', () => {
+    it('TODO: Needs endpoint tests', async () => {
+        expect(false).toBeTruthy();
     });
 });

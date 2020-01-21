@@ -32,6 +32,18 @@ const commitTransaction = async (client) => {
 };
 
 /**
+ * Returns the postGis statement that turns a lat and a lon into a point
+ * TODO: Move this to a utils file
+ * 
+ * @param {number} lon the points longitude (x)
+ * @param {number} lat the points latitude (y)
+ * @returns {string} a PostGIS point
+ */
+const makePoint = (lon, lat) => {
+    return `ST_MakePoint(${lon}, ${lat})`;
+};
+
+/**
  * Rollsback a SQL transaction
  * 
  * @param {*} client - node postgres client
@@ -47,5 +59,6 @@ module.exports = {
     isValidDbInteger,
     beginTransaction,
     commitTransaction,
-    rollbackTransaction
+    rollbackTransaction,
+    makePoint
 };

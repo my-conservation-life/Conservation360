@@ -1,4 +1,4 @@
-const { distanceFind, envelopeFind } = require('../geometrySearch.controller');
+const { distanceFind, envelopeFind, polygonFind } = require('../geometrySearch.controller');
 const geomDb = require('../../db/geometrySearch.db');
 
 describe('geometrySearch.controller.envelopeFind', () => {
@@ -90,3 +90,32 @@ describe('geometrySearch.controller.distanceFind', () => {
     });
 });
 
+describe('geometrySearch.controller.polygonFind', () => {
+    let req;
+    let res;
+    let next;
+    let expected;
+
+    beforeEach(() => {
+        // Clear request
+        req = {
+            valid: {},
+            query: {}
+        };
+
+        // Clear response
+        res = {
+            json: jest.fn(),
+            send: jest.fn(),
+            status: jest.fn(() => res)
+        };
+
+        next = jest.fn();
+        expected = [{}];
+        geomDb.polygonFind = jest.fn(async () => expected);
+    });
+
+    it('TODO: Needs tests', async () => {
+        expect(false).toBeTruthy();
+    });
+});

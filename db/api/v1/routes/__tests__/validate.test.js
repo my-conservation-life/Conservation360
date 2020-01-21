@@ -83,6 +83,93 @@ describe('validate', () => {
     });
 });
 
+describe('validate.type.coordinates', () => {
+
+    // Temp function to create point objects
+    let pack = (lon, lat) => {
+        return {latitude: lat, longitude:lon};
+    };
+
+    it('rejects empty coordinates array', () => {
+        const emptyCoords = [];
+        const result = type.coordinates(emptyCoords);
+        expect(result.isFailure).toBeTruthy();
+    });
+
+    it('rejects coordinates array with only 2 points', () => {
+        const twoCoords = [pack('1.1', '3.3'), pack('22', '-23')];
+        const result = type.coordinates(twoCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Expected at least 3 points in the coordinates list')
+        );
+    });
+
+    it('rejects coordinates that are malformed', () => {
+        const badCoords = [pack('word', '3.3'), pack('22', '-23'), pack('a', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed requests', () => {
+        const badCoords = [{somethingelse: 403}, pack('22', '-23'), pack('3', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed latitudes that are too big', () => {
+        const badCoords = [pack('22', '200'), pack('22', '-23'), pack('3', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed latitudes that are too small', () => {
+        const badCoords = [pack('22', '2'), pack('22', '-23'), pack('3', '-200')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed longitudes that are too big', () => {
+        const badCoords = [pack('12', '-10.30'), pack('181', '-23'), pack('10', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed longitudes that are too small', () => {
+        const badCoords = [pack('22', '20'), pack('22.3', '-23'), pack('-181', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('accepts a well formed request', () => {
+        const goodCoords = [pack('22.4', '20'), pack('22.3', '-23.1111'), pack('-20', '23')];
+        const expected = [pack(22.4, 20), pack(22.3, -23.1111), pack(-20, 23)];
+        const result = type.coordinates(goodCoords);
+        expect(result.isSuccess).toBeTruthy();
+        expect(result.value).toEqual(
+            expect.arrayContaining(expected)
+        );
+    });
+});
+
 describe('validate.type.id', () => {
     it('rejects 0', () => {
         const result = type.id('0');

@@ -15,20 +15,26 @@ const {
 // Geometry Searches
 router.get(
     '/assets/geometrySearch/envelope',
-    validate(param.query, 'minimumLatitude', type.latitude),
-    validate(param.query, 'minimumLongitude', type.longitude),
-    validate(param.query, 'maximumLatitude', type.latitude),
-    validate(param.query, 'maximumLongitude', type.longitude),
+    validate(param.query, 'minimumLatitude', type.latitude, true),
+    validate(param.query, 'minimumLongitude', type.longitude, true),
+    validate(param.query, 'maximumLatitude', type.latitude, true),
+    validate(param.query, 'maximumLongitude', type.longitude, true),
     geometrySearch.envelopeFind
 );
 
 // Geometry Searches
 router.get(
     '/assets/geometrySearch/distance',
-    validate(param.query, 'latitude', type.latitude),
-    validate(param.query, 'longitude', type.longitude),
-    validate(param.query, 'radiusMeters', type.radius),
+    validate(param.query, 'latitude', type.latitude, true),
+    validate(param.query, 'longitude', type.longitude, true),
+    validate(param.query, 'radiusMeters', type.radius, true),
     geometrySearch.distanceFind
+);
+
+router.get(
+    '/assets/geometrySearch/polygon',
+    validate(param.body, 'coordinates', type.coordinates, true),
+    geometrySearch.polygonFind
 );
 
 // Assets

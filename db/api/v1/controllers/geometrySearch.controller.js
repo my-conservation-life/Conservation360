@@ -47,9 +47,27 @@ const envelopeFind = async (req, res, next) => {
     }
 };
 
+/**
+ * Finds assests within a polygon formed by three or more geospacial points:
+ * 
+ * @param {*} req - Incoming request
+ * @param {*} res - Outgoing response
+ * @param {*} next - The next middleware function
+ */
+const polygonFind = async (req, res, next) => {
+    const coordinates = req.valid.coordinates;
+    try {
+        const assets = await geomDb.polygonFind(coordinates);
+        res.json(assets);
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     distanceFind,
-    envelopeFind
+    envelopeFind,
+    polygonFind
 };
 
 

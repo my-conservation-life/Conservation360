@@ -2,6 +2,8 @@
  * Finds assets that are geospacially related.
  */
 
+const { makePoint } = require('../utils/db.utils');
+
 // Limit on how many rows may be returned on a find
 const QUERY_LIMIT = 50;
 
@@ -58,6 +60,32 @@ const DISTANCE_FIND = `
 `;
 
 /**
+ * Finds assets within a polygon of geospacial points.
+ * The array has to have at least 3 different points with at least
+ * one point that is not colinear. The first point will be copied to the end of the
+ * array to ensure that the polygon is closed.
+ */
+const POLYGON_FIND = `
+    SELECT 
+        a.id,
+        s.name AS sponsor_name,
+        p.name AS project_name,
+        at.name AS asset_type,
+        at.description AS asset_description,
+        ST_Y(a.location) AS lat,
+        ST_X(a.location) AS lon
+    FROM
+        asset a
+        JOIN project p ON a.project_id = p.id
+        JOIN sponsor s ON p.sponsor_id = s.id
+        JOIN asset_type at ON a.asset_type_id = at.id
+    WHERE
+        ST_Within(a.location, ST_MakePolygon(ST_MakeLine(ARRAY[$1])))
+    LIMIT
+        $2;
+`;
+
+/**
  * Finds assets within a specified radius of a center longitude, latitude point.
  * 
  * @param {number} lat - the center latitude
@@ -85,7 +113,29 @@ const envelopeFind = async (latMin, lonMin, latMax, lonMax) => {
     return result.rows;
 };
 
+/**
+ * Finds assets within a polygon made up of geospacial points. The first
+ * coordinate gets copied to the end to ensure that the polygon is closed.
+ * 
+ * @param {Array} coordinatesList an Array of points
+ */
+const polygonFind = async (coordinatesList) => {
+    coordinatesList.push(coordinatesList[0]);
+
+    // An Array of ST_MakePoint(lon, lat)
+    let dbPointList = [];
+
+    coordinatesList.forEach(point => {
+        dbPointList.push(makePoint(point.longitude, point.latitude));
+    });
+
+    const params = [dbPointList.join(','), QUERY_LIMIT];
+    const result = await global.dbPool.query(POLYGON_FIND, params);
+    return result.rows;
+};
+
 module.exports = {
     distanceFind,
-    envelopeFind
+    envelopeFind,
+    polygonFind
 };
