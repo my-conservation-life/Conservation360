@@ -53,7 +53,7 @@ const findAssetTypes = async () => {
     return global.dbPool.query(query);
 };
 
-const findAssetProperties = async () => {
+const findProperties = async () => {
     let query = PROPERTIES_QUERY;
 
     return global.dbPool.query(query);
@@ -102,7 +102,7 @@ const createProperty = async (client, assetTypeId, property) => {
 const find = async () => {
 
     const types = (await findAssetTypes()).rows;
-    const properties = (await findAssetProperties()).rows;
+    const properties = (await findProperties()).rows;
 
     const assetDefinitions = [];
     for (let type of types) {
