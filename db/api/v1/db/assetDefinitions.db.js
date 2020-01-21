@@ -138,14 +138,7 @@ const create = async (assetDefinition) => {
     }
 };
 
-/**
- * createAssetProperty is used to generate a row in
- * the asset_property table
- * @param {*} client The client being used to access the database
- * @param {*} assetId The asset id that this property will be associated with
- * @param {*} property The object containing the property's information
- */
-const createAssetProperty = async (client, assetId, property) => {
+const createAssetProperty = async (client, assetId, propertyId, value) => {
     
     // Generate the SQL command
     const query = `
@@ -156,7 +149,7 @@ const createAssetProperty = async (client, assetId, property) => {
     `;
 
     // Generate the values to subsitute into the SQL command
-    const values = [assetId, property.id, property.value];
+    const values = [assetId, propertyId, value];
 
     // Execute the SQL command
     return client.query(query, values);
@@ -174,6 +167,24 @@ const storeCSV = async(assetTypeId, csvJson) => {
         property = propertyArray[i];
         propertyName = property.name;
         properties[propertyName] = property;
+    }
+
+    const client = await global.dbPool.connect();
+    var asset = null;
+    var assetId = null;
+    for (i = 0; i < csvJson.length; i++) {
+        asset = csvJson[i];
+        assetId = asset.asset_id;
+
+        const assetKeys = Object.keys(asset);
+        var key;
+        var value;
+        var propertyId;
+        for (key of assetKeys) {
+            value = asset[key];
+            propertyId = properties[key].id;
+            await createAssetProperty(client, assetId, propertyId, value);
+        }
     }
     return(properties);
 };
