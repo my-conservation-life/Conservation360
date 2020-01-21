@@ -161,12 +161,11 @@ const storeCSV = async(assetTypeId, csvJson) => {
     var i;
     var property = null;
     var propertyName = null;
-    for (i = 0; i < properties.length; i++) {
+    for (i = 0; i < propertyArray.length; i++) {
         property = propertyArray[i];
         propertyName = property.name;
         properties[propertyName] = property;
     }
-    properties['something'] = 'testing';
     return(properties);
 };
 
