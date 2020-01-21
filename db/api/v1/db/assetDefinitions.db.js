@@ -27,7 +27,7 @@ const findPropertiesByAssetTypeId = async(assetTypeId) => {
         query = query + ` WHERE asset_type_id = $${values.length}`;
     }
 
-    const propertyArray = global.dbPool.query(query, values).rows;
+    const propertyArray = await global.dbPool.query(query, values).rows;
     const properties = {};
 
     var i;
