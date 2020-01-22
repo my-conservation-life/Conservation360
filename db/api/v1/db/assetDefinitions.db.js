@@ -172,14 +172,14 @@ const storeCSV = async(assetTypeId, csvJson) => {
     const client = await global.dbPool.connect();
     var asset = null;
     var assetId = null;
+    var value;
+    var propertyToAdd;
+    var propertyId;
     for (i = 0; i < csvJson.length; i++) {
         asset = csvJson[i];
         assetId = asset.asset_id;
 
         var assetKeys = Object.keys(asset);
-        var value;
-        var propertyToAdd;
-        var propertyId;
         for (const key in assetKeys) {
             if (key !== 'asset_id') {
                 value = asset[key];
@@ -189,7 +189,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             }
         }
     }
-    return(asset);
+    return(value);
 };
 
 const updateProperty = async(assetId, assetTypeId, newValue) => {
