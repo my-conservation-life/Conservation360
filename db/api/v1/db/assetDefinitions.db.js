@@ -203,9 +203,10 @@ const storeCSV = async(assetTypeId, csvJson) => {
     const client = await global.dbPool.connect();
     var asset = null;
     var assetId = null;
+    var property;
     var propertyId;
+    var propertyIsRequired;
     var value;
-    var valueRequired;
     const object = {};
     for (i = 0; i < csvJson.length; i++) {
         asset = csvJson[i];
@@ -213,10 +214,12 @@ const storeCSV = async(assetTypeId, csvJson) => {
 
         for (const propertyName in asset) {
             if (propertyName !== 'asset_id') {
-                propertyId = properties[propertyName].id;
+                property = properties[propertyName];
+                propertyId = property.id;
+                propertyIsRequired = property.required;
                 value = asset[propertyName];
                 if (value === '') {
-                    valueRequired = await checkIfPropertyRequired(propertyName);
+                    
                 }
                 else {
                     // await createAssetProperty(client, assetId, propertyId, value);
@@ -226,7 +229,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             object.propertyId = propertyId;
             object.propertyName = propertyName;
             object.propertyValue = value;
-            object.propertyRequired = valueRequired;
+            object.propertyIsRequired = propertyIsRequired;
         }
     }
     return(object);
