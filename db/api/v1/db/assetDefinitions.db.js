@@ -13,6 +13,21 @@ const findAssetTypes = async () => {
     return global.dbPool.query(query);
 };
 
+const findAssetsByTypeID = async (assetTypeID) => {
+    let query = `
+        SELECT
+            id
+        FROM
+            asset
+        WHERE
+            asset_type_id = $1
+    `;
+
+    const params = [assetTypeID];
+
+    return global.dbPool.query(query, params);
+};
+
 const findAssetTypesCSV = async (assetTypeID) => {
     // TODO
     let query = `
@@ -143,5 +158,6 @@ module.exports = {
     find,
     create,
     findAssetTypes,
+    findAssetsByTypeID,
     findAssetTypesCSV
 };

@@ -24,6 +24,8 @@ router.post('/assets', assets.create);
 
 router.get('/asset_types', assetDefinitions.getAssetTypes);
 
+router.get('/assets_by_type_id', assetDefinitions.getAssetsByTypeID);
+
 router.post('/asset_type_CSV', assetDefinitions.getAssetTypesCSV);
 
 // router.post('/assets', assets.create); //example create
