@@ -180,7 +180,8 @@ const storeCSV = async(assetTypeId, csvJson) => {
     //     assetId = asset.asset_id;
     // }
     asset = csvJson[0];
-    return(asset);
+    assetId = asset.asset_id;
+    return(assetId);
 };
 
 const updateProperty = async(assetId, assetTypeId, newValue) => {
