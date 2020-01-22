@@ -186,7 +186,6 @@ const storeCSV = async(assetTypeId, csvJson) => {
     }
 
     const failedRows = [];
-    const client = await global.dbPool.connect();
     var asset = null;
     var assetId = null;
     var property;
@@ -194,29 +193,40 @@ const storeCSV = async(assetTypeId, csvJson) => {
     var propertyIsRequired;
     var value;
     const object = {};
-    for (i = 0; i < csvJson.length; i++) {
-        asset = csvJson[i];
-        assetId = asset.asset_id;
+    const client = await global.dbPool.connect();
+    try {
+        await utils.db.beginTransaction(client);
 
-        for (const propertyName in asset) {
-            if (propertyName !== 'asset_id') {
-                property = properties[propertyName];
-                propertyId = property.id;
-                propertyIsRequired = property.required;
-                value = asset[propertyName];
-                if (value === '') {
-                    
+        for (i = 0; i < csvJson.length; i++) {
+            asset = csvJson[i];
+            assetId = asset.asset_id;
+
+            for (const propertyName in asset) {
+                if (propertyName !== 'asset_id') {
+                    property = properties[propertyName];
+                    propertyId = property.id;
+                    propertyIsRequired = property.required;
+                    value = asset[propertyName];
+                    if (value === '' && propertyIsRequired) {
+                        await utils.db.rollbackTransaction(client);
+                        throw 'A required value is missing.';
+                    }
+                    else {
+                        // await createAssetProperty(client, assetId, propertyId, value);
+                    }
                 }
-                else {
-                    // await createAssetProperty(client, assetId, propertyId, value);
-                }
+                object.asset = asset;
+                object.propertyId = propertyId;
+                object.propertyName = propertyName;
+                object.propertyValue = value;
+                object.propertyIsRequired = propertyIsRequired;
             }
-            object.asset = asset;
-            object.propertyId = propertyId;
-            object.propertyName = propertyName;
-            object.propertyValue = value;
-            object.propertyIsRequired = propertyIsRequired;
         }
+        await utils.db.commitTransaction(client);
+    }
+    catch (error) {
+        await utils.db.rollbackTransaction(client);
+        throw error;
     }
     return(object);
 };
