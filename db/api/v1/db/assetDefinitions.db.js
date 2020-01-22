@@ -156,20 +156,6 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
 
 };
 
-const checkIfPropertyRequired = async (propertyName) => {
-    const query = `
-        SELECT 
-            required
-        FROM 
-            property
-        WHERE name=$1;
-    `;
-
-    const values = [propertyName];
-
-    return global.dbPool.query(query, values);
-};
-
 const updateProperty = async(assetId, assetTypeId, newValue) => {
     const client = await global.dbPool.connect();
 
