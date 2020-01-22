@@ -175,13 +175,19 @@ const storeCSV = async(assetTypeId, csvJson) => {
     var value;
     var propertyToAdd;
     var propertyId;
-    // for (i = 0; i < csvJson.length; i++) {
-    //     asset = csvJson[i];
-    //     assetId = asset.asset_id;
-    // }
-    asset = csvJson[0];
-    assetId = asset.asset_id;
-    return(assetId);
+    for (i = 0; i < csvJson.length; i++) {
+        asset = csvJson[i];
+        assetId = asset.asset_id;
+
+        for (const key in asset) {
+            if (key !== 'asset_id') {
+                value = asset[key];
+                propertyId = properties[key].id;
+                // await createAssetProperty(client, assetId, propertyId, value);
+            }
+        }
+    }
+    return(propertyId);
 };
 
 const updateProperty = async(assetId, assetTypeId, newValue) => {
