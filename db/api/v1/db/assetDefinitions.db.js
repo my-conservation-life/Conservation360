@@ -13,19 +13,17 @@ const findAssetTypes = async () => {
     return global.dbPool.query(query);
 };
 
-const findAssetTypesCSV = async (assetTypeId) => {
+const findAssetTypesCSV = async (assetTypeID) => {
     // TODO
     let query = `
         SELECT
             *
         FROM
             asset_type
-        WHERE
-            asset_type_id = $1
     `;
-    const params = [assetTypeId];
+    // const params = [assetTypeID];
 
-    return global.dbPool.query(query, params);
+    return global.dbPool.query(query);
 };
 
 const findAssetProperties = async () => {
