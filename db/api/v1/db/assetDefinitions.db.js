@@ -206,6 +206,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
     var propertyId;
     var value;
     var valueRequired;
+    const object = {};
     for (i = 0; i < csvJson.length; i++) {
         asset = csvJson[i];
         assetId = asset.asset_id;
@@ -215,15 +216,20 @@ const storeCSV = async(assetTypeId, csvJson) => {
                 propertyId = properties[propertyName].id;
                 value = asset[propertyName];
                 if (value === '') {
-                    valueRequired = (await checkIfPropertyRequired(propertyName)).rows;
+                    valueRequired = await checkIfPropertyRequired(propertyName);
                 }
                 else {
                     // await createAssetProperty(client, assetId, propertyId, value);
                 }
             }
+            object.asset = asset;
+            object.propertyId = propertyId;
+            object.propertyName = propertyName;
+            object.propertyValue = value;
+            object.propertyRequired = valueRequired;
         }
     }
-    return(valueRequired);
+    return(object);
 };
 
 module.exports = {
