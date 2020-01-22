@@ -18,18 +18,6 @@ const findProperties = async () => {
     return global.dbPool.query(query);
 };
 
-const findPropertiesByAssetTypeId = async(assetTypeId) => {
-    let query = PROPERTIES_QUERY;
-
-    const values = [];
-    if ((typeof assetTypeId !== 'undefined') & (assetTypeId > 0)) {
-        values.push(assetTypeId);
-        query = query + ` WHERE asset_type_id = $${values.length}`;
-    }
-
-    return global.dbPool.query(query, values);
-};
-
 const findAssetTypes = async () => {
     let query = `
         SELECT
@@ -138,6 +126,18 @@ const create = async (assetDefinition) => {
     }
 };
 
+const findPropertiesByAssetTypeId = async(assetTypeId) => {
+    let query = PROPERTIES_QUERY;
+
+    const values = [];
+    if ((typeof assetTypeId !== 'undefined') & (assetTypeId > 0)) {
+        values.push(assetTypeId);
+        query = query + ` WHERE asset_type_id = $${values.length}`;
+    }
+
+    return global.dbPool.query(query, values);
+};
+
 const createAssetProperty = async (client, assetId, propertyId, value) => {
     
     // Generate the SQL command
@@ -156,37 +156,18 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
 
 };
 
-const storeCSV = async(assetTypeId, csvJson) => {
-    const propertyArray = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
-    const properties = {};
+const checkIfPropertyRequired = async (propertyName) => {
+    const query = `
+        SELECT 
+            required
+        FROM 
+            property
+        WHERE name=$1;
+    `;
 
-    var i;
-    var property = null;
-    var propertyName = null;
-    for (i = 0; i < propertyArray.length; i++) {
-        property = propertyArray[i];
-        propertyName = property.name;
-        properties[propertyName] = property;
-    }
+    const values = [propertyName];
 
-    const client = await global.dbPool.connect();
-    var asset = null;
-    var assetId = null;
-    var value;
-    var propertyId;
-    for (i = 0; i < csvJson.length; i++) {
-        asset = csvJson[i];
-        assetId = asset.asset_id;
-
-        for (const key in asset) {
-            if (key !== 'asset_id') {
-                value = asset[key];
-                propertyId = properties[key].id;
-                // await createAssetProperty(client, assetId, propertyId, value);
-            }
-        }
-    }
-    return(propertyId);
+    return global.dbPool.query(query, values);
 };
 
 const updateProperty = async(assetId, assetTypeId, newValue) => {
@@ -205,9 +186,48 @@ const updateProperty = async(assetId, assetTypeId, newValue) => {
     return client.query(query, values);
 };
 
+const storeCSV = async(assetTypeId, csvJson) => {
+    const propertyArray = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
+    const properties = {};
+
+    var i;
+    var property = null;
+    var propertyName = null;
+    for (i = 0; i < propertyArray.length; i++) {
+        property = propertyArray[i];
+        propertyName = property.name;
+        properties[propertyName] = property;
+    }
+
+    const failedRows = [];
+    const client = await global.dbPool.connect();
+    var asset = null;
+    var assetId = null;
+    var propertyId;
+    var value;
+    var valueRequired;
+    for (i = 0; i < csvJson.length; i++) {
+        asset = csvJson[i];
+        assetId = asset.asset_id;
+
+        for (const propertyName in asset) {
+            if (propertyName !== 'asset_id') {
+                propertyId = properties[propertyName].id;
+                value = asset[propertyName];
+                if (value === '') {
+                    valueRequired = (await checkIfPropertyRequired(propertyName)).rows[0].required;
+                }
+                else {
+                    // await createAssetProperty(client, assetId, propertyId, value);
+                }
+            }
+        }
+    }
+    return(valueRequired);
+};
+
 module.exports = {
     findPropertiesByAssetTypeId,
-    updateProperty,
     findAssetTypes,
     find,
     create,
