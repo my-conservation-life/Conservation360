@@ -215,7 +215,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                 propertyId = properties[propertyName].id;
                 value = asset[propertyName];
                 if (value === '') {
-                    valueRequired = (await checkIfPropertyRequired(propertyName)).rows[0].required;
+                    valueRequired = (await checkIfPropertyRequired(propertyName)).rows;
                 }
                 else {
                     // await createAssetProperty(client, assetId, propertyId, value);
