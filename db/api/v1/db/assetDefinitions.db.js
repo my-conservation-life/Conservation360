@@ -184,7 +184,6 @@ const storeCSV = async(assetTypeId, csvJson) => {
         properties[propertyName] = property;
     }
 
-    const failedRows = [];
     var asset = null;
     var assetId = null;
     var propertyId;
@@ -203,7 +202,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
         }
         for (const propertyName in properties) {
             if (!(propertyName in asset)) {
-                throw 'CSV is missing a header: ' + propertyName;
+                throw 'The selected CSV file is missing a header (' + propertyName + ')';
             }
         }
 
@@ -212,7 +211,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             asset = csvJson[i];
             assetId = asset.asset_id;
             if (assetId === '') {
-                throw 'The CSV file contains a row that is missing an asset ID.';
+                throw 'The CSV file contains a row that is missing an asset ID (' + asset + ')';
             }
             const checkedAsset = (await findAsset(assetId)).rows;
             if (checkedAsset.length === 0) {
