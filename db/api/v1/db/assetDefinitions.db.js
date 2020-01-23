@@ -215,7 +215,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             }
             const checkedAsset = (await findAsset(assetId)).rows;
             if (checkedAsset.length === 0) {
-                throw 'The CSV file contains a row for an asset that is not tracked.';
+                throw 'The CSV file contains a row for an asset that is not tracked (Asset ID '+ assetId + ')';
             }
 
             for (const propertyName in asset) {
@@ -232,7 +232,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                         throw 'A required value is missing.';
                     }
                     else {
-                        // await createAssetProperty(client, assetId, propertyId, value);
+                        await createAssetProperty(client, assetId, propertyId, value);
                     }
                 }
                 object.asset = asset;
