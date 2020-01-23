@@ -173,9 +173,9 @@ const updateProperty = async(assetId, assetTypeId, newValue) => {
 };
 
 const storeCSV = async(assetTypeId, csvJson) => {
-    if (csvJson.length === 0) {
-        throw 'The CSV file selected has no data to import.';
-    }
+    // if (csvJson.length === 0) {
+    //     throw 'The CSV file selected has no data to import.';
+    // }
 
     const propertyArray = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
     const properties = {};
