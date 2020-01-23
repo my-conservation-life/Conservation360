@@ -215,6 +215,10 @@ const storeCSV = async(assetTypeId, csvJson) => {
             if (assetId === '') {
                 throw 'The CSV file contains a row that is missing an asset ID.';
             }
+            const checkedAsset = (await findAsset(assetId)).rows;
+            if (checkedAsset.length === 0) {
+                throw 'The CSV file contains a row for an asset that is not tracked.';
+            }
 
             for (const propertyName in asset) {
                 if (propertyName !== 'asset_id') {
@@ -227,7 +231,6 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     propertyIsRequired = property.required;
                     value = asset[propertyName];
                     if (value === '' && propertyIsRequired) {
-                        await utils.db.rollbackTransaction(client);
                         throw 'A required value is missing.';
                     }
                     else {
