@@ -33,10 +33,10 @@ const findAssetProperties = async (assetID) => {
         SELECT
             value
         FROM
-            asset_property
-        WHERE
-            asset_id = $1
-    `;
+            asset_property`;
+    //     WHERE
+    //         asset_id = $1
+    // `;
 
     const params = [assetID];
 
