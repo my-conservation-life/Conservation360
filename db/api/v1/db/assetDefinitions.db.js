@@ -138,7 +138,7 @@ const findPropertiesByAssetTypeId = async(assetTypeId) => {
     return global.dbPool.query(query, values);
 };
 
-const findAsset = async (client, assetId) {
+const findAsset = async (assetId) => {
     const query = `
         SELECT
             *
@@ -146,9 +146,11 @@ const findAsset = async (client, assetId) {
             asset
         WHERE
             id=$1
-    `
+    `;
 
-    const values = assetId
+    const values = [assetId];
+
+    return global.dbPool.query(query, values);
 };
 
 const createAssetProperty = async (client, assetId, propertyId, value) => {
@@ -198,7 +200,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
 
         asset = csvJson[0];
         if (!('asset_id' in asset)) {
-            throw 'The CSV file selected is missing an asset ID column.'
+            throw 'The CSV file selected is missing an asset ID column.';
         }
         for (const propertyName in properties) {
             if (!(propertyName in asset)) {
@@ -211,7 +213,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             asset = csvJson[i];
             assetId = asset.asset_id;
             if (assetId === '') {
-                throw 'The CSV file contains a row that is missing an asset ID.'
+                throw 'The CSV file contains a row that is missing an asset ID.';
             }
 
             for (const propertyName in asset) {
