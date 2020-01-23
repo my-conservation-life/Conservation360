@@ -51,10 +51,20 @@ const getAssetsByTypeID = async (req, res, next) => {
     }
 };
 
+const getAssetProperties = async (req, res, next) => {
+    try {
+        const asset_properties = await db.assetDefinitions.findAssetProperties(req.body.assetID);
+        res.json(asset_properties);
+    } catch (e) {
+        next(e);
+    }
+};
+
 module.exports = {
     find,
     create,
     getAssetTypes,
     getAssetsByTypeID,
-    getAssetTypesCSV
+    getAssetTypesCSV,
+    getAssetProperties
 };

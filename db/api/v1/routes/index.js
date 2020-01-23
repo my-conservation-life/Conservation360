@@ -28,6 +28,8 @@ router.post('/assets_by_type_id', assetDefinitions.getAssetsByTypeID);
 
 router.post('/asset_type_CSV', assetDefinitions.getAssetTypesCSV);
 
+router.post('/asset_properties', assetDefinitions.getAssetProperties);
+
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);
 // router.put('/assets/:id', assets.update); //example update
