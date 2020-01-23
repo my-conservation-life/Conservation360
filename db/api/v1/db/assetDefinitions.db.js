@@ -226,7 +226,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
     }
     catch (error) {
         await utils.db.rollbackTransaction(client);
-        return(error);
+        throw error;
     }
     return(object);
 };
