@@ -203,7 +203,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
         }
         for (const propertyName in properties) {
             if (!(propertyName in asset)) {
-                throw 'CSV is missing a header.';
+                throw 'CSV is missing a header: ' + propertyName;
             }
         }
 
