@@ -218,6 +218,10 @@ const storeCSV = async(assetTypeId, csvJson) => {
 
             for (const propertyName in asset) {
                 if (propertyName !== 'asset_id') {
+                    if (!(propertyName in properties)) {
+                        throw 'The CSV file contains a property that is not tracked.';
+                    }
+
                     property = properties[propertyName];
                     propertyId = property.id;
                     propertyIsRequired = property.required;
