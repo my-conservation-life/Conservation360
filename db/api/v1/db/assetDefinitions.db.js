@@ -187,7 +187,6 @@ const storeCSV = async(assetTypeId, csvJson) => {
     const failedRows = [];
     var asset = null;
     var assetId = null;
-    var property;
     var propertyId;
     var propertyIsRequired;
     var value;
