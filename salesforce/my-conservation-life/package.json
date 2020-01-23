@@ -8,9 +8,7 @@
     "test:unit:debug": "lwc-jest --debug",
     "test:unit:coverage": "lwc-jest --coverage"
   },
-  "dependencies": {
-    "url-join": "^4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@salesforce/eslint-config-lwc": "^0.3.0",
     "@salesforce/lwc-jest": "^0.6.0",

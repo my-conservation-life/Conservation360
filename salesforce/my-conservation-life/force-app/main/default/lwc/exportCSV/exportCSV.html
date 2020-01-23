@@ -6,10 +6,11 @@
                 label="Export data to CSV"
                 value={value}
                 placeholder={value}
-                options={options}
+                options={combo_options}
                 onchange={handleChange}
             ></lightning-combobox>
         </lightning:layoutItem>
+        <br/>
         <lightning:layoutItem size="2">
             <lightning-button variant="success" label="Download" onclick={downloadTest}></lightning-button>
         </lightning:layoutItem>
