@@ -23,12 +23,10 @@ router.get(
 router.post('/assets', assets.create);
 
 router.get('/asset_types', assetDefinitions.getAssetTypes);
-
 router.post('/assets_by_type_id', assetDefinitions.getAssetsByTypeID);
-
 router.post('/asset_type_CSV', assetDefinitions.getAssetTypesCSV);
-
 router.post('/asset_properties', assetDefinitions.getAssetProperties);
+router.post('/asset_prop_types', assetDefinitions.getAssetPropTypes);
 
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);

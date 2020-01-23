@@ -58,6 +58,22 @@ const findAssetTypesCSV = async (assetTypeID) => {
     return global.dbPool.query(query, params);
 };
 
+const findAssetPropTypes = async (assetTypeID) => {
+    let query = `
+        SELECT
+            id, name
+        FROM
+            property
+        WHERE
+            asset_type_id = $1
+        ORDER BY id
+    `;
+
+    const params = [assetTypeID];
+
+    return global.dbPool.query(query, params);
+};
+
 const findAssetProperties = async () => {
     let query = `
         SELECT
@@ -175,5 +191,6 @@ module.exports = {
     findAssetTypes,
     findAssetsByTypeID,
     findAssetTypesCSV,
-    findAssetPropertiesByID
+    findAssetPropertiesByID,
+    findAssetPropTypes
 };

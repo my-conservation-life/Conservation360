@@ -60,11 +60,21 @@ const getAssetProperties = async (req, res, next) => {
     }
 };
 
+const getAssetPropTypes = async (req, res, next) => {
+    try {
+        const prop_types = await db.assetDefinitions.findAssetPropTypes(req.body.assetTypeID);
+        res.json(prop_types);
+    } catch (e) {
+        next(e);
+    }
+};
+
 module.exports = {
     find,
     create,
     getAssetTypes,
     getAssetsByTypeID,
     getAssetTypesCSV,
-    getAssetProperties
+    getAssetProperties,
+    getAssetPropTypes
 };
