@@ -198,7 +198,14 @@ const storeCSV = async(assetTypeId, csvJson) => {
         if (csvJson.length === 0) {
             throw 'The CSV file selected has no data to import.';
         }
-        
+
+        asset = csvJson[0];
+        for (const propertyName in properties) {
+            if (!(propertyName in asset)) {
+                throw 'CSV is missing a header.';
+            }
+        }
+
         await utils.db.beginTransaction(client);
         for (i = 0; i < csvJson.length; i++) {
             asset = csvJson[i];
