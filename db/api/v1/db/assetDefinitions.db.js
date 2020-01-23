@@ -28,7 +28,7 @@ const findAssetsByTypeID = async (assetTypeID) => {
     return global.dbPool.query(query, params);
 };
 
-const findAssetProperties = async (assetID) => {
+const findAssetPropertiesByID = async (assetID) => {
     let query = `
         SELECT
             value
@@ -175,5 +175,5 @@ module.exports = {
     findAssetTypes,
     findAssetsByTypeID,
     findAssetTypesCSV,
-    findAssetProperties
+    findAssetPropertiesByID
 };
