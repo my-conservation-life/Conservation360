@@ -211,7 +211,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             asset = csvJson[i];
             assetId = asset.asset_id;
             if (assetId === '') {
-                throw 'The CSV file contains a row that is missing an asset ID (' + asset + ')';
+                throw 'The CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
             }
             const checkedAsset = (await findAsset(assetId)).rows;
             if (checkedAsset.length === 0) {
