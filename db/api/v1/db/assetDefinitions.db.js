@@ -226,9 +226,9 @@ const storeCSV = async(assetTypeId, csvJson) => {
     }
     catch (error) {
         await utils.db.rollbackTransaction(client);
-        throw error;
+        return({success: false, error: error});
     }
-    return(object);
+    return({success: true});
 };
 
 module.exports = {
