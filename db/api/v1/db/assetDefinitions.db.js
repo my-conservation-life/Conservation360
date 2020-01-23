@@ -173,10 +173,6 @@ const updateProperty = async(assetId, assetTypeId, newValue) => {
 };
 
 const storeCSV = async(assetTypeId, csvJson) => {
-    // if (csvJson.length === 0) {
-    //     throw 'The CSV file selected has no data to import.';
-    // }
-
     const propertyArray = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
     const properties = {};
 
@@ -199,6 +195,10 @@ const storeCSV = async(assetTypeId, csvJson) => {
     const object = {};
     const client = await global.dbPool.connect();
     try {
+        if (csvJson.length === 0) {
+            throw 'The CSV file selected has no data to import.';
+        }
+        
         await utils.db.beginTransaction(client);
         for (i = 0; i < csvJson.length; i++) {
             asset = csvJson[i];
