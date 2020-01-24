@@ -229,7 +229,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     propertyIsRequired = property.required;
                     value = asset[propertyName];
                     if (value === '' && propertyIsRequired) {
-                        throw 'A required value is missing (' + property + ', ' + JSON.stringify(asset) + ')';
+                        throw 'A required value is missing (' + propertyName + ', ' + JSON.stringify(asset) + ')';
                     }
                     else {
                         await createAssetProperty(client, assetId, propertyId, value);
