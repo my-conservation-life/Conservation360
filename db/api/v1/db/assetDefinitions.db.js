@@ -193,12 +193,12 @@ const storeCSV = async(assetTypeId, csvJson) => {
     const client = await global.dbPool.connect();
     try {
         if (csvJson.length === 0) {
-            throw 'The CSV file selected has no data to import.';
+            throw 'The selected CSV file has no data to import.';
         }
 
         asset = csvJson[0];
         if (!('asset_id' in asset)) {
-            throw 'The CSV file selected is missing an asset ID column.';
+            throw 'The selected CSV file is missing an asset ID column.';
         }
         for (const propertyName in properties) {
             if (!(propertyName in asset)) {
@@ -211,17 +211,17 @@ const storeCSV = async(assetTypeId, csvJson) => {
             asset = csvJson[i];
             assetId = asset.asset_id;
             if (assetId === '') {
-                throw 'The CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
+                throw 'The selected CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
             }
             const checkedAsset = (await findAsset(assetId)).rows;
             if (checkedAsset.length === 0) {
-                throw 'The CSV file contains a row for an asset that is not tracked (Asset ID '+ assetId + ')';
+                throw 'The selected CSV file contains a row for an asset that is not being tracked (Asset ID '+ assetId + ')';
             }
 
             for (const propertyName in asset) {
                 if (propertyName !== 'asset_id') {
                     if (!(propertyName in properties)) {
-                        throw 'The CSV file contains a property that is not tracked (' + propertyName + ')';
+                        throw 'The selected CSV file either contains an empty column, is missing a header, or contains a property that is not tracked (' + propertyName + ')';
                     }
 
                     property = properties[propertyName];
@@ -229,7 +229,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     propertyIsRequired = property.required;
                     value = asset[propertyName];
                     if (value === '' && propertyIsRequired) {
-                        throw 'A required value is missing (' + propertyName + ', ' + JSON.stringify(asset) + ')';
+                        throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
                     }
                     else {
                         await createAssetProperty(client, assetId, propertyId, value);
