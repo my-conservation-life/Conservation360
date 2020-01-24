@@ -221,7 +221,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             for (const propertyName in asset) {
                 if (propertyName !== 'asset_id') {
                     if (!(propertyName in properties)) {
-                        throw 'The selected CSV file either contains an empty column, is missing a header, or contains a property that is not tracked (' + propertyName + ')';
+                        throw 'The selected CSV file either contains an empty column, is missing a header, or contains a property that is not being tracked (' + propertyName + ')';
                     }
 
                     property = properties[propertyName];
