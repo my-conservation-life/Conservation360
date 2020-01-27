@@ -262,7 +262,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     if (value === '' && propertyIsRequired) {
                         throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
                     }
-                    else if ((await findAssetProperty(assetId, propertyId).rows.length > 0)) {
+                    else if ((await findAssetProperty(assetId, propertyId)).rows.length > 0) {
                         await updateAssetProperty(client, assetId, propertyId, value);
                     }
                     else {
@@ -280,7 +280,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
     }
     catch (error) {
         await utils.db.rollbackTransaction(client);
-        return({success: false, error: JSON.stringify(error)});
+        return({success: false, error: error});
     }
     return({success: true});
 };
