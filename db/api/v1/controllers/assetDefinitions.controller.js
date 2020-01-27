@@ -44,7 +44,7 @@ const getAssetTypesCSV = async (req, res, next) => {
 
 const getAssetsByTypeID = async (req, res, next) => {
     try {
-        const assets = await db.assetDefinitions.findAssetsByTypeID(req.body['assetTypeID']);
+        const assets = await db.assetDefinitions.findAssetsByTypeID(req.valid.assetTypeID);
         res.json(assets);
     } catch (e) {
         next(e);

@@ -23,7 +23,9 @@ router.get(
 router.post('/assets', assets.create);
 
 router.get('/asset_types', assetDefinitions.getAssetTypes);
-router.post('/assets_by_type_id', assetDefinitions.getAssetsByTypeID);
+router.post('/assets_by_type_id', 
+            validate(param.body, 'assetTypeID', type.id, true),
+            assetDefinitions.getAssetsByTypeID);
 router.post('/asset_type_CSV', assetDefinitions.getAssetTypesCSV);
 router.post('/asset_properties', assetDefinitions.getAssetProperties);
 router.post('/asset_prop_types', assetDefinitions.getAssetPropTypes);
