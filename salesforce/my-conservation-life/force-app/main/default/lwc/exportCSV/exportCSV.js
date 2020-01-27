@@ -33,7 +33,7 @@ export default class ExportCSV extends LightningElement {
 
     handleChange(event) {
         this.value = event.detail.value;
-        this.valueID = event.detail.value.split(':')[1].trimLeft();
+        this.valueID = parseInt(event.detail.value.split(':')[1].trimLeft());
     }
 
     download() {        
