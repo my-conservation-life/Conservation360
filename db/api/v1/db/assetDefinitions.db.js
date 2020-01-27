@@ -153,6 +153,22 @@ const findAsset = async (assetId) => {
     return global.dbPool.query(query, values);
 };
 
+const findAssetProperty = async (assetId, propertyId) => {
+    const query = `
+        SELECT 
+            *
+        FROM
+            asset_property
+        WHERE
+            asset_id=$1 AND 
+            property_id=$2
+    `;
+
+    const values = [assetId, propertyId];
+
+    return global.dbPool.query(query, values);
+};
+
 const createAssetProperty = async (client, assetId, propertyId, value) => {
     
     // Generate the SQL command
@@ -168,7 +184,22 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
 
     // Execute the SQL command
     return client.query(query, values);
+};
 
+const updateAssetProperty = async(assetId, propertyId, newValue) => {
+    const client = await global.dbPool.connect();
+
+    let query = `
+        UPDATE asset_property
+        SET value=$3
+        WHERE
+            asset_id=$1 AND
+            property_id=$2
+    `;
+
+    const  values = [assetId, propertyId, newValue];
+
+    return client.query(query, values);
 };
 
 const storeCSV = async(assetTypeId, csvJson) => {
@@ -230,6 +261,9 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     value = asset[propertyName];
                     if (value === '' && propertyIsRequired) {
                         throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
+                    }
+                    else if ((await findAssetProperty(assetId, propertyId).rows.length > 0)) {
+                        await updateAssetProperty(client, assetId, propertyId, value);
                     }
                     else {
                         await createAssetProperty(client, assetId, propertyId, value);
