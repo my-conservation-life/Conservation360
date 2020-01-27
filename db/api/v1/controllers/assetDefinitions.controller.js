@@ -35,7 +35,7 @@ const getAssetTypes = async (req, res, next) => {
 
 const getAssetTypesCSV = async (req, res, next) => {
     try {
-        const assetTypesCSV = await db.assetDefinitions.findAssetTypesCSV(req.body['assetTypeID']);
+        const assetTypesCSV = await db.assetDefinitions.findAssetTypesCSV(req.valid.assetTypeID);
         res.json(assetTypesCSV);
     } catch (e) {
         next(e);
@@ -53,7 +53,7 @@ const getAssetsByTypeID = async (req, res, next) => {
 
 const getAssetProperties = async (req, res, next) => {
     try {
-        const asset_properties = await db.assetDefinitions.findAssetPropertiesByID(req.body['assetID']);
+        const asset_properties = await db.assetDefinitions.findAssetPropertiesByID(req.valid.assetID);
         res.json(asset_properties);
     } catch (e) {
         next(e);
@@ -62,7 +62,7 @@ const getAssetProperties = async (req, res, next) => {
 
 const getAssetPropTypes = async (req, res, next) => {
     try {
-        const prop_types = await db.assetDefinitions.findAssetPropTypes(req.body['assetTypeID']);
+        const prop_types = await db.assetDefinitions.findAssetPropTypes(req.valid.assetTypeID);
         res.json(prop_types);
     } catch (e) {
         next(e);
