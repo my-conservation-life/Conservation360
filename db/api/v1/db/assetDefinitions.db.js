@@ -186,8 +186,7 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
     return client.query(query, values);
 };
 
-const updateAssetProperty = async(assetId, propertyId, newValue) => {
-    const client = await global.dbPool.connect();
+const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
 
     let query = `
         UPDATE asset_property 
