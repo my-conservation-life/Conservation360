@@ -33,7 +33,7 @@ export default class ExportCSV extends LightningElement {
 
     handleChange(event) {
         this.value = event.detail.value;
-        this.valueID = parseInt(event.detail.value.split(':')[1].trimLeft());
+        this.valueID = event.detail.value.split(':')[1].trimLeft();
     }
 
     download() {        
@@ -42,30 +42,39 @@ export default class ExportCSV extends LightningElement {
         var rows = [];
         assetDefinitions.fetchAssetPropTypes(this.valueID)
             .then(properties => {
-                rows = [this.valueID, this.value.split(':')[0].trimRight()];
+                rows = ['asset_type_id', this.value.split(':')[0].trimRight()];
                 for (i = 0; i < properties.rows.length; i++) {
                     rows.push(properties.rows[i]['name']);
                 }
                 csv_data += rows.join(',') + '\n';
                 assetDefinitions.fetchAssetsByTypeID(this.valueID)
                     .then(assets => {
-                        rows = [];
                         for (i = 0; i < assets.rows.length; i++) {
-                            rows.push(this.valueID);
-                            rows.push(assets.rows[i]['id']);
-                            assetDefinitions.fetchAssetProperties(assets.rows[i]['id'])
+                            rows = [];
+                            // rows.push(this.valueID);
+                            // rows.push(parseInt(assets.rows[i]['id']));
+                            csv_data += this.valueID + ',';
+                            csv_data += parseInt(assets.rows[i]['id']) + ',' + '\n';
+                            console.log("1:" + JSON.stringify(rows));
+                            assetDefinitions.fetchAssetProperties(parseInt(assets.rows[i]['id']))
                                 .then(props => {
                                     for (j = 0; j < props.rows.length; j++) {
-                                        rows.push(props.rows[i]);
+                                        // rows.push(props.rows[j]['value']);
+                                        csv_data += props.rows[j]['value'] + ',';
+                                        // console.log("3:" + JSON.stringify(rows));
                                     }
-                                    csv_data += rows.join(',') + '\n';
-                                    rows = [];
+                                    // console.log("RIGHT BEFORE ADDING THE DATA!" + JSON.stringify(rows));
+
+                                    // csv_data += rows.join(',') + '\n';
+                                    csv_data += '\n';
+                                    
                                 })
                                 .catch(e => {
                                     console.log('sdfwf', e);
                                 });
                         }
                         /////////////
+                        console.log("4:" + csv_data);
                         var hiddenElement = document.createElement('a');
                         hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_data);
                         hiddenElement.target = '_blank';

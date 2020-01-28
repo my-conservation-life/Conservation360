@@ -31,11 +31,13 @@ const findAssetsByTypeID = async (assetTypeID) => {
 const findAssetPropertiesByID = async (assetID) => {
     let query = `
         SELECT
-            value
+            value, property_id
         FROM
             asset_property
         WHERE
             asset_id = $1
+        ORDER BY
+            property_id
     `;
 
     const params = [assetID];
