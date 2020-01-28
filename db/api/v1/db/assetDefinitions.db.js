@@ -219,7 +219,6 @@ const storeCSV = async(assetTypeId, csvJson) => {
     var propertyId;
     var propertyIsRequired;
     var value;
-    const object = {};
     const client = await global.dbPool.connect();
     try {
         if (csvJson.length === 0) {
@@ -268,11 +267,6 @@ const storeCSV = async(assetTypeId, csvJson) => {
                         await createAssetProperty(client, assetId, propertyId, value);
                     }
                 }
-                object.asset = asset;
-                object.propertyId = propertyId;
-                object.propertyName = propertyName;
-                object.propertyValue = value;
-                object.propertyIsRequired = propertyIsRequired;
             }
         }
         await utils.db.commitTransaction(client);
