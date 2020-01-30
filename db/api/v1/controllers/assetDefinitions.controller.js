@@ -33,33 +33,6 @@ const getAssetTypes = async (req, res, next) => {
     }
 };
 
-const getAssetTypesCSV = async (req, res, next) => {
-    try {
-        const assetTypesCSV = await db.assetDefinitions.findAssetTypesCSV(req.valid.assetTypeID);
-        res.json(assetTypesCSV);
-    } catch (e) {
-        next(e);
-    }
-};
-
-const getAssetsByTypeID = async (req, res, next) => {
-    try {
-        const assets = await db.assetDefinitions.findAssetsByTypeID(req.valid.assetTypeID);
-        res.json(assets);
-    } catch (e) {
-        next(e);
-    }
-};
-
-const getAssetProperties = async (req, res, next) => {
-    try {
-        const asset_properties = await db.assetDefinitions.findAssetPropertiesByID(req.valid.assetID);
-        res.json(asset_properties);
-    } catch (e) {
-        next(e);
-    }
-};
-
 const getAssetPropTypes = async (req, res, next) => {
     try {
         const prop_types = await db.assetDefinitions.findAssetPropTypes(req.valid.assetTypeID);
@@ -82,9 +55,6 @@ module.exports = {
     find,
     create,
     getAssetTypes,
-    getAssetsByTypeID,
-    getAssetTypesCSV,
-    getAssetProperties,
     getAssetPropTypes,
     getAssetPropsByTypeID
 };

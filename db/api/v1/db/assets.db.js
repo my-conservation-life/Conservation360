@@ -43,20 +43,6 @@ const find = async (sponsorId, projectId, assetType) => {
     return result.rows;
 };
 
-// TODO comment
-const getAssetTypes = async () => {
-    let query = `
-    SELECT
-        id,
-        name
-    FROM
-        asset_type
-    `;
-
-    const result = await global.dbPool.query(query);
-    return result.rows;
-};
-
 /**
  * createAssetProperty is used to generate a row in
  * the asset_property table

@@ -1,6 +1,5 @@
 import utils from 'c/utils';
 
-
 const find = () => {
     const url = utils.URL + 'assetDefinitions';
     return utils.get(url);

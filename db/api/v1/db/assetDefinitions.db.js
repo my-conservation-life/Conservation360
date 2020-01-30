@@ -13,53 +13,6 @@ const findAssetTypes = async () => {
     return global.dbPool.query(query);
 };
 
-const findAssetsByTypeID = async (assetTypeID) => {
-    let query = `
-        SELECT
-            id
-        FROM
-            asset
-        WHERE
-            asset_type_id = $1
-    `;
-
-    const params = [assetTypeID];
-
-    return global.dbPool.query(query, params);
-};
-
-const findAssetPropertiesByID = async (assetID) => {
-    let query = `
-        SELECT
-            value, property_id
-        FROM
-            asset_property
-        WHERE
-            asset_id = $1
-        ORDER BY
-            property_id
-    `;
-
-    const params = [assetID];
-
-    return global.dbPool.query(query, params);
-};
-
-const findAssetTypesCSV = async (assetTypeID) => {
-    // TODO
-    let query = `
-        SELECT
-            *
-        FROM
-            asset_type
-        WHERE
-            id = $1
-    `;
-    const params = [assetTypeID];
-
-    return global.dbPool.query(query, params);
-};
-
 const findAssetPropTypes = async (assetTypeID) => {
     let query = `
         SELECT
@@ -68,7 +21,8 @@ const findAssetPropTypes = async (assetTypeID) => {
             property
         WHERE
             asset_type_id = $1
-        ORDER BY id
+        ORDER BY
+            id
     `;
 
     const params = [assetTypeID];
@@ -211,9 +165,6 @@ module.exports = {
     find,
     create,
     findAssetTypes,
-    findAssetsByTypeID,
-    findAssetTypesCSV,
-    findAssetPropertiesByID,
     findAssetPropTypes,
     findAssetPropsByTypeID
 };
