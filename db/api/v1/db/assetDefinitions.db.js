@@ -1,5 +1,8 @@
 const utils = require('../utils');
 
+/**
+ * Query to find all asset types.
+ */
 const findAssetTypes = async () => {
     let query = `
         SELECT
@@ -13,6 +16,10 @@ const findAssetTypes = async () => {
     return global.dbPool.query(query);
 };
 
+/**
+ * Query to find the property types for a given assetTypeID.
+ * @param {*} assetTypeID - the asset type ID
+ */
 const findAssetPropTypes = async (assetTypeID) => {
     let query = `
         SELECT
@@ -46,6 +53,10 @@ const findAssetProperties = async () => {
     return global.dbPool.query(query);
 };
 
+/**
+ * Finds all asset properties for all assets for a given asset type ID.
+ * @param {*} assetTypeID - the asset type ID
+ */
 const findAssetPropsByTypeID = async (assetTypeID) => {
     let query = `
         SELECT

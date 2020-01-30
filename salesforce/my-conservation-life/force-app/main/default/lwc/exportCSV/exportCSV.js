@@ -8,9 +8,12 @@ export default class ExportCSV extends LightningElement {
     @track placeholder = 'N/A';
     @track combo_options = [];
 
+    /**
+     * Sets the combobox options.
+     */
     connectedCallback() {
         var i;
-        assetDefinitions.findAssetTypes()
+        assetDefinitions.fetchAssetTypes()
             .then(data => {
                 var temp_options = [];
                 for (i = 0; i < data.rows.length; i++) {
@@ -26,11 +29,18 @@ export default class ExportCSV extends LightningElement {
             });
     }
 
+    /**
+     * Event handler for when something is selected from the combobox.
+     * @param {*} event - the event object
+     */
     handleChange(event) {
         this.value = event.detail.value;
         this.valueID = event.detail.value.split(':')[1].trimLeft();
     }
 
+    /**
+     * Event handler for when the download button is pressed.
+     */
     download() {        
         var i, j;
         var csv_data = '';
@@ -38,6 +48,7 @@ export default class ExportCSV extends LightningElement {
         var props = {};
         var keys;
         var hiddenElement;
+
         assetDefinitions.fetchAssetPropTypes(this.valueID)
             .then(properties => {
                 rows = ['asset_type_id', this.value.split(':')[0].trimRight()];
@@ -66,6 +77,7 @@ export default class ExportCSV extends LightningElement {
                             csv_data += rows.join(',') + '\n';
                         }
 
+                        // Creates the CSV file and downloads it.
                         hiddenElement = document.createElement('a');
                         hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_data);
                         hiddenElement.target = '_blank';
