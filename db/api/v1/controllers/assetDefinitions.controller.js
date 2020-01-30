@@ -2,10 +2,8 @@ const db = require('../db');
 const csv = require('csvtojson');
 
 const findAssetTypes = async (req, res, next) => {
-    const predicates = req.query;
-
     try {
-        const data = await db.assetDefinitions.findAssetTypes(predicates);
+        const data = await db.assetDefinitions.findAssetTypes();
         const assetTypes = data.rows;
         res.json(assetTypes);
     }
