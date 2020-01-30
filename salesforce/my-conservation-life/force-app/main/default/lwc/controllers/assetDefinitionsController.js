@@ -36,6 +36,11 @@ const fetchAssetPropTypes = (assetTypeID) => {
     return utils.post(url, { assetTypeID: assetTypeID });
 };
 
+const fetchAssetPropsByTypeID = (assetTypeID) => {
+    const url = utils.URL + 'asset_props_by_type_id';
+    return utils.post(url, { assetTypeID: assetTypeID });
+};
+
 export default {
     find,
     create,
@@ -43,5 +48,6 @@ export default {
     fetchAssetTypesCSV,
     fetchAssetsByTypeID,
     fetchAssetProperties,
-    fetchAssetPropTypes
+    fetchAssetPropTypes,
+    fetchAssetPropsByTypeID
 };

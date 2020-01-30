@@ -40,6 +40,8 @@ export default class ExportCSV extends LightningElement {
         var i, j;
         var csv_data = '';
         var rows = [];
+        var props = {};
+        var keys;
         assetDefinitions.fetchAssetPropTypes(this.valueID)
             .then(properties => {
                 rows = ['asset_type_id', this.value.split(':')[0].trimRight()];
@@ -47,44 +49,75 @@ export default class ExportCSV extends LightningElement {
                     rows.push(properties.rows[i]['name']);
                 }
                 csv_data += rows.join(',') + '\n';
-                assetDefinitions.fetchAssetsByTypeID(this.valueID)
-                    .then(assets => {
-                        for (i = 0; i < assets.rows.length; i++) {
-                            rows = [];
-                            // rows.push(this.valueID);
-                            // rows.push(parseInt(assets.rows[i]['id']));
-                            csv_data += this.valueID + ',';
-                            csv_data += parseInt(assets.rows[i]['id']) + ',' + '\n';
-                            console.log("1:" + JSON.stringify(rows));
-                            assetDefinitions.fetchAssetProperties(parseInt(assets.rows[i]['id']))
-                                .then(props => {
-                                    for (j = 0; j < props.rows.length; j++) {
-                                        // rows.push(props.rows[j]['value']);
-                                        csv_data += props.rows[j]['value'] + ',';
-                                        // console.log("3:" + JSON.stringify(rows));
-                                    }
-                                    // console.log("RIGHT BEFORE ADDING THE DATA!" + JSON.stringify(rows));
+                assetDefinitions.fetchAssetPropsByTypeID(this.valueID)
+                        .then(data => {
+                            for (i = 0; i < data.rows.length; i++) {
+                                if (!props[data.rows[i]['id']]) {
+                                    props[data.rows[i]['id']] = [];
+                                }
+                                props[data.rows[i]['id']].push(data.rows[i]['value']);
+                            }
+                            // console.log(JSON.stringify(properties));
+                            keys = Object.keys(props);
+                            for (i = 0; i < keys.length; i++) {
+                                csv_data += this.valueID + ',' + keys[i] + ',';
+                                for (j = 0; j < props[keys[i]].length; j++) {
+                                    csv_data += props[keys[i]][j] + ',';
+                                }
+                                csv_data += '\n';
+                            }
 
-                                    // csv_data += rows.join(',') + '\n';
-                                    csv_data += '\n';
+                            ///////////
+                            console.log("4:" + csv_data);
+                            var hiddenElement = document.createElement('a');
+                            hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_data);
+                            hiddenElement.target = '_blank';
+                            hiddenElement.download = this.value + '.csv';
+                            hiddenElement.click();
+                            ///////////////////////
+                        })
+                        .catch(e => {
+                            console.log("Exception: ", e);
+                        });
+                // assetDefinitions.fetchAssetsByTypeID(this.valueID)
+                //     .then(assets => {
+                //         for (i = 0; i < assets.rows.length; i++) {
+                //             rows = [];
+                //             // rows.push(this.valueID);
+                //             // rows.push(parseInt(assets.rows[i]['id']));
+                //             csv_data += this.valueID + ',';
+                //             csv_data += parseInt(assets.rows[i]['id']) + ',' + '\n';
+                //             console.log("1:" + JSON.stringify(rows));
+                //             assetDefinitions.fetchAssetProperties(parseInt(assets.rows[i]['id']))
+                //                 .then(props => {
+                //                     for (j = 0; j < props.rows.length; j++) {
+                //                         // rows.push(props.rows[j]['value']);
+                //                         csv_data += props.rows[j]['value'] + ',';
+                //                         // console.log("3:" + JSON.stringify(rows));
+                //                     }
+
+                //                     // console.log("RIGHT BEFORE ADDING THE DATA!" + JSON.stringify(rows));
+
+                //                     // csv_data += rows.join(',') + '\n';
+                //                     csv_data += '\n';
                                     
-                                })
-                                .catch(e => {
-                                    console.log('sdfwf', e);
-                                });
-                        }
-                        /////////////
-                        console.log("4:" + csv_data);
-                        var hiddenElement = document.createElement('a');
-                        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_data);
-                        hiddenElement.target = '_blank';
-                        hiddenElement.download = this.value + '.csv';
-                        hiddenElement.click();
-                        ///////////////////////                    
-                    })
-                    .catch(e => {
-                        console.log('props exception: ', e);
-                    });
+                //                 })
+                //                 .catch(e => {
+                //                     console.log('sdfwf', e);
+                //                 });
+                //         }
+                //         /////////////
+                //         console.log("4:" + csv_data);
+                //         var hiddenElement = document.createElement('a');
+                //         hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv_data);
+                //         hiddenElement.target = '_blank';
+                //         hiddenElement.download = this.value + '.csv';
+                //         hiddenElement.click();
+                //         ///////////////////////                    
+                //     })
+                //     .catch(e => {
+                //         console.log('props exception: ', e);
+                //     });
             })
             .catch(e => {
                 console.log('Exception: ', e);
