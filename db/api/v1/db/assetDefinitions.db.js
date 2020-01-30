@@ -104,7 +104,7 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
         ON
 	        asset_property.asset_id=asset.id
         WHERE
-	        asset_type_id = 1
+	        asset_type_id = $1
     `;
 
     const params = [assetTypeID];
