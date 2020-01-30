@@ -5,8 +5,9 @@ const findAssetTypes = async (req, res, next) => {
     const predicates = req.query;
 
     try {
-        const assetType = await db.assetDefinitions.findAssetTypes(predicates);
-        res.json(assetType);
+        const data = await db.assetDefinitions.findAssetTypes(predicates);
+        const assetTypes = data.rows;
+        res.json(assetTypes);
     }
     catch (e) {
         next(e);
@@ -44,7 +45,7 @@ const storeCSV = async(req, res, next) => {
         const json = await csv().fromFile(csvPath);
         const result = await db.assetDefinitions.storeCSV(assetTypeId, json);
         // res.json({assetType: assetTypeId, file: csvFile, csvJson: json, result: result});
-        res.json(result);
+        res.json({result: result});
     } catch (error) {
         next(error);
     }
