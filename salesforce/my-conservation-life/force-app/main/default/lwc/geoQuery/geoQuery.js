@@ -10,7 +10,7 @@ const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
 
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
-export default class GeoQuerry extends LightningElement {
+export default class GeoQuery extends LightningElement {
     assetsPromise;
 
     
