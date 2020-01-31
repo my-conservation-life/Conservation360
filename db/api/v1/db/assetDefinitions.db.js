@@ -136,6 +136,11 @@ const create = async (assetDefinition) => {
     }
 };
 
+/**
+ * Gets all properties associated with an asset type using the asset type's ID
+ * 
+ * @param {Number} assetTypeId ID of the asset type whose properties are being queried
+ */
 const findPropertiesByAssetTypeId = async(assetTypeId) => {
     let query = PROPERTIES_QUERY;
 
