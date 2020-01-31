@@ -12,6 +12,11 @@ const PROPERTIES_QUERY = `
         property
 `;
 
+/**
+ * Gets all properties stored in the database
+ * 
+ * @returns {object} contains all properties found in the database along with other data associated with the query
+ */
 const findProperties = async () => {
     let query = PROPERTIES_QUERY;
 
