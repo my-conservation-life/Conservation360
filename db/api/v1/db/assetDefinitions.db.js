@@ -153,6 +153,11 @@ const findPropertiesByAssetTypeId = async(assetTypeId) => {
     return global.dbPool.query(query, values);
 };
 
+/**
+ * Gets the asset associated given with the asset ID
+ * 
+ * @param {Number} assetId ID of the asset to query for
+ */
 const findAsset = async (assetId) => {
     const query = `
         SELECT
