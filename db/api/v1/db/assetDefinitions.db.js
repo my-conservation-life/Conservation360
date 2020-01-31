@@ -18,6 +18,11 @@ const findProperties = async () => {
     return global.dbPool.query(query);
 };
 
+/**
+ * Gets all asset types stored in the database
+ * 
+ * @returns {object} contains all asset types found in the database along with other data associated with the query
+ */
 const findAssetTypes = async () => {
     let query = `
         SELECT
