@@ -146,8 +146,9 @@ const validLongitude = (longitude) => {
 const parseCoordinates = (coordinateList) => {
    
     // There needs to be at least 3 
-    if (coordinateList.length < 3)
+    if (coordinateList.length < 3) {
         return ParseResult.failure('Expected at least 3 points in the coordinates list');
+    }
 
     let lat = 0;
     let lon = 0;
@@ -163,12 +164,10 @@ const parseCoordinates = (coordinateList) => {
         lat = parseFloat(point.latitude);
 
         if(!isNaN(lon) && validLongitude(lon) 
-            && !isNaN(lat) && validLatitude(lat))
-        {
+            && !isNaN(lat) && validLatitude(lat)) {
             coordinates.push({latitude: lat, longitude: lon});
         }
-        else
-        {
+        else {
             return ParseResult.failure('Unable to parse coordinate. Please format points like {coordinates: [{"latitude": "-14.342", "longitude": "33.123"},...]}');
         }
     }
@@ -184,9 +183,9 @@ const parseCoordinates = (coordinateList) => {
 const parseId = (idStr) => {
     const id = parseInt(idStr, 10);
 
-    return (isNaN(id) || !utils.db.isValidDbInteger(id))
-        ? ParseResult.failure(`Expected a number between 1 and ${utils.db.DB_INTEGER_MAX}`)
-        : ParseResult.success(id);
+    return (isNaN(id) || !utils.db.isValidDbInteger(id)) ? 
+        ParseResult.failure(`Expected a number between 1 and ${utils.db.DB_INTEGER_MAX}`) : 
+        ParseResult.success(id);
 };
 
 /**
