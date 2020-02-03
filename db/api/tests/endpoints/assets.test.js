@@ -141,7 +141,7 @@ describe('GET/POST assets', () => {
                 expect(typeof data).toBe('object');
                 //"Randomly" checking that the data loaded from Sample-data-1.sql is present
                 expect(contains(data, 'sponsor_name', 'Bronx Zoo'));
-                expect(contains(data, 'sponsor_name', 'Seneca Park Zoo'));
+                expect(contains(data, 'sponsor_name', 'Seneca Park Zoo Society'));
                 expect(contains(data, 'asset_id', '21'));
                 expect(contains(data, 'asset_type', 'Bison'));
                 done();
