@@ -218,6 +218,13 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
     return client.query(query, values);
 };
 
+/**
+ * Updates an asset property that is already stored in the DB
+ * @param {*} client Node Postgres client
+ * @param {Number} assetId asset ID associated with the asset property
+ * @param {Number} propertyId property ID associated with the asset property
+ * @param {String} newValue new value that will replace the asset property's current value
+ */
 const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
 
     let query = `
