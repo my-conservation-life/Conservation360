@@ -2,14 +2,14 @@ const db = require('../db');
 const csv = require('csvtojson');
 
 const findAssetTypes = async (req, res, next) => {
-    try {
-        const data = await db.assetDefinitions.findAssetTypes();
-        const assetTypes = data.rows;
-        res.json(assetTypes);
-    }
-    catch (e) {
-        next(e);
-    }
+    db.assetDefinitions.findAssetTypes()
+        .then(data => {
+            const assetTypes = data.rows;
+            res.json(assetTypes);
+        })
+        .catch(e => {
+            next(e);
+        });
 };
 
 const find = async (req, res, next) => {
