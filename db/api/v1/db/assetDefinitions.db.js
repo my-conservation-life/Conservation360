@@ -240,6 +240,11 @@ const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
     return client.query(query, values);
 };
 
+/**
+ * Stores contents of CSV into the DB
+ * @param {Number} assetTypeId ID of the asset type associated with the headers in the CSV
+ * @param {Object} csvJson JSON of data contained in the imported CSV file
+ */
 const storeCSV = async(assetTypeId, csvJson) => {
     const propertyArray = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
     const properties = {};
