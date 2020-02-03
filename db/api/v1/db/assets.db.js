@@ -14,8 +14,7 @@ FROM
     JOIN project ON asset.project_id = project.id
     JOIN sponsor ON project.sponsor_id = sponsor.id
     JOIN asset_type ON asset.asset_type_id = asset_type.id
-WHERE 
-    TRUE `;
+`;
 
 /**
  * Find project assets.
