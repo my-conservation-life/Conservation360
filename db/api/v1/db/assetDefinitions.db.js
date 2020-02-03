@@ -194,6 +194,13 @@ const findAssetProperty = async (assetId, propertyId) => {
     return global.dbPool.query(query, values);
 };
 
+/**
+ * Creates a new asset property in the DB
+ * @param {*} client Node Postgres client
+ * @param {Number} assetId asset ID associated with the asset property
+ * @param {Number} propertyId property ID associated with the asset property
+ * @param {String} value the value of the property 
+ */
 const createAssetProperty = async (client, assetId, propertyId, value) => {
     
     // Generate the SQL command
