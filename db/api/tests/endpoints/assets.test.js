@@ -104,7 +104,7 @@ describe('GET/POST assets', () => {
                 id: 1
             },
             location: {
-                lattitude: 1.5,
+                latitude: 1.5,
                 longitude: -1.5
             },
             properties: [

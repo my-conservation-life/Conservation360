@@ -10,7 +10,7 @@ const DATABASE_QUERY_FAILED_MESSAGE = 'Database query for the bounding box faile
  */
 const get = async (projectId) => {
     const createQuery = (fromTableExpression) => `
-        SELECT ST_XMin(bbox) AS latitude_min, ST_XMax(bbox) AS latitude_max, ST_YMin(bbox) AS longitude_min, ST_YMax(bbox) AS longitude_max
+        SELECT ST_YMin(bbox) AS latitude_min, ST_YMax(bbox) AS latitude_max, ST_XMin(bbox) AS longitude_min, ST_XMax(bbox) AS longitude_max
         FROM (SELECT ST_Extent(location) AS bbox FROM ${fromTableExpression})
         AS tbbox
         `;
