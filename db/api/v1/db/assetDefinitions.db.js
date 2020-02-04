@@ -18,7 +18,7 @@ const findAssetTypes = async () => {
 
 /**
  * Query to find the property types for a given assetTypeID.
- * @param {*} assetTypeID - the asset type ID
+ * @param {number} assetTypeID - the asset type ID
  */
 const findAssetPropTypes = async (assetTypeID) => {
     let query = `
@@ -55,7 +55,7 @@ const findAssetProperties = async () => {
 
 /**
  * Finds all asset properties for all assets for a given asset type ID.
- * @param {*} assetTypeID - the asset type ID
+ * @param {number} assetTypeID - the asset type ID
  */
 const findAssetPropsByTypeID = async (assetTypeID) => {
     let query = `

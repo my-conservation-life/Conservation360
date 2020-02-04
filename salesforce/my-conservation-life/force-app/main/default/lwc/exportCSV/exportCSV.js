@@ -51,6 +51,7 @@ export default class ExportCSV extends LightningElement {
 
         assetDefinitions.fetchAssetPropTypes(this.valueID)
             .then(properties => {
+                // [asset_type_id],[asset_type_name]
                 rows = ['asset_type_id', this.value.split(':')[0].trimRight()];
                 for (i = 0; i < properties.rows.length; i++) {
                     rows.push(properties.rows[i]['name']);

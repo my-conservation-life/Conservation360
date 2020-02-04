@@ -14,7 +14,7 @@ const create = (assetDefinition) => {
  * Finds all asset types.
  */
 const fetchAssetTypes = () => {
-    const url = utils.URL + 'asset_types';
+    const url = utils.URL + 'assetTypes';
     return utils.get(url);
 };
 
@@ -23,7 +23,7 @@ const fetchAssetTypes = () => {
  * @param {*} assetTypeID - the asset type ID
  */
 const fetchAssetPropTypes = (assetTypeID) => {
-    const url = utils.URL + 'asset_prop_types';
+    const url = utils.URL + 'assetPropTypes';
     return utils.post(url, { assetTypeID: assetTypeID });
 };
 
@@ -32,7 +32,7 @@ const fetchAssetPropTypes = (assetTypeID) => {
  * @param {*} assetTypeID - the asset type ID
  */
 const fetchAssetPropsByTypeID = (assetTypeID) => {
-    const url = utils.URL + 'asset_props_by_type_id';
+    const url = utils.URL + 'assetPropsByTypeID';
     return utils.post(url, { assetTypeID: assetTypeID });
 };
 

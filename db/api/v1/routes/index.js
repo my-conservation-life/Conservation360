@@ -22,9 +22,9 @@ router.get(
 
 router.post('/assets', assets.create);
 
-router.get('/asset_types', assetDefinitions.getAssetTypes);
-router.post('/asset_prop_types', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropTypes);
-router.post('/asset_props_by_type_id', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropsByTypeID);
+router.get('/assetTypes', assetDefinitions.getAssetTypes);
+router.post('/assetPropTypes', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropTypes);
+router.post('/assetPropsByTypeID', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropsByTypeID);
 
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);
