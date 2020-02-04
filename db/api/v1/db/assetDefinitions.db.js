@@ -319,13 +319,20 @@ const storeCSV = async(assetTypeId, csvJson) => {
         await utils.db.rollbackTransaction(client);
         return({success: false, error: error});
     }
+    finally {
+        client.release();
+    }
     return({success: true});
 };
 
 module.exports = {
-    findPropertiesByAssetTypeId,
     findAssetTypes,
     find,
     create,
+    findPropertiesByAssetTypeId,
+    findAsset,
+    findAssetProperty,
+    createAssetProperty,
+    updateAssetProperty,
     storeCSV
 };
