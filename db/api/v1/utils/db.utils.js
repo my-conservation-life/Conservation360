@@ -32,6 +32,35 @@ const commitTransaction = async (client) => {
 };
 
 /**
+ * Returns a latitude and longitude as a string pair
+ * 
+ * @param {number} lon the points longitude (x)
+ * @param {number} lat the points latitude (y)
+ * @returns {string} a PostGis linestring point pair
+ */
+const makeLineStringHelper = (lon, lat) => {
+    return `${lon} ${lat}`;
+};
+
+/**
+ * Creates a postgis LINESTRING from an array of latitude and longitude points
+ * 
+ * @param {Array} coordinatesList an array of x,y (longitude, latitude) points
+ * @returns {string} a postgis LINESTRING
+ */
+const makeLineString = (coordinatesList) => {
+
+    // An array of LINESTRING coordinate pairs 'lon lat'
+    let coordPairs = [];
+
+    coordinatesList.forEach(point => {
+        coordPairs.push(makeLineStringHelper(point.longitude, point.latitude));
+    });
+
+    return `LINESTRING(${coordPairs.join(',')})`;
+};
+
+/**
  * Rollsback a SQL transaction
  * 
  * @param {*} client - node postgres client
@@ -47,5 +76,6 @@ module.exports = {
     isValidDbInteger,
     beginTransaction,
     commitTransaction,
-    rollbackTransaction
+    rollbackTransaction,
+    makeLineString
 };
