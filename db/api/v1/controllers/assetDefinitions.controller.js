@@ -1,6 +1,17 @@
+/**
+ * Maps asset definition related requests to the correct DB function and returns a response
+ */
+
 const db = require('../db');
 const csv = require('csvtojson');
 
+/**
+ * Finds all asset types stored in the DB
+ * 
+ * @param {*} req The incoming Express request
+ * @param {*} res The outgoing Express request
+ * @param {*} next The next Express middleware function in the stack
+ */
 const findAssetTypes = async (req, res, next) => {
     db.assetDefinitions.findAssetTypes()
         .then(data => {
@@ -34,6 +45,13 @@ const create = async (req, res, next) => {
     }
 };
 
+/**
+ * Converts selected CSV file to JSON and adds the data to the DB
+ * 
+ * @param {*} req The incoming Express request
+ * @param {*} res The outgoing Express request
+ * @param {*} next The next Express middleware function in the stack
+ */
 const storeCSV = async(req, res, next) => {
     const assetTypeId = req.body.assetTypeId;
 
@@ -42,7 +60,6 @@ const storeCSV = async(req, res, next) => {
     try {
         const json = await csv().fromFile(csvPath);
         const result = await db.assetDefinitions.storeCSV(assetTypeId, json);
-        // res.json({assetType: assetTypeId, file: csvFile, csvJson: json, result: result});
         res.json({result: result});
     } catch (error) {
         next(error);
