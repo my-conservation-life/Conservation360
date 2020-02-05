@@ -49,10 +49,10 @@ describe('assetDefinitions.controller.storeCSV', () => {
 
         expected = { success: true };
         assetTypeId = 1;
-        // Try to create file object
         assetDefinitionsDb.storeCSV = jest.fn(async () => expected);
     });
 
+    // TODO - tests for storeCSV function in controller
     // it('accesses DB and sends successful response', async () => {
     //     req.body.assetTypeId = assetTypeId;
     //     // req.file = SOME SORT OF FILE
