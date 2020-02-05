@@ -113,6 +113,7 @@ export default class ImportCSV extends LightningElement {
                         this.hasError = true;
                         this.errorMessage = response.result.error;
                     }
+
                     this.fileSent = this.csv.name;
                     button.disabled = false;
                 })
@@ -120,8 +121,11 @@ export default class ImportCSV extends LightningElement {
                     this.importing = false;
                     this.hasSuccess = false;
                     this.hasError = true;
-                    this.errorMessage = 'An issue has occurred while processing the CSV. Please refresh and try again.';
-                    console.log("Exception: ", e);
+                    this.errorMessage = 'An issue has occurred while processing the CSV. This could be due to the CSV file containing too many rows to be handled at once or a weak wi-fi connection.';
+                    console.log('Exception: ', e);
+
+                    this.fileSent = this.csv.name;
+                    button.disabled = false;
                 });
         }
     }
