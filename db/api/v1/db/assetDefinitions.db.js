@@ -1,5 +1,8 @@
 const utils = require('../utils');
 
+/**
+ * Query to find all asset types.
+ */
 const findAssetTypes = async () => {
     let query = `
         SELECT
@@ -11,6 +14,27 @@ const findAssetTypes = async () => {
     `;
 
     return global.dbPool.query(query);
+};
+
+/**
+ * Query to find the property types for a given assetTypeID.
+ * @param {number} assetTypeID - the asset type ID
+ */
+const findAssetPropTypes = async (assetTypeID) => {
+    let query = `
+        SELECT
+            id, name
+        FROM
+            property
+        WHERE
+            asset_type_id = $1
+        ORDER BY
+            id
+    `;
+
+    const params = [assetTypeID];
+
+    return global.dbPool.query(query, params);
 };
 
 const findAssetProperties = async () => {
@@ -27,6 +51,30 @@ const findAssetProperties = async () => {
     `;
 
     return global.dbPool.query(query);
+};
+
+/**
+ * Finds all asset properties for all assets for a given asset type ID.
+ * @param {number} assetTypeID - the asset type ID
+ */
+const findAssetPropsByTypeID = async (assetTypeID) => {
+    let query = `
+        SELECT
+	        asset.id as id, asset_property.value as value, asset_property.property_id as property_id
+        FROM
+	        asset
+
+        INNER JOIN
+	        asset_property
+        ON
+	        asset_property.asset_id=asset.id
+        WHERE
+	        asset_type_id = $1
+    `;
+
+    const params = [assetTypeID];
+
+    return global.dbPool.query(query, params);
 };
 
 /**
@@ -126,5 +174,8 @@ const create = async (assetDefinition) => {
 
 module.exports = {
     find,
-    create
+    create,
+    findAssetTypes,
+    findAssetPropTypes,
+    findAssetPropsByTypeID
 };
