@@ -1,0 +1,11 @@
+.success {
+    color: darkgreen;
+}
+
+.error {
+    color: darkred;
+}
+
+.long-text {
+    word-wrap: break-word;
+}
