@@ -175,6 +175,7 @@ const findAsset = async (assetId) => {
 
 /**
  * Gets the asset property associated with the given asset ID and property ID
+ * 
  * @param {Number} assetId ID of the asset
  * @param {Number} propertyId ID of the property
  */
@@ -196,6 +197,7 @@ const findAssetProperty = async (assetId, propertyId) => {
 
 /**
  * Creates a new asset property in the DB
+ * 
  * @param {*} client Node Postgres client
  * @param {Number} assetId asset ID associated with the asset property
  * @param {Number} propertyId property ID associated with the asset property
@@ -220,6 +222,7 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
 
 /**
  * Updates an asset property that is already stored in the DB
+ * 
  * @param {*} client Node Postgres client
  * @param {Number} assetId asset ID associated with the asset property
  * @param {Number} propertyId property ID associated with the asset property
@@ -242,13 +245,16 @@ const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
 
 /**
  * Stores contents of CSV into the DB
+ * 
  * @param {Number} assetTypeId ID of the asset type associated with the headers in the CSV
  * @param {Object} csvJson JSON of data contained in the imported CSV file
  */
 const storeCSV = async(assetTypeId, csvJson) => {
+    // Get properties associated with the selected asset type
     const propertyArray = (await findPropertiesByAssetTypeId(assetTypeId)).rows;
-    const properties = {};
 
+    // Create a property object to be more accessible
+    const properties = {};
     var i;
     var property = null;
     var propertyName = null;
@@ -258,34 +264,45 @@ const storeCSV = async(assetTypeId, csvJson) => {
         properties[propertyName] = property;
     }
 
-    var asset = null;
-    var assetId = null;
+    // Start processing the JSON of the CSV file
+    var asset;
+    var assetId;
     var propertyId;
     var propertyIsRequired;
     var value;
     const client = await global.dbPool.connect();
     try {
+        // Check to see that the CSV has data to store
         if (csvJson.length === 0) {
             throw 'The selected CSV file has no data to import.';
         }
 
+        // Check that asset IDs are specified in the CSV
         asset = csvJson[0];
         if (!('asset_id' in asset)) {
             throw 'The selected CSV file is missing an asset ID column.';
         }
+
+        // Check that all headers associated with the selected asset type are contained in the CSV
         for (const propertyName in properties) {
             if (!(propertyName in asset)) {
                 throw 'The selected CSV file is missing a header (' + propertyName + ')';
             }
         }
 
+        // Validate each row of the CSV and add it
         await utils.db.beginTransaction(client);
         for (i = 0; i < csvJson.length; i++) {
             asset = csvJson[i];
             assetId = asset.asset_id;
+
+            // Check that each row contains an asset ID
             if (assetId === '') {
                 throw 'The selected CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
             }
+
+            // Check that the asset exists
+            // TODO in the future - Add new asset to DB instead of throwing error 
             const checkedAsset = (await findAsset(assetId)).rows;
             if (checkedAsset.length === 0) {
                 throw 'The selected CSV file contains a row for an asset that is not being tracked (Asset ID '+ assetId + ')';
@@ -293,6 +310,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
 
             for (const propertyName in asset) {
                 if (propertyName !== 'asset_id') {
+                    // Throw an error if CSV contains a header that is not associated with the selected asset type
                     if (!(propertyName in properties)) {
                         throw 'The selected CSV file either contains an empty column, is missing a header, or contains a property that is not being tracked (' + propertyName + ')';
                     }
@@ -301,11 +319,16 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     propertyId = property.id;
                     propertyIsRequired = property.required;
                     value = asset[propertyName];
+                    const assetProperties = (await findAssetProperty(assetId, propertyId)).rows;
+
+                    // Throw an error if a row fails to contain a value for a property that is required
                     if (value === '' && propertyIsRequired) {
                         throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
                     }
-                    else if ((await findAssetProperty(assetId, propertyId)).rows.length > 0) {
-                        await updateAssetProperty(client, assetId, propertyId, value);
+                    else if (assetProperties.length > 0) {
+                        if (assetProperties[0].value !== value) {
+                            await updateAssetProperty(client, assetId, propertyId, value);
+                        }
                     }
                     else {
                         await createAssetProperty(client, assetId, propertyId, value);
@@ -316,6 +339,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
         await utils.db.commitTransaction(client);
     }
     catch (error) {
+        // If an error is thrown, undo all DB interactions since the transaction began
         await utils.db.rollbackTransaction(client);
         return({success: false, error: error});
     }
