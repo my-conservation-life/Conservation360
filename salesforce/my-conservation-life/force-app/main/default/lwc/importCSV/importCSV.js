@@ -23,14 +23,13 @@ export default class ImportCSV extends LightningElement {
     @track errorMessage = '';
 
     connectedCallback() {
-        var i = 0;
-
         assetDefinitions.findAssetTypes()
             .then(assetTypes => {
                 // populate combobox with asset types
                 const typeOptions = [];
 
-                for (i; i < assetTypes.length; i++) {
+                var i;
+                for (i = 0; i < assetTypes.length; i++) {
                     const assetType = assetTypes[i];
                     const assetTypeString = JSON.stringify(assetType);
 
