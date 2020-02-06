@@ -36,5 +36,5 @@ const create = (asset) => {
     
 export default {
     find,
-    create,
+    create
 };
