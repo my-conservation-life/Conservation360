@@ -34,7 +34,7 @@ router.get('/assetDefinitions', assetDefinitions.find);
 router.post('/assetDefinitions', validate(param.body, 'assetDefinition', type.assetDefinition, true), assetDefinitions.create);
 
 // Asset Types
-router.get('/assetTypes', assetDefinitions.findAssetTypes);
+router.get('/assetTypes', assetDefinitions.getAssetTypes);
 
 // CSV for importing data
 router.put('/csv', upload.single('csv'), assetDefinitions.storeCSV);
