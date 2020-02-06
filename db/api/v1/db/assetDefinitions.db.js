@@ -354,7 +354,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     propertyId = property.id;
                     propertyIsRequired = property.required;
                     value = asset[propertyName];
-                    const assetProperties = (await findAssetProperty(assetId, propertyId)).rows;
+                    let assetProperties = (await findAssetProperty(assetId, propertyId)).rows;
 
                     // Throw an error if a row fails to contain a value for a property that is required
                     if (value === '' && propertyIsRequired) {
@@ -376,7 +376,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
     catch (error) {
         // If an error is thrown, undo all DB interactions since the transaction began
         await utils.db.rollbackTransaction(client);
-        return({success: false, error: error});
+        return({success: false, error: error, assetId: assetId, propertyId: propertyId});
     }
     finally {
         client.release();
