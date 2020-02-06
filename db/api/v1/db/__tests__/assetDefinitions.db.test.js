@@ -1,7 +1,8 @@
 /**
  * Tests for Asset Definitions database layer
  */
-const { findAssetTypes, findPropertiesByAssetTypeId, findAsset, findAssetProperty, createAssetProperty, updateAssetProperty, storeCSV } = require('../assetDefinitions.db');
+const { findAssetTypes, findPropertiesByAssetTypeId, findAsset, 
+    findAssetProperty, createAssetProperty, updateAssetProperty } = require('../assetDefinitions.db');
 
 describe('assetDefinitions.db.findAssetTypes', () => {
     let rows;
@@ -22,47 +23,58 @@ describe('assetDefinitions.db.findAssetTypes', () => {
 describe('assetDefinitions.db.findPropertiesByAssetTypeId', () => {
     let rows;
     let query;
+    let assetTypeId;
 
     beforeEach(() => {
         rows = [{}];
         query = jest.fn(async() => rows);
         global.dbPool = { query };
+
+        assetTypeId = 1;
     });
 
     it('finds all properties associated with the asset type ID given', async () => {
-        const actualRows = await findPropertiesByAssetTypeId();
+        const actualRows = await findPropertiesByAssetTypeId(assetTypeId);
         expect(actualRows).toEqual(rows);
     });
 });
 
-describe('assetDefinitions.db.findAssets', () => {
+describe('assetDefinitions.db.findAsset', () => {
     let rows;
     let query;
+    let assetId;
 
     beforeEach(() => {
         rows = [{}];
         query = jest.fn(async() => rows);
         global.dbPool = { query };
+
+        assetId = 1;
     });
 
-    it('finds all properties associated with the asset type ID given', async () => {
-        const actualRows = await findAsset();
+    it('finds the asset associated with the asset ID given', async () => {
+        const actualRows = await findAsset(assetId);
         expect(actualRows).toEqual(rows);
     });
 });
 
-describe('find asset property with the asset type ID and property ID given', () => {
+describe('assetDefinitions.db.findAssetProperty', () => {
     let rows;
     let query;
+    let assetId;
+    let propertyId;
 
     beforeEach(() => {
         rows = [{}];
         query = jest.fn(async() => rows);
         global.dbPool = { query };
+
+        assetId = 1;
+        propertyId = 1;
     });
 
-    it('finds all properties associated with the asset type ID given', async () => {
-        const actualRows = await findAssetProperty();
+    it('find the asset property associated with the asset type ID and property ID given', async () => {
+        const actualRows = await findAssetProperty(assetId, propertyId);
         expect(actualRows).toEqual(rows);
     });
 });
@@ -123,7 +135,6 @@ describe('assetDefinitions.db.storeCSV', () => {
     let client;
 
     beforeEach(() => {
-        // TODO tests for storeCSV function
         rows = [{}];
         findPropertiesByAssetTypeId = jest.fn(async () => ({rows}));
         findAsset = jest.fn(async () => ({rows}));
@@ -135,18 +146,5 @@ describe('assetDefinitions.db.storeCSV', () => {
         global.dbPool.connect = jest.fn(async () => { return client; });
     });
 
-    // it('executes correct queries', async () => {
-    //     const assetTypeId = 1;
-    //     const data = [
-    //         { asset_id: '3', latitude: '-17.66365', longitude: '45.9114', bright_ti4: '334.6', scan: '0.35', track: '0.57', acq_date: '5/28/2019', acq_time: '954', satellite: 'A', instrument: 'VIIRS', confidence: 'n', version: '1.0NRT', bright_ti5: '295.4', frp: '2.7', daynight: 'N' },
-    //         { asset_id: '4', latitude: '-19.53818', longitude: '45.04081', bright_ti4: '344.6', scan: '0.42', track: '0.61', acq_date: '5/28/2019', acq_time: '954', satellite: 'B', instrument: 'VIIRS', confidence: 'n', version: '1.0NRT', bright_ti5: '295.8', frp: '4.2', daynight: 'D' },
-    //         { asset_id: '5', latitude: '-19.53904', longitude: '45.04072', bright_ti4: '346.1', scan: '0.42', track: '0.61', acq_date: '5/28/2019', acq_time: '954', satellite: 'C', instrument: 'VIIRS', confidence: 'n', version: '1.0NRT', bright_ti5: '296', frp: '3.8', daynight: 'N' }
-    //     ];
-
-    //     await storeCSV(assetTypeId, data);
-    //     expect(query).toHaveBeenCalledTimes(3);
-    //     expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('BEGIN TRANSACTION'));
-    //     expect(query.mock.calls[1][0]).toEqual(expect.stringContaining('INSERT INTO asset_property'));
-    //     expect(query.mock.calls[2][0]).toEqual(expect.stringContaining('END TRANSACTION'));
-    // });
+    // TODO tests for storeCSV function
 });
