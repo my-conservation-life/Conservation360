@@ -9,5 +9,5 @@ VALUES
     (5, 'weight', 'number', false, false);
 
 INSERT INTO asset (project_id, asset_type_id, location)
-SELECT 3, 5, ST_MakePoint(random_between(-16.80, -16.15), random_between(37.90, 38.78))
+SELECT 3, 5, ST_MakePoint(random_between(37.90, 38.78), random_between(-16.80, -16.15))
 FROM generate_series(1, 30);

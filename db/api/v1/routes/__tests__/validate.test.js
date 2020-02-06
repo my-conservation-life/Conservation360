@@ -83,6 +83,93 @@ describe('validate', () => {
     });
 });
 
+describe('validate.type.coordinates', () => {
+
+    // Temp function to create point objects
+    let pack = (lon, lat) => {
+        return {latitude: lat, longitude:lon};
+    };
+
+    it('rejects empty coordinates array', () => {
+        const emptyCoords = [];
+        const result = type.coordinates(emptyCoords);
+        expect(result.isFailure).toBeTruthy();
+    });
+
+    it('rejects coordinates array with only 2 points', () => {
+        const twoCoords = [pack('1.1', '3.3'), pack('22', '-23')];
+        const result = type.coordinates(twoCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Expected at least 3 points in the coordinates list')
+        );
+    });
+
+    it('rejects coordinates that are malformed', () => {
+        const badCoords = [pack('word', '3.3'), pack('22', '-23'), pack('a', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed requests', () => {
+        const badCoords = [{somethingelse: 403}, pack('22', '-23'), pack('3', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed latitudes that are too big', () => {
+        const badCoords = [pack('22', '200'), pack('22', '-23'), pack('3', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed latitudes that are too small', () => {
+        const badCoords = [pack('22', '2'), pack('22', '-23'), pack('3', '-200')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed longitudes that are too big', () => {
+        const badCoords = [pack('12', '-10.30'), pack('181', '-23'), pack('10', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('rejects malformed longitudes that are too small', () => {
+        const badCoords = [pack('22', '20'), pack('22.3', '-23'), pack('-181', '23')];
+        const result = type.coordinates(badCoords);
+        expect(result.isFailure).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining('Unable to parse coordinate. Please format')
+        );
+    });
+
+    it('accepts a well formed request', () => {
+        const goodCoords = [pack('22.4', '20'), pack('22.3', '-23.1111'), pack('-20', '23')];
+        const expected = [pack(22.4, 20), pack(22.3, -23.1111), pack(-20, 23)];
+        const result = type.coordinates(goodCoords);
+        expect(result.isSuccess).toBeTruthy();
+        expect(result.value).toEqual(
+            expect.arrayContaining(expected)
+        );
+    });
+});
+
 describe('validate.type.id', () => {
     it('rejects 0', () => {
         const result = type.id('0');
@@ -111,6 +198,86 @@ describe('validate.type.id', () => {
     });
 });
 
+describe('validate.type.latitude', () => {
+    it('rejects strings', () => {
+        const result = type.latitude('hello world');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects empty strings', () => {
+        const result = type.latitude('');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('accepts 90.0', () => {
+        const result = type.latitude('90.0');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(90.0);
+    });
+
+    it('accepts -90.0', () => {
+        const result = type.latitude('-90.0');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(-90.0);
+    });
+
+    it('accepts 80.78373163637', () => {
+        const result = type.latitude('80.78373163637');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(80.78373163637);
+    });
+
+    it('rejects 90.000391', () => {
+        const result = type.latitude('90.000391');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects -90.000391', () => {
+        const result = type.latitude('-90.000391');
+        expect(result.isFailure()).toBe(true);
+    });
+});
+
+describe('validate.type.longitude', () => {
+    it('rejects strings', () => {
+        const result = type.longitude('hello world');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects empty strings', () => {
+        const result = type.longitude('');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('accepts 180.0', () => {
+        const result = type.longitude('180.0');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(180.0);
+    });
+
+    it('accepts -180.0', () => {
+        const result = type.longitude('-180.0');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(-180.0);
+    });
+
+    it('accepts 80.78373163637', () => {
+        const result = type.longitude('80.78373163637');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(80.78373163637);
+    });
+
+    it('rejects 180.042391', () => {
+        const result = type.longitude('180.042391');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects -180.042391', () => {
+        const result = type.longitude('-180.042391');
+        expect(result.isFailure()).toBe(true);
+    });
+});
+
 describe('validate.type.projectName', () => {
     it('rejects null', () => {
         const result = type.projectName(null);
@@ -132,6 +299,34 @@ describe('validate.type.projectName', () => {
         const result = type.projectName('Madagascar Reforestation');
         expect(result.isSuccess()).toBeTruthy();
         expect(result.value).toBe('Madagascar Reforestation');
+    });
+});
+
+describe('validate.type.radius', () => {
+    it('rejects 0', () => {
+        const result = type.radius('0');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('accepts 1', () => {
+        const result = type.radius('1000');
+        expect(result.isSuccess()).toBe(true);
+        expect(result.value).toBe(1000);
+    });
+
+    it('rejects negative numbers', () => {
+        const result = type.radius('-1000');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects the empty string', () => {
+        const result = type.radius('');
+        expect(result.isFailure()).toBe(true);
+    });
+
+    it('rejects alphabetic characters', () => {
+        const result = type.radius('abc');
+        expect(result.isFailure()).toBe(true);
     });
 });
 

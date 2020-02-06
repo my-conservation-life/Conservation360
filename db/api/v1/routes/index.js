@@ -11,8 +11,34 @@ const {
     assetDefinitions,
     bboxAssets,
     dataTypes,
+    geometrySearch,
     projects
 } = require('../controllers');
+
+// Geometry Searches
+router.get(
+    '/assets/geometrySearch/envelope',
+    validate(param.query, 'minimumLatitude', type.latitude, true),
+    validate(param.query, 'minimumLongitude', type.longitude, true),
+    validate(param.query, 'maximumLatitude', type.latitude, true),
+    validate(param.query, 'maximumLongitude', type.longitude, true),
+    geometrySearch.envelopeFind
+);
+
+// Geometry Searches
+router.get(
+    '/assets/geometrySearch/distance',
+    validate(param.query, 'latitude', type.latitude, true),
+    validate(param.query, 'longitude', type.longitude, true),
+    validate(param.query, 'radiusMeters', type.radius, true),
+    geometrySearch.distanceFind
+);
+
+router.get(
+    '/assets/geometrySearch/polygon',
+    validate(param.body, 'coordinates', type.coordinates, true),
+    geometrySearch.polygonFind
+);
 
 // Assets
 router.get(
@@ -25,6 +51,10 @@ router.get(
 
 router.post('/assets', assets.create);
 
+router.get('/assetTypes', assetDefinitions.getAssetTypes);
+router.post('/assetPropTypes', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropTypes);
+router.post('/assetPropsByTypeID', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropsByTypeID);
+
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);
 // router.put('/assets/:id', assets.update); //example update
@@ -32,9 +62,6 @@ router.post('/assets', assets.create);
 // Asset Definitions
 router.get('/assetDefinitions', assetDefinitions.find);
 router.post('/assetDefinitions', validate(param.body, 'assetDefinition', type.assetDefinition, true), assetDefinitions.create);
-
-// Asset Types
-router.get('/assetTypes', assetDefinitions.getAssetTypes);
 
 // CSV for importing data
 router.put('/csv', upload.single('csv'), assetDefinitions.storeCSV);
