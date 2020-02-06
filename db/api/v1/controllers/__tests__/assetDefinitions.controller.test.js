@@ -1,7 +1,7 @@
 const { findAssetTypes } = require('../assetDefinitions.controller');
 const assetDefinitionsDb = require('../../db/assetDefinitions.db');
 
-describe('assetDefinitions.controller.findAssetTypes', () => {
+describe('assetDefinitions.controller.getAssetTypes', () => {
     let req;
     let res;
     let next;

@@ -6,21 +6,20 @@ const db = require('../db');
 const csv = require('csvtojson');
 
 /**
- * Finds all asset types stored in the DB
- * 
- * @param {*} req The incoming Express request
- * @param {*} res The outgoing Express request
- * @param {*} next The next Express middleware function in the stack
+ * Gets all the different asset types from the database.
+ * @param {*} req - the request
+ * @param {*} res - the response
+ * @param {*} next - the next middleware function
  */
-const findAssetTypes = async (req, res, next) => {
-    db.assetDefinitions.findAssetTypes()
-        .then(data => {
-            const assetTypes = data.rows;
-            res.json(assetTypes);
-        })
-        .catch(e => {
-            next(e);
-        });
+const getAssetTypes = async (req, res, next) => {
+    const predicates = req.query;
+
+    try {
+        const assetTypes = await db.assetDefinitions.findAssetTypes(predicates);
+        res.json(assetTypes);
+    } catch (e) {
+        next(e);
+    }
 };
 
 const find = async (req, res, next) => {
@@ -67,7 +66,7 @@ const storeCSV = async(req, res, next) => {
 };
 
 module.exports = {
-    findAssetTypes,
+    getAssetTypes,
     find,
     create,
     storeCSV
