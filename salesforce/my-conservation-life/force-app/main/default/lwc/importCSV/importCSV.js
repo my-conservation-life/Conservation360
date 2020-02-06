@@ -23,13 +23,13 @@ export default class ImportCSV extends LightningElement {
     @track errorMessage = '';
 
     connectedCallback() {
-        assetDefinitions.findAssetTypes()
-            .then(assetTypes => {
+        assetDefinitions.fetchAssetTypes()
+            .then(data => {
+                const assetTypes = data.rows;
+
                 // populate combobox with asset types
                 const typeOptions = [];
-
-                var i;
-                for (i = 0; i < assetTypes.length; i++) {
+                for (let i = 0; i < assetTypes.length; i++) {
                     const assetType = assetTypes[i];
                     const assetTypeString = JSON.stringify(assetType);
 
@@ -37,7 +37,6 @@ export default class ImportCSV extends LightningElement {
                     const option = {label: optionLabel, value: assetTypeString};
                     typeOptions.push(option);
                 }
-
                 this.options = typeOptions;
             })
             .catch(e => {

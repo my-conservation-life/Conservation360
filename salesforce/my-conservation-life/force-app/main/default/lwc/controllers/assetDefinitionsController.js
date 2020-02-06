@@ -1,11 +1,9 @@
 import utils from 'c/utils';
 
 /**
- * Find all asset types that are stored in the DB
- * 
- * @returns {Promise<Array>} Promise of an array of asset type objects 
+ * Finds all asset types.
  */
-const findAssetTypes = () => {
+const fetchAssetTypes = () => {
     const url = utils.URL + 'assetTypes';
     return utils.get(url);
 };
@@ -35,7 +33,7 @@ const sendCSV = (assetTypeId, csv) => {
 };
 
 export default {
-    findAssetTypes,
+    fetchAssetTypes,
     find,
     create,
     sendCSV
