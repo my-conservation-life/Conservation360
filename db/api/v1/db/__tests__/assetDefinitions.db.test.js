@@ -1,7 +1,7 @@
 /**
  * Tests for Asset Definitions database layer
  */
-const { findAssetTypes, findAssetPropsByTypeID, findAsset, 
+const { findAssetTypes, findAssetPropTypes, findAsset, 
     findAssetProperty, createAssetProperty, updateAssetProperty } = require('../assetDefinitions.db');
 
 describe('assetDefinitions.db.findAssetTypes', () => {
@@ -20,7 +20,7 @@ describe('assetDefinitions.db.findAssetTypes', () => {
     });
 });
 
-describe('assetDefinitions.db.findAssetPropsByTypeID', () => {
+describe('assetDefinitions.db.findAssetPropTypes', () => {
     let rows;
     let query;
     let assetTypeId;
@@ -34,7 +34,7 @@ describe('assetDefinitions.db.findAssetPropsByTypeID', () => {
     });
 
     it('finds all properties associated with the asset type ID given', async () => {
-        const actualRows = await findAssetPropsByTypeID(assetTypeId);
+        const actualRows = await findAssetPropTypes(assetTypeId);
         expect(actualRows).toEqual(rows);
     });
 });
@@ -127,7 +127,7 @@ describe('assetDefinitions.db.updateAssetProperty', () => {
 
 describe('assetDefinitions.db.storeCSV', () => {
     let rows;
-    let findAssetPropsByTypeID;
+    let findAssetPropTypes;
     let findAsset;
     let result;
     let query;
@@ -136,7 +136,7 @@ describe('assetDefinitions.db.storeCSV', () => {
 
     beforeEach(() => {
         rows = [{}];
-        findAssetPropsByTypeID = jest.fn(async () => ({rows}));
+        findAssetPropTypes = jest.fn(async () => ({rows}));
         findAsset = jest.fn(async () => ({rows}));
 
         result = {};

@@ -286,7 +286,7 @@ const updateAssetProperty = async(client, newValue, assetId, propertyId) => {
  */
 const storeCSV = async(assetTypeId, csvJson) => {
     // Get properties associated with the selected asset type
-    const propertyArray = (await findAssetPropsByTypeID(assetTypeId)).rows;
+    const propertyArray = (await findAssetPropTypes(assetTypeId)).rows;
 
     // Create a property object to be more accessible
     const properties = {};
