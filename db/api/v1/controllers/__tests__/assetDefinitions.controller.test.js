@@ -1,4 +1,4 @@
-const { findAssetTypes, storeCSV } = require('../assetDefinitions.controller');
+const { findAssetTypes } = require('../assetDefinitions.controller');
 const assetDefinitionsDb = require('../../db/assetDefinitions.db');
 
 describe('assetDefinitions.controller.findAssetTypes', () => {
@@ -21,7 +21,7 @@ describe('assetDefinitions.controller.findAssetTypes', () => {
         assetDefinitionsDb.findAssetTypes = jest.fn(async () => data);
     });
 
-    it('gets all asset types in DB', async () => {
+    it('returns all asset types in DB', async () => {
         await findAssetTypes(req, res, next);
         expect(res.json).toHaveBeenCalledWith(expectedAssetTypes);
     });
@@ -53,12 +53,4 @@ describe('assetDefinitions.controller.storeCSV', () => {
     });
 
     // TODO - tests for storeCSV function in controller
-    // it('accesses DB and sends successful response', async () => {
-    //     req.body.assetTypeId = assetTypeId;
-    //     // req.file = SOME SORT OF FILE
-
-    //     await storeCSV(req, res, next);
-    //     expect(assetDefinitionsDb.storeCSV).toHaveBeenCalledTimes(1);
-    //     expect(assetDefinitionsDb.storeCSV).toHaveBeenCalledWith(assetTypeId, json);
-    // });
 });
