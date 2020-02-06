@@ -56,8 +56,7 @@ export default class ImportCSV extends LightningElement {
         const description = assetType.description;
         if (description !== null) {
             this.description = assetType.description;
-        }
-        else {
+        } else {
             this.description = 'No description found.';
         }
 
@@ -106,8 +105,7 @@ export default class ImportCSV extends LightningElement {
                     if (response.result.success === true) {
                         this.hasSuccess = true;
                         this.hasError = false;
-                    }
-                    else {
+                    } else {
                         this.hasSuccess = false;
                         this.hasError = true;
                         this.errorMessage = response.result.error;
