@@ -69,6 +69,8 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
 	        asset_property.asset_id=asset.id
         WHERE
 	        asset_type_id = $1
+        ORDER BY
+            property_id
     `;
 
     const params = [assetTypeID];
