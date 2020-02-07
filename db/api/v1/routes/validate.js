@@ -1,4 +1,5 @@
 const utils = require('../utils');
+const moment = require('moment');
 
 const MIN_PROJECT_NAME_LENGTH = 1;
 
@@ -173,6 +174,24 @@ const parseCoordinates = (coordinateList) => {
     }
 
     return ParseResult.success(coordinates);
+};
+
+/**
+ * Parses a date from a string
+ * 
+ * @param {string} dateString - a date string in the form YYYY-MM-DD
+ * @returns {ParseResult} - returns Prase success with a moment object, or a parse failure
+ */
+const parseDate = (dateString) => {
+    // Strictly parse the date
+    const dateFmt = 'YYYY-MM-DD';
+    const m = moment(dateString, dateFmt, true);
+    
+    if (!m.isValid()) {
+        return ParseResult.failure(`Unable to parse date from ${dateString}. The following date format(s) are supported [${dateFmt}]`);
+    }
+
+    return ParseResult.success(m);
 };
 
 /**
@@ -371,6 +390,7 @@ module.exports = {
         id: parseId,
         assetDefinition: parseAssetDefinition,
         coordinates: parseCoordinates,
+        date: parseDate,
         latitude: parseLatitude,
         longitude: parseLongitude,
         project: parseProject,
