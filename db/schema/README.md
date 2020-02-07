@@ -40,3 +40,131 @@ SET row_security = off;
 ```sh
 heroku pg:psql -a YOUR_HEROKU_APP -f schema.sql
 ```
+
+# Using pgAdmin4 to export the schema.sql file
+
+You can use pgAdmin to create a backup of the database schema by right clicking on the database and selecting the `"Backup..."` option. Make sure your clicking the database and not the schema so that your backup will include any installed extensions.
+
+This will open the backup dialog box. Use the following settings:
+	
+```
+General
+    Filename: schema
+    Format: Plain
+    # Leave the rest blank...
+
+Dump Options
+    Sections
+        Pre-data: Yes
+        Post-Data Yes
+        Data: No
+
+    Type of Objects
+        Only Data: No
+        Only Schema: No
+        Blobs: No
+
+    Do Not Save:
+        Owner: Yes
+        Tablespace: No
+        Comments: Yes
+        Privilege: Yes
+        Unlogged Table Data: Yes
+
+    Queries
+        Use Column Inserts: No
+        Use Insert Commands: No
+        Include CREATE DATABASE statement: No
+        Include DROP DATABASE statement: Yes
+        Load Via Partition Root: No
+
+    Disable:
+        Trigger: No
+        $ quoting: No
+
+    Miscellaneous
+        With OID(s): No
+        Verbose Messages: Yes
+        Force double quote on identifiers: Yes
+        Use SET SESSION AUTHORIZATION: No
+```
+
+__Again you should remove these lines from the export__
+``` sql
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+```
+
+
+## Backuping up the data_type table
+
+The `schema.sql` file contains a few insert statements at the bottom that populate the `data_type` table. These were manually added to the file. Another option would be to export the data_types table.
+
+The process is similar to the database backup procedure but instead you should right click the `data_type` table in the navigation tree and select `Backup...`
+
+```
+.
++-- _<server name>
+|   +-- _Databases
+|       +-- _<database name>
+|           +-- ...
+|           +-- _Schemas
+|               +-- ...
+|               +-- _Tables
+|                   +-- ...
+|                   +-- data_type
+|                   +-- ...
+|               +-- ...
+
+```
+
+Use the following settings to export the table to an sql file containing insert statements.
+
+```
+General
+    Filename: data_types
+    Format: Plain
+    # Leave the rest blank...
+
+Dump Options
+    Sections
+        Pre-data: No
+        Post-Data No
+        Data: Yes
+
+    Type of Objects
+        Only Data: No
+        Only Schema: No
+        Blobs: No
+
+    Do Not Save:
+        Owner: Yes
+        Tablespace: Yes
+        Comments: Yes
+        Privilege: Yes
+        Unlogged Table Data: Yes
+
+    Queries
+        Use Column Inserts: Yes
+        Use Insert Commands: No
+        Include CREATE DATABASE statement: No
+        Include DROP DATABASE statement: No
+        Load Via Partition Root: No
+
+    Disable:
+        Trigger: No
+        $ quoting: No
+
+    Miscellaneous
+        With OID(s): No
+        Verbose Messages: Yes
+        Force double quote on identifiers: No
+        Use SET SESSION AUTHORIZATION: No
+```
