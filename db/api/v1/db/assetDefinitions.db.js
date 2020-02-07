@@ -173,23 +173,6 @@ const create = async (assetDefinition) => {
     }
 };
 
-// /**
-//  * Gets all properties associated with an asset type using the asset type's ID
-//  * 
-//  * @param {Number} assetTypeId ID of the asset type whose properties are being queried
-//  */
-// const findPropertiesByAssetTypeId = async(assetTypeId) => {
-//     let query = PROPERTIES_QUERY;
-
-//     const values = [];
-//     if ((typeof assetTypeId !== 'undefined') & (assetTypeId > 0)) {
-//         values.push(assetTypeId);
-//         query = query + ` WHERE asset_type_id = $${values.length}`;
-//     }
-
-//     return global.dbPool.query(query, values);
-// };
-
 /**
  * Gets the asset associated given with the asset ID
  * 
