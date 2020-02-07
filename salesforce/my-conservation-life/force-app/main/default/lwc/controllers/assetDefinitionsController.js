@@ -56,5 +56,5 @@ export default {
     fetchAssetPropsByTypeID,
     find,
     create,
-    sendCSV,
+    sendCSV
 };
