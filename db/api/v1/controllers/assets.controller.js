@@ -33,5 +33,5 @@ const create = async (req, res, next) => {
 
 module.exports = {
     find,
-    create
+    create,
 };
