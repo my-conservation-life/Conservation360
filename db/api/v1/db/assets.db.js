@@ -14,7 +14,10 @@ FROM
     JOIN project ON asset.project_id = project.id
     JOIN sponsor ON project.sponsor_id = sponsor.id
     JOIN asset_type ON asset.asset_type_id = asset_type.id
-`;
+WHERE
+    TRUE
+`; // The WHERE TRUE is needed for the find function to append WHERE clauses properly
+
 
 /**
  * Find project assets.
@@ -142,4 +145,3 @@ module.exports = {
     find,
     create
 };
-
