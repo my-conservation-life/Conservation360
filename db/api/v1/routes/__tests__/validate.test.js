@@ -1,4 +1,5 @@
 const { validate, ParseResult, type, param } = require('../validate');
+const moment = require('moment');
 
 describe('validate', () => {
     let extractQueryParam;
@@ -195,6 +196,59 @@ describe('validate.type.id', () => {
     it('rejects alphabetic characters', () => {
         const result = type.id('b');
         expect(result.isFailure()).toBe(true);
+    });
+});
+
+describe('validate.type.date', () => {
+    it('rejects and empty string', () => {
+        const result = type.date('');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects strings that are not dates', () => {
+        const result = type.date('this is not a date');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects dates that have extra characters', () => {
+        const result = type.date('2020-02-02 extra stuff');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('returns actionable error messages', () => {
+        const badlyFormattedDate = '02-13-2020';
+        const validDateFormat = 'YYYY-MM-DD';
+        const result = type.date(badlyFormattedDate);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining(badlyFormattedDate)
+        );
+        expect(result.error).toEqual(
+            expect.stringContaining(validDateFormat)
+        );
+    });
+
+    it('rejects dates with invalid months', () => {
+        const result = type.date('2020-19-02');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects dates with invalid days', () => {
+        const result = type.date('2020-02-42');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects dates with invalid delimeters', () => {
+        const result = type.date('2020/02/02');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('successfully parses a date', () => {
+        const validDate = '2020-02-02';
+        const m = moment(validDate, 'YYYY-MM-DD', true);
+        const result = type.date(validDate);
+        expect(result.isSuccess()).toBeTruthy();
+        expect(result.value).toEqual(m);
     });
 });
 

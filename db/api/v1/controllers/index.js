@@ -4,6 +4,7 @@ const bboxAssets = require('./bboxAssets.controller');
 const dataTypes = require('./dataTypes.controller');
 const geometrySearch = require('./geometrySearch.controller');
 const projects = require('./projects.controller');
+const temporal = require('./temporal.controller');
 
 module.exports = {
     assets,
@@ -11,5 +12,6 @@ module.exports = {
     bboxAssets,
     dataTypes,
     geometrySearch,
-    projects
+    projects,
+    temporal
 };
