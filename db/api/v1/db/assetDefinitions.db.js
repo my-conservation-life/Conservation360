@@ -1,5 +1,31 @@
 const utils = require('../utils');
 
+const PROPERTIES_QUERY = `
+    SELECT
+        id,
+        asset_type_id,
+        name,
+        data_type,
+        required,
+        is_private
+    FROM
+        property
+`;
+
+/**
+ * Gets all properties stored in the database
+ * 
+ * @returns {object} contains all properties found in the database along with other data associated with the query
+ */
+const findProperties = async () => {
+    let query = PROPERTIES_QUERY;
+
+    return global.dbPool.query(query);
+};
+
+/**
+ * Query to find all asset types.
+ */
 const findAssetTypes = async () => {
     let query = `
         SELECT
@@ -13,20 +39,43 @@ const findAssetTypes = async () => {
     return global.dbPool.query(query);
 };
 
-const findAssetProperties = async () => {
+/**
+ * Query to find the property types for a given assetTypeID.
+ * @param {number} assetTypeID - the asset type ID
+ */
+const findAssetPropTypes = async (assetTypeID) => {
+    let query = PROPERTIES_QUERY;
+    query = query + ' WHERE asset_type_id=$1 ORDER BY id';
+
+    const params = [assetTypeID];
+
+    return global.dbPool.query(query, params);
+};
+
+/**
+ * Finds all asset properties for all assets for a given asset type ID.
+ * @param {number} assetTypeID - the asset type ID
+ */
+const findAssetPropsByTypeID = async (assetTypeID) => {
     let query = `
         SELECT
-            id,
-            asset_type_id,
-            name,
-            data_type,
-            required,
-            is_private
+	        asset.id as id, asset_property.value as value, asset_property.property_id as property_id
         FROM
-            property
+	        asset
+
+        INNER JOIN
+	        asset_property
+        ON
+	        asset_property.asset_id=asset.id
+        WHERE
+	        asset_type_id = $1
+        ORDER BY
+            property_id
     `;
 
-    return global.dbPool.query(query);
+    const params = [assetTypeID];
+
+    return global.dbPool.query(query, params);
 };
 
 /**
@@ -72,7 +121,7 @@ const createProperty = async (client, assetTypeId, property) => {
 const find = async () => {
 
     const types = (await findAssetTypes()).rows;
-    const properties = (await findAssetProperties()).rows;
+    const properties = (await findProperties()).rows;
 
     const assetDefinitions = [];
     for (let type of types) {
@@ -124,7 +173,228 @@ const create = async (assetDefinition) => {
     }
 };
 
+// /**
+//  * Gets all properties associated with an asset type using the asset type's ID
+//  * 
+//  * @param {Number} assetTypeId ID of the asset type whose properties are being queried
+//  */
+// const findPropertiesByAssetTypeId = async(assetTypeId) => {
+//     let query = PROPERTIES_QUERY;
+
+//     const values = [];
+//     if ((typeof assetTypeId !== 'undefined') & (assetTypeId > 0)) {
+//         values.push(assetTypeId);
+//         query = query + ` WHERE asset_type_id = $${values.length}`;
+//     }
+
+//     return global.dbPool.query(query, values);
+// };
+
+/**
+ * Gets the asset associated given with the asset ID
+ * 
+ * @param {Number} assetId ID of the asset to query for
+ */
+const findAsset = async (assetId) => {
+    const query = `
+        SELECT
+            *
+        FROM
+            asset
+        WHERE
+            id=$1
+    `;
+
+    const values = [assetId];
+
+    return global.dbPool.query(query, values);
+};
+
+/**
+ * Gets the asset property associated with the given asset ID and property ID
+ * 
+ * @param {Number} assetId ID of the asset
+ * @param {Number} propertyId ID of the property
+ */
+const findAssetProperty = async (assetId, propertyId) => {
+    const query = `
+        SELECT 
+            *
+        FROM
+            asset_property
+        WHERE
+            asset_id=$1 AND 
+            property_id=$2
+    `;
+
+    const values = [assetId, propertyId];
+
+    return global.dbPool.query(query, values);
+};
+
+/**
+ * Creates a new asset property in the DB
+ * 
+ * @param {*} client Node Postgres client
+ * @param {Number} assetId asset ID associated with the asset property
+ * @param {Number} propertyId property ID associated with the asset property
+ * @param {String} value the value of the property 
+ */
+const createAssetProperty = async (client, assetId, propertyId, value) => {
+    
+    // Generate the SQL command
+    const query = `
+        INSERT INTO asset_property
+            (asset_id, property_id, value)
+        VALUES
+            ($1, $2, $3)
+    `;
+
+    // Generate the values to subsitute into the SQL command
+    const values = [assetId, propertyId, value];
+
+    // Execute the SQL command
+    return client.query(query, values);
+};
+
+/**
+ * Updates an asset property that is already stored in the DB
+ * 
+ * @param {*} client Node Postgres client
+ * @param {Number} assetId asset ID associated with the asset property
+ * @param {Number} propertyId property ID associated with the asset property
+ * @param {String} newValue new value that will replace the asset property's current value
+ */
+const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
+
+    let query = `
+        UPDATE asset_property 
+        SET value=$1
+        WHERE 
+            asset_id=$2 AND 
+            property_id=$3
+    `;
+
+    const  values = [newValue, assetId, propertyId];
+
+    return client.query(query, values);
+};
+
+/**
+ * Stores contents of CSV into the DB
+ * 
+ * @param {Number} assetTypeId ID of the asset type associated with the headers in the CSV
+ * @param {Object} csvJson JSON of data contained in the imported CSV file
+ */
+const storeCSV = async(assetTypeId, csvJson) => {
+    // Get properties associated with the selected asset type
+    const propertyArray = (await findAssetPropTypes(assetTypeId)).rows;
+
+    // Create a property object to be more accessible
+    const properties = {};
+    var i;
+    var property = null;
+    var propertyName = null;
+    for (i = 0; i < propertyArray.length; i++) {
+        property = propertyArray[i];
+        propertyName = property.name;
+        properties[propertyName] = property;
+    }
+
+    // Start processing the JSON of the CSV file
+    var asset;
+    var assetId;
+    var propertyId;
+    var propertyIsRequired;
+    var value;
+    const client = await global.dbPool.connect();
+    try {
+        // Check to see that the CSV has data to store
+        if (csvJson.length === 0) {
+            throw 'The selected CSV file has no data to import.';
+        }
+
+        // Check that asset IDs are specified in the CSV
+        asset = csvJson[0];
+        if (!('asset_id' in asset)) {
+            throw 'The selected CSV file is missing an asset ID column.';
+        }
+
+        // Check that all headers associated with the selected asset type are contained in the CSV
+        for (const propertyName in properties) {
+            if (!(propertyName in asset)) {
+                throw 'The selected CSV file is missing a header (' + propertyName + ')';
+            }
+        }
+
+        // Validate each row of the CSV and add it
+        await utils.db.beginTransaction(client);
+        for (i = 0; i < csvJson.length; i++) {
+            asset = csvJson[i];
+            assetId = asset.asset_id;
+
+            // Check that each row contains an asset ID
+            if (assetId === '') {
+                throw 'The selected CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
+            }
+
+            // Check that the asset exists
+            // TODO in the future - Add new asset to DB instead of throwing error 
+            const checkedAsset = (await findAsset(assetId)).rows;
+            if (checkedAsset.length === 0) {
+                throw 'The selected CSV file contains a row for an asset that is not being tracked (Asset ID '+ assetId + ')';
+            }
+
+            for (const propertyName in asset) {
+                if (propertyName !== 'asset_id') {
+                    // Throw an error if CSV contains a header that is not associated with the selected asset type
+                    if (!(propertyName in properties)) {
+                        throw 'The selected CSV file either contains an empty column, is missing a header, or contains a property that is not being tracked (' + propertyName + ')';
+                    }
+
+                    property = properties[propertyName];
+                    propertyId = property.id;
+                    propertyIsRequired = property.required;
+                    value = asset[propertyName];
+                    let assetProperties = (await findAssetProperty(assetId, propertyId)).rows;
+
+                    // Throw an error if a row fails to contain a value for a property that is required
+                    if (value === '' && propertyIsRequired) {
+                        throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
+                    }
+                    else if (assetProperties.length > 0) {
+                        if (assetProperties[0].value !== value) {
+                            await updateAssetProperty(client, assetId, propertyId, value);
+                        }
+                    }
+                    else {
+                        await createAssetProperty(client, assetId, propertyId, value);
+                    }
+                }
+            }
+        }
+        await utils.db.commitTransaction(client);
+    }
+    catch (error) {
+        // If an error is thrown, undo all DB interactions since the transaction began
+        await utils.db.rollbackTransaction(client);
+        return({success: false, error: error});
+    }
+    finally {
+        client.release();
+    }
+    return({success: true});
+};
+
 module.exports = {
+    findAssetTypes,
+    findAssetPropTypes,
+    findAssetPropsByTypeID,
     find,
-    create
+    create,
+    findAsset,
+    findAssetProperty,
+    createAssetProperty,
+    updateAssetProperty,
+    storeCSV
 };
