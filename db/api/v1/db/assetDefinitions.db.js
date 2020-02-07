@@ -306,7 +306,6 @@ const storeCSV = async(assetTypeId, csvJson) => {
     var propertyIsRequired;
     var value;
     const client = await global.dbPool.connect();
-    let assetProps;
     try {
         // Check to see that the CSV has data to store
         if (csvJson.length === 0) {
@@ -356,7 +355,6 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     propertyIsRequired = property.required;
                     value = asset[propertyName];
                     let assetProperties = (await findAssetProperty(assetId, propertyId)).rows;
-                    assetProps = assetProperties;
 
                     // Throw an error if a row fails to contain a value for a property that is required
                     if (value === '' && propertyIsRequired) {
@@ -378,7 +376,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
     catch (error) {
         // If an error is thrown, undo all DB interactions since the transaction began
         await utils.db.rollbackTransaction(client);
-        return({success: false, error: error, assetProps: assetProps});
+        return({success: false, error: error});
     }
     finally {
         client.release();
