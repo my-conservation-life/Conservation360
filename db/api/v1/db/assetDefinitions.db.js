@@ -259,11 +259,11 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
  * Updates an asset property that is already stored in the DB
  * 
  * @param {*} client Node Postgres client
- * @param {String} newValue new value that will replace the asset property's current value
  * @param {Number} assetId asset ID associated with the asset property
  * @param {Number} propertyId property ID associated with the asset property
+ * @param {String} newValue new value that will replace the asset property's current value
  */
-const updateAssetProperty = async(client, newValue, assetId, propertyId) => {
+const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
 
     let query = `
         UPDATE asset_property 
@@ -363,7 +363,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                         throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
                     }
                     else if (assetProperties.length > 0) {
-                        if (assetProperties[0].value != value) {
+                        if (assetProperties[0].value !== value) {
                             await updateAssetProperty(client, assetId, propertyId, value);
                         }
                     }
