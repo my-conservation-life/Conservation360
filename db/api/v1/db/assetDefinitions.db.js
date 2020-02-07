@@ -306,7 +306,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
     var propertyIsRequired;
     var value;
     const client = await global.dbPool.connect();
-    const assetProps;
+    let assetProps;
     try {
         // Check to see that the CSV has data to store
         if (csvJson.length === 0) {
