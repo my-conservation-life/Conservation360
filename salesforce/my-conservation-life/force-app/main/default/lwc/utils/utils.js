@@ -27,13 +27,15 @@ const post = (url, data) => {
     }).then(handleFetchErrors);
 };
 
-const put = (url, data) => {
+const putCSV = (url, assetTypeId, csvFile) => {
+    // Key-value pairs that represent form fields and corresponding values
+    const formData = new FormData();
+    formData.append('assetTypeId', assetTypeId);
+    formData.append('csv', csvFile);
+
     return fetch(url, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        body: formData
     }).then(handleFetchErrors);
 };
 
@@ -41,5 +43,5 @@ export default {
     URL,
     get,
     post,
-    put
+    putCSV
 };
