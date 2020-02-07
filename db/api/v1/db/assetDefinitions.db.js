@@ -363,7 +363,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                         throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
                     }
                     else if (assetProperties.length > 0) {
-                        if (assetProperties[0].value !== value) {
+                        if (assetProperties[0].value != value) {
                             await updateAssetProperty(client, assetId, propertyId, value);
                         }
                     }
