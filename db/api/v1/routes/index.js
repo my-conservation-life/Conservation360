@@ -12,7 +12,8 @@ const {
     bboxAssets,
     dataTypes,
     geometrySearch,
-    projects
+    projects,
+    temporal
 } = require('../controllers');
 
 // Geometry Searches
@@ -38,6 +39,17 @@ router.get(
     '/assets/geometrySearch/polygon',
     validate(param.body, 'coordinates', type.coordinates, true),
     geometrySearch.polygonFind
+);
+
+router.get(
+    '/assets/properties/temporalSearch',
+    validate(param.query, 'asset_id', type.id),
+    validate(param.query, 'sponsor_id', type.id),
+    validate(param.query, 'project_id', type.id),
+    validate(param.query, 'asset_type_id', type.id),
+    validate(param.query, 'start_date', type.date),
+    validate(param.query, 'end_date', type.date),
+    temporal.temporalSearch
 );
 
 // Assets
