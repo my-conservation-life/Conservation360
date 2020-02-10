@@ -33,6 +33,7 @@ export default class Map extends LightningElement {
         const mapRoot = this.template.querySelector('.map-root');
         this.map = L.map(mapRoot);
         this.map.fitWorld();
+       
     }
 
     /**

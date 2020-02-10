@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { LightningElement } from 'lwc';
 
 import utils from 'c/utils';
@@ -47,6 +48,11 @@ export default class GeoQuery extends LightningElement {
             [-30.06909396443886, 26.102030238912395], 
             [-7.231698708367139, 74.47760116029443]]);
 
+
+        // Locks the map region to one earth.
+        map.setMaxBounds([[-90,-180],[90,180]]);
+
+
         // Implement map "on click" handler
         // If we could keep a reference to the map via a class variable (this.map = event.detail) this would be a lot cleaner
         // to bad this map doesn't wish to cooperate at the time being.
@@ -78,33 +84,14 @@ export default class GeoQuery extends LightningElement {
 
             // If you zoom out far enough the world map will start to repeat accross the screan and leaflet 
             // will return longitudes like 190 degrees for what would technicall be -170
-            
-            if(coord.lat >= 0){ //Works for positive
-                this.mlat = (((coord.lat + 180) % 360) - 180); //TODO
-            }
-            else if(coord.lat < 0){
-                let absmlat = Math.abs(coord.lng);
-                console.log(`YOLO: ${absmlat}`);
-                this.mlat = (((absmlat + 180) % 360) - 180);
-                this.mlat*=-1;
-            }
-          
-            // let mlat = (((coord.lat + 90) % 180) - 90);
-            
-            if(coord.lng >= 0){ //Works for positive
-                this.mlon = (((coord.lng + 180) % 360) - 180); //TODO
-            }
-            else if(coord.lng < 0){
-                let absmlon = Math.abs(coord.lng);
-                this.mlon = (((absmlon + 180) % 360) - 180);
-                this.mlon*=-1;
-            }
+            let mlat = (((coord.lat + 90) % 180) - 90);
+            let mlon = (((coord.lng + 180) % 360) - 180); //TODO
 
             // Remember where the user actually clicked so we can put the markers in the correct spot
             let latOff = Math.trunc(coord.lat / 90);
             let lonOff = Math.trunc(coord.lng / 180);
 
-            console.log(`Translates to lat: ${this.mlat} lat offset: ${latOff} lon: ${this.mlon} lon offset: ${lonOff}`);
+            console.log(`Translates to lat: ${mlat} lat offset: ${latOff} lon: ${mlon} lon offset: ${lonOff}`);
 
             // radius in meters
             let rad = 100000;
@@ -121,8 +108,8 @@ export default class GeoQuery extends LightningElement {
             // where the user clicked... this should go in a controller module and is only
             // here because I was hacking this together for a demo
             const distanceURL = new URL(DISTANCE_URL);
-            distanceURL.searchParams.append('latitude', `${this.mlat}`);
-            distanceURL.searchParams.append('longitude', `${this.mlon}`);
+            distanceURL.searchParams.append('latitude', `${mlat}`);
+            distanceURL.searchParams.append('longitude', `${mlon}`);
             distanceURL.searchParams.append('radiusMeters', `${rad}`);
 
             console.log('Getting: ' + distanceURL.href);
