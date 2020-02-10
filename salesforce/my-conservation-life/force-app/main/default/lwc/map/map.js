@@ -34,7 +34,8 @@ export default class Map extends LightningElement {
         this.map = L.map(mapRoot);
         this.map.fitWorld();
         L.control.scale().addTo(this.map);
-        
+        this.map.setMinZoom(2);
+        this.map.setMaxZoom(8);
     }
 
     /**
