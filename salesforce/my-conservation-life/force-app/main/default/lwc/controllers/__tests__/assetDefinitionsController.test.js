@@ -15,7 +15,7 @@ describe('assetDefinitions.findAssetTypes', () => {
     });
 
     it('finds all asset types stored in the DB', async () => {
-        const assetTypes = await assetDefinitions.findAssetTypes();
+        const assetTypes = await assetDefinitions.fetchAssetTypes();
         expect(fetch.mock.calls[0][0]).toBe(URL);
         expect(assetTypes).toEqual(EXPECTED_ASSET_TYPES);
     });
