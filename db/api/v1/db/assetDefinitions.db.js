@@ -34,6 +34,7 @@ const findAssetTypes = async () => {
             description
         FROM
             asset_type
+        ORDER BY id
     `;
 
     return global.dbPool.query(query);
