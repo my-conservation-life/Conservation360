@@ -33,7 +33,8 @@ export default class Map extends LightningElement {
         const mapRoot = this.template.querySelector('.map-root');
         this.map = L.map(mapRoot);
         this.map.fitWorld();
-       
+        L.control.scale().addTo(this.map);
+        
     }
 
     /**
@@ -46,7 +47,9 @@ export default class Map extends LightningElement {
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
                 attribution: '&copy; ' + mapLink + ' Contributors',
-                maxZoom: 18
+                //minZoom: 4,
+                maxZoom: 5,
+                maxNativeZoom: 5
             })
             .addTo(this.map);
     }

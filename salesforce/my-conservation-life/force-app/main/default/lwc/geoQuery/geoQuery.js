@@ -48,11 +48,10 @@ export default class GeoQuery extends LightningElement {
             [-30.06909396443886, 26.102030238912395], 
             [-7.231698708367139, 74.47760116029443]]);
 
-
-        // Locks the map region to one earth.
+        // Locks the map region to one earth (prevents dragging)
         map.setMaxBounds([[-90,-180],[90,180]]);
 
-
+        
         // Implement map "on click" handler
         // If we could keep a reference to the map via a class variable (this.map = event.detail) this would be a lot cleaner
         // to bad this map doesn't wish to cooperate at the time being.
