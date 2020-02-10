@@ -85,14 +85,14 @@ describe('GET assetTypes', () => {
             .get('/api/v1/assetTypes')
             .expect(200)
             .then((res) => {
-                expect(res.body).toEqual(
+                expect(res.body.rows).toEqual(
                     expect.arrayContaining([
                         expect.objectContaining(EXPECTED_ASSET_TYPE1),
                         expect.objectContaining(EXPECTED_ASSET_TYPE2),
                         expect.objectContaining(EXPECTED_ASSET_TYPE3)
                     ])
                 );
-                expect(res.body).toHaveLength(3);
+                expect(res.body.rows).toHaveLength(3);
             });
     });
 });

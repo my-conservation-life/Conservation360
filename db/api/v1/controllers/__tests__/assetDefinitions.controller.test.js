@@ -1,4 +1,4 @@
-const { findAssetTypes } = require('../assetDefinitions.controller');
+const { getAssetTypes } = require('../assetDefinitions.controller');
 const assetDefinitionsDb = require('../../db/assetDefinitions.db');
 
 describe('assetDefinitions.controller.getAssetTypes', () => {
@@ -22,8 +22,8 @@ describe('assetDefinitions.controller.getAssetTypes', () => {
     });
 
     it('returns all asset types in DB', async () => {
-        await findAssetTypes(req, res, next);
-        expect(res.json).toHaveBeenCalledWith(expectedAssetTypes);
+        await getAssetTypes(req, res, next);
+        expect(res.json).toHaveBeenCalledWith(data);
     });
 });
 
