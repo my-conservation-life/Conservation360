@@ -401,6 +401,7 @@ module.exports = {
     findAsset,
     findAssetProperty,
     createAssetProperty,
+    addAssetPropertyToHistory,
     updateAssetProperty,
     storeCSV
 };

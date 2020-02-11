@@ -1,8 +1,8 @@
 /**
  * Tests for Asset Definitions database layer
  */
-const { findAssetTypes, findAssetPropTypes, findAsset, 
-    findAssetProperty, createAssetProperty, updateAssetProperty } = require('../assetDefinitions.db');
+const { findAssetTypes, findAssetPropTypes, findAsset, findAssetProperty, 
+    createAssetProperty, addAssetPropertyToHistory, updateAssetProperty } = require('../assetDefinitions.db');
 
 describe('assetDefinitions.db.findAssetTypes', () => {
     let rows;
@@ -99,6 +99,31 @@ describe('assetDefinitions.db.createAssetProperty', () => {
         const value = 1;
         await createAssetProperty(client, assetId, propertyId, value);
         expect(query).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe('assetDefinitions.db.addAssetPropertyToHistory', () => {
+
+    let rows;
+    let query;
+    let release;
+    let client;
+
+    beforeEach(() => {
+        rows = [{}];
+        query = jest.fn(async () => ({ rows }));
+        release = jest.fn(() => { return undefined; });
+        client = { query, release };
+        global.dbPool.connect = jest.fn(async () => { return client; });
+    });
+
+    it('adds asset properties to the history table', async() => {
+        const assetId = 1;
+        const propertyId = 1;
+        const value = 1;
+        const date = new Date();
+        await addAssetPropertyToHistory(client, assetId, propertyId, value, date);
+        expect(query).toHaveBeenCalledTimes(1);        
     });
 });
 
