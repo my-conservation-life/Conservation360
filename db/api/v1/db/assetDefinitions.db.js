@@ -344,6 +344,9 @@ const storeCSV = async(assetTypeId, csvJson) => {
             if (checkedAsset.length === 0) {
                 throw 'The selected CSV file contains a row for an asset that is not being tracked (Asset ID '+ assetId + ')';
             }
+            if (checkedAsset[0].asset_type_id != assetTypeId) {
+                throw 'The selected CSV file contains an asset of a different asset type than the one selected (Asset ID '+ assetId + ')';
+            }
 
             for (const propertyName in asset) {
                 if (propertyName !== 'asset_id') {
