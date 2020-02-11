@@ -176,6 +176,85 @@ const parseCoordinates = (coordinateList) => {
     return ParseResult.success(coordinates);
 };
 
+
+// Using GeoJSON as a template https://tools.ietf.org/html/rfc7946
+const parseGeometry = (geometry) => {
+    if (typeof geometry === 'undefined' || !geometry)
+        return ParseResult.failure('\'geometry\' was undefined');
+
+    if (typeof geometry.type === 'undefined' || !geometry.type)
+        return ParseResult.failure('geometry \'type\' was undefined');
+
+    if (!Array.isArray(geometry.coordinates))
+        return ParseResult.failure('geometry must have \'coordinates\' with at least one [lon, lat] or [[lon, lat], ...]');
+
+    // Types are case sensitive
+    switch (geometry.type) {
+    case 'Circle': 
+        return parseCircleGeometry(geometry);
+    case 'Polygon': 
+        return parsePolygonGeometry(geometry);
+    default:
+        return ParseResult.failure('geometry \'type\' is case sensitive and can be (\'Circle\', \'Polygon\')');
+    }
+};
+
+// We are assuming that this is a geometry of type 'Circle' and has coordinates
+const parseCircleGeometry = (geometry) => {
+    if (geometry.coordinates.length != 2)
+        return ParseResult.failure('Circle geometry \'coordinates\' is formatted [lat, lon]');
+    
+    if (typeof geometry.radius === 'undefined' || !geometry.radius)
+        return ParseResult.failure('Circle geometry must have a \'radius\'');
+
+
+    const lon = parseFloat(geometry.coordinates[0]);
+    const lat = parseFloat(geometry.coordinates[1]);
+
+    if (isNaN(lon) || isNaN(lat))
+        return ParseResult.failure('error parsing coordinate values');
+
+    const radius = parseFloat(geometry.radius);
+
+    if (isNaN(radius))
+        return ParseResult.failure('error parsing radius');
+
+    geometry.radius = radius;
+    geometry.coordinates = [lon, lat];
+
+    return ParseResult.success(geometry);
+};
+
+// We are assuming that this is a geometry of type 'Polygon' and has coordinates
+const parsePolygonGeometry = (geometry) => {
+    if (geometry.coordinates.length < 4)
+        return ParseResult.failure('For type "Polygon", the "coordinates" member MUST be an array of 4 or more coordinate arrays.');
+
+    let lat = 0;
+    let lon = 0;
+
+    var i;
+    var coordArray;
+    var parsedCoordinates = [];
+    for (i = 0; i < geometry.coordinates; i++) {
+        coordArray = geometry.coordinates[i];
+        lon = parseFloat(coordArray[0]);
+        lat = parseFloat(coordArray[1]);
+
+        if (!isNaN(lon) && validLongitude(lon)
+            && !isNaN(lat) && validLatitude(lat)) {
+            parsedCoordinates.push([lon, lat]);
+        }
+        else {
+            return ParseResult.failure('Unable to parse coordinate. Please format coordinate arrays like [lon, lat]');
+        }
+    }
+
+    geometry.coordinates = parsedCoordinates;
+
+    return ParseResult.success(geometry);
+};
+
 /**
  * Parses a date from a string
  * 
@@ -184,7 +263,7 @@ const parseCoordinates = (coordinateList) => {
  */
 const parseDate = (dateString) => {
     // Strictly parse the date
-    const dateFmt = 'YYYY-MM-DD';
+    const dateFmt = utils.shared.dateStringFormat;
     const m = moment(dateString, dateFmt, true);
     
     if (!m.isValid()) {
@@ -391,6 +470,7 @@ module.exports = {
         assetDefinition: parseAssetDefinition,
         coordinates: parseCoordinates,
         date: parseDate,
+        geometry: parseGeometry,
         latitude: parseLatitude,
         longitude: parseLongitude,
         project: parseProject,
