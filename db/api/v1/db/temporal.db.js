@@ -3,13 +3,15 @@ const moment = require('moment');
 
 const QUERY_HISTORY = `
     SELECT 
-        asset.id        as asset_id,
-        asset_type.name as asset_type
-        property.name   as property,
-        history.value   as value,
-        history.date    as date,
-        sponsor.name    as sponsor_name,
-        project.name    as project_name
+        asset.id        AS asset_id,
+        asset_type.name AS asset_type
+        property.name   AS property,
+        history.value   AS value,
+        history.date    AS date,
+        sponsor.name    AS sponsor_name,
+        project.name    AS project_name,
+        ST_X(asset.location) AS longitude,
+        ST_Y(asset.location) AS latitude
     FROM
         asset
         JOIN history    ON asset.id = history.asset_id
@@ -120,7 +122,11 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
         'properties' : [],
         'sponsor_name': '',
         'project_name': '',
-        'date': ''
+        'date': '',
+        'geometry' : {
+            'type' : 'Point',
+            'coordinates' : [-1, -1]
+        }
     };
 
     // Should be ordered by asset id then ordered by date
@@ -138,6 +144,8 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
             temporal_asset['sponsor_name'] = row.sponsor_name;
             temporal_asset['project_name'] = row.project_name;
             temporal_asset['date']         = row.date;
+            temporal_asset['geometry']['coordinates'][0] = row.longitude; 
+            temporal_asset['geometry']['coordinates'][1] = row.latitude;
         }
 
         temporal_property['property'] = row.property;
