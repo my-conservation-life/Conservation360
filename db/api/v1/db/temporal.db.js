@@ -1,15 +1,15 @@
 const utils = require('../utils');
 const moment = require('moment');
 
-
 const QUERY_HISTORY = `
     SELECT 
-        asset.id       as asset_id,
-        property.name  as property,
-        history.value  as value,
-        history.date   as date,
-        sponsor.name   as sponsor_name,
-        project.name   as project_name
+        asset.id        as asset_id,
+        asset_type.name as asset_type
+        property.name   as property,
+        history.value   as value,
+        history.date    as date,
+        sponsor.name    as sponsor_name,
+        project.name    as project_name
     FROM
         asset
         JOIN history    ON asset.id = history.asset_id
@@ -19,6 +19,12 @@ const QUERY_HISTORY = `
         JOIN sponsor    ON project.sponsor_id = sponsor.id
     WHERE
         TRUE
+`;
+
+const ORDER_BY = `
+    ORDER BY
+        asset.id ASC,
+        history.date DESC
 `;
 
 const D_WITHIN = `
@@ -102,8 +108,44 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
         }
     }
 
+    query += ORDER_BY;
+
     const result = await global.dbPool.query(query, values);
-    return result.rows;
+
+    var temporal_results = [];
+    var temporal_property = {'property' : '', 'value': ''};
+    var temporal_asset = {
+        'asset_id' : -1,
+        'asset_type' : '',
+        'properties' : [],
+        'sponsor_name': '',
+        'project_name': '',
+        'date': ''
+    };
+
+    // Should be ordered by asset id then ordered by date
+    var row = {};
+    for (var i = 0; i < result.rows; i++) {
+        row = result.rows[i];
+        // Start a new asset record
+        if (row.asset_id != temporal_asset['asset_id'] || row.date != temporal_asset['date']) {
+            if (i != 0)
+                temporal_results.push(temporal_asset);
+
+            temporal_asset['asset_id']     = row.asset_id;
+            temporal_asset['asset_type']   = row.asset_type;
+            temporal_asset['properties']   = [];
+            temporal_asset['sponsor_name'] = row.sponsor_name;
+            temporal_asset['project_name'] = row.project_name;
+            temporal_asset['date']         = row.date;
+        }
+
+        temporal_property['property'] = row.property;
+        temporal_property['value']    = row.value;
+        temporal_asset['properties'].push(temporal_property);
+    }
+
+    return temporal_results;
 };
 
 module.exports = { 
