@@ -252,6 +252,12 @@ describe('validate.type.date', () => {
     });
 });
 
+describe('validate.type.geometry', () => {
+    it('TODO: NEEDS TESTS', () => {
+        expect(false).toBeTruthy();
+    });
+});
+
 describe('validate.type.latitude', () => {
     it('rejects strings', () => {
         const result = type.latitude('hello world');

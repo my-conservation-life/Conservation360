@@ -43,12 +43,13 @@ router.get(
 
 router.get(
     '/assets/properties/temporalSearch',
-    validate(param.query, 'asset_id', type.id),
-    validate(param.query, 'sponsor_id', type.id),
-    validate(param.query, 'project_id', type.id),
-    validate(param.query, 'asset_type_id', type.id),
-    validate(param.query, 'start_date', type.date),
-    validate(param.query, 'end_date', type.date),
+    validate(param.body, 'asset_id', type.id),
+    validate(param.body, 'sponsor_id', type.id),
+    validate(param.body, 'project_id', type.id),
+    validate(param.body, 'asset_type_id', type.id),
+    validate(param.body, 'start_date', type.date),
+    validate(param.body, 'end_date', type.date),
+    validate(param.body, 'geometry', type.geometry, true),
     temporal.temporalSearch
 );
 

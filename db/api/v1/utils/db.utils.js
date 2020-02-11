@@ -60,6 +60,17 @@ const makeLineString = (coordinatesList) => {
     return `LINESTRING(${coordPairs.join(',')})`;
 };
 
+const makeLineStringFromGeoJsonCoordinates = (coordinates) => {
+
+    let coordPairs = [];
+
+    coordinates.forEach(p => {
+        coordinates.push(makeLineStringHelper(p[0], p[1]));
+    });
+
+    return `LINESTRING(${coordPairs.join(',')})`;
+};
+
 /**
  * Rollsback a SQL transaction
  * 
@@ -77,5 +88,6 @@ module.exports = {
     beginTransaction,
     commitTransaction,
     rollbackTransaction,
-    makeLineString
+    makeLineString,
+    makeLineStringFromGeoJsonCoordinates
 };
