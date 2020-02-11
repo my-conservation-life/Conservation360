@@ -34,6 +34,7 @@ const findAssetTypes = async () => {
             description
         FROM
             asset_type
+        ORDER BY id
     `;
 
     return global.dbPool.query(query);
@@ -240,6 +241,22 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
     return client.query(query, values);
 };
 
+const addAssetPropertyToHistory = async (client, assetId, propertyId, value, date) => {
+    // Generate the SQL command
+    const query = `
+        INSERT INTO history
+            (asset_id, property_id, value, date)
+        VALUES
+            ($1, $2, $3, $4)
+    `;
+
+    // Generate the values to subsitute into the SQL command
+    const values = [assetId, propertyId, value, date];
+
+    // Execute the SQL command
+    return client.query(query, values);
+};
+
 /**
  * Updates an asset property that is already stored in the DB
  * 
@@ -341,16 +358,19 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     value = asset[propertyName];
                     let assetProperties = (await findAssetProperty(assetId, propertyId)).rows;
 
+                    let date = new Date();
                     // Throw an error if a row fails to contain a value for a property that is required
                     if (value === '' && propertyIsRequired) {
                         throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
                     }
                     else if (assetProperties.length > 0) {
                         if (assetProperties[0].value !== value) {
+                            await addAssetPropertyToHistory(client, assetId, propertyId, value, date);
                             await updateAssetProperty(client, assetId, propertyId, value);
                         }
                     }
                     else {
+                        await addAssetPropertyToHistory(client, assetId, propertyId, value, date);
                         await createAssetProperty(client, assetId, propertyId, value);
                     }
                 }
