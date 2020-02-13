@@ -114,71 +114,32 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
 
     const result = await global.dbPool.query(query, values);
 
-    // var temporal_results = [];
-    // // Should be ordered by asset id then ordered by date
-    // var last_asset_id = -1;
-    // var last_asset_date = '';
-    // var row = {};
-    // for (var i = 0; i < result.rows.length; i++) {
-    //     row = result.rows[i];
-    //     // Start a new asset record
-    //     if (last_asset_id != row.asset_id || !last_asset_date.localeCompare(row.date.toString())) {
-    //         last_asset_id = row.asset_id;
-    //         last_asset_date = row.date.toString();
-
-    //         temporal_results.push({
-    //             'asset_id' : row.asset_id,
-    //             'asset_type' : row.asset_type,
-    //             'properties' : [],
-    //             'sponsor_name': row.sponsor_name,
-    //             'project_name': row.project_name,
-    //             'date': row.date,
-    //             'geometry' : {
-    //                 'type' : 'Point',
-    //                 'coordinates' : [row.longitude, row.latitude]
-    //             }});
-    //     }
-
-    //     temporal_results[temporal_results.length - 1]['properties'].push({'property': row.property, 'value': row.value});
-    // }
-
     var temporal_results = [];
-    var temporal_property = {'property' : '', 'value': ''};
-    var temporal_asset = {
-        'asset_id' : -1,
-        'asset_type' : '',
-        'properties' : [],
-        'sponsor_name': '',
-        'project_name': '',
-        'date': '',
-        'geometry' : {
-            'type' : 'Point',
-            'coordinates' : [-1, -1]
-        }
-    };
-
     // Should be ordered by asset id then ordered by date
+    var last_asset_id = -1;
+    var last_asset_date = '';
     var row = {};
     for (var i = 0; i < result.rows.length; i++) {
         row = result.rows[i];
         // Start a new asset record
-        if (row.asset_id != temporal_asset['asset_id'] || !temporal_asset['date'].localeCompare(row.date.toString())) {
-            if (i != 0)
-                temporal_results.push(temporal_asset);
+        if (last_asset_id != row.asset_id || !last_asset_date.localeCompare(row.date.toString())) {
+            last_asset_id = row.asset_id;
+            last_asset_date = row.date.toString();
 
-            temporal_asset['asset_id']     = row.asset_id;
-            temporal_asset['asset_type']   = row.asset_type;
-            temporal_asset['properties']   = [];
-            temporal_asset['sponsor_name'] = row.sponsor_name;
-            temporal_asset['project_name'] = row.project_name;
-            temporal_asset['date']         = row.date.toString();
-            temporal_asset['geometry']['coordinates'][0] = row.longitude; 
-            temporal_asset['geometry']['coordinates'][1] = row.latitude;
+            temporal_results.push({
+                'asset_id' : row.asset_id,
+                'asset_type' : row.asset_type,
+                'properties' : [],
+                'sponsor_name': row.sponsor_name,
+                'project_name': row.project_name,
+                'date': row.date,
+                'geometry' : {
+                    'type' : 'Point',
+                    'coordinates' : [row.longitude, row.latitude]
+                }});
         }
 
-        temporal_property['property'] = row.property;
-        temporal_property['value']    = row.value;
-        temporal_asset['properties'].push(temporal_property);
+        temporal_results[temporal_results.length - 1]['properties'].push({'property': row.property, 'value': row.value});
     }
 
     return temporal_results;
