@@ -124,13 +124,16 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
         row = result.rows[i];
         // Start a new asset record
         if (row.asset_id != last_asset_id || row.date != last_asset_date) {
+            last_asset_id = row.asset_id;
+            last_asset_date = row.date;
+
             temporal_results.push({
                 'asset_id' : row.asset_id,
                 'asset_type' : row.asset_type,
                 'properties' : [],
                 'sponsor_name': row.sponsor_name,
                 'project_name': row.project_name,
-                'date': '',
+                'date': row.date,
                 'geometry' : {
                     'type' : 'Point',
                     'coordinates' : [row.longitude, row.latitude]
