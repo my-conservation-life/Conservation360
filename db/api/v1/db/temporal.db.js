@@ -131,7 +131,7 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
 
     // Should be ordered by asset id then ordered by date
     var row = {};
-    for (var i = 0; i < result.rows; i++) {
+    for (var i = 0; i < result.rows.length; i++) {
         row = result.rows[i];
         // Start a new asset record
         if (row.asset_id != temporal_asset['asset_id'] || row.date != temporal_asset['date']) {
