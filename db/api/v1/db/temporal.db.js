@@ -56,7 +56,7 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
     let values = [];
 
     switch (geometry.type) {
-    case 'Cirlce':
+    case 'Circle':
         values.push(geometry.coordinates[0]);
         values.push(geometry.coordinates[1]);
         values.push(geometry.radius);
@@ -118,12 +118,12 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
     var temporal_results = [];
     // Should be ordered by asset id then ordered by date
     var last_asset_id = -1;
-    var last_asset_date = '-1';
+    var last_asset_date = '';
     var row = {};
     for (var i = 0; i < result.rows.length; i++) {
         row = result.rows[i];
         // Start a new asset record
-        if (last_asset_id !== row.asset_id || !last_asset_date.localeCompare(row.date)) {
+        if (last_asset_id != row.asset_id || last_asset_date != row.date) {
             last_asset_id = row.asset_id;
             last_asset_date = row.date;
 
