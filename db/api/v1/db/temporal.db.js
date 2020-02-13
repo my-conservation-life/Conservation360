@@ -117,13 +117,13 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
 
     var temporal_results = [];
     // Should be ordered by asset id then ordered by date
-    var last_asset_id = '';
-    var last_asset_date = '';
+    var last_asset_id = '-1';
+    var last_asset_date = '-1';
     var row = {};
     for (var i = 0; i < result.rows.length; i++) {
         row = result.rows[i];
         // Start a new asset record
-        if (!last_asset_id.localeCompare(row.asset_id) || !last_asset_date.localeCompare(row.date)) {
+        if (!last_asset_id.localeCompare(row.asset_id.toString()) || !last_asset_date.localeCompare(row.date.toString())) {
             last_asset_id = row.asset_id;
             last_asset_date = row.date;
 
