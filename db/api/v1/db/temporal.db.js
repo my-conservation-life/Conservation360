@@ -114,8 +114,6 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
 
     const result = await global.dbPool.query(query, values);
 
-    return result.rows;
-
     var temporal_results = [];
     var temporal_property = {'property' : '', 'value': ''};
     var temporal_asset = {
