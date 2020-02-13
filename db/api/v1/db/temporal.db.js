@@ -148,9 +148,9 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
             temporal_asset['geometry']['coordinates'][1] = row.latitude;
         }
 
-        temporal_property['property'] = row.property;
-        temporal_property['value']    = row.value;
-        temporal_asset['properties'].push(temporal_property);
+        // temporal_property['property'] = row.property;
+        // temporal_property['value']    = row.value;
+        temporal_asset['properties'].push({'property' : row.property, 'value': row.value});
     }
 
     return temporal_results;
