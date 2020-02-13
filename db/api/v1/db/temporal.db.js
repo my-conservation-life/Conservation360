@@ -60,7 +60,7 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
         values.push(geometry.coordinates[0]);
         values.push(geometry.coordinates[1]);
         values.push(geometry.radius);
-        query += 'AND ' + D_WITHIN + ' ';
+        query = query + 'AND ' + D_WITHIN + ' ';
         break;
     case 'Polygon':
         values.push(utils.db.makeLineStringFromGeoJsonCoordinates(geometry.coordinates));
