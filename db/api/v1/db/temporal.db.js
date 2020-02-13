@@ -55,6 +55,8 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
     let query = QUERY_HISTORY;
     let values = [];
 
+    return geometry;
+
     switch (geometry.type) {
     case 'Circle':
         values.push(geometry.coordinates[0]);
