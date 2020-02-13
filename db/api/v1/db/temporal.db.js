@@ -123,7 +123,7 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
     for (var i = 0; i < result.rows.length; i++) {
         row = result.rows[i];
         // Start a new asset record
-        if (!last_asset_id.localeCompare(row.asset_id) || last_asset_date.localeCompare(row.date)) {
+        if (!last_asset_id.localeCompare(row.asset_id) || !last_asset_date.localeCompare(row.date)) {
             last_asset_id = row.asset_id;
             last_asset_date = row.date;
 
