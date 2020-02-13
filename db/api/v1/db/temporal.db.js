@@ -30,7 +30,7 @@ const ORDER_BY = `
 `;
 
 const D_WITHIN = `
-    ST_DWithin(ST_SetSRID(a.location, 4326)::geography, 
+    ST_DWithin(ST_SetSRID(asset.location, 4326)::geography, 
         ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography,
         $3)
 `;
@@ -55,14 +55,12 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
     let query = QUERY_HISTORY;
     let values = [];
 
-    return geometry;
-
     switch (geometry.type) {
     case 'Circle':
         values.push(geometry.coordinates[0]);
         values.push(geometry.coordinates[1]);
         values.push(geometry.radius);
-        query = query + ' AND ' + D_WITHIN + ' ';
+        query += ' AND ' + D_WITHIN + ' ';
         break;
     case 'Polygon':
         values.push(utils.db.makeLineStringFromGeoJsonCoordinates(geometry.coordinates));
