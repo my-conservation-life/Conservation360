@@ -114,36 +114,33 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
 
     const result = await global.dbPool.query(query, values);
 
-    return result.rows;
+    var temporal_results = [];
+    // Should be ordered by asset id then ordered by date
+    var last_asset_id = -1;
+    var last_asset_date = '';
+    var row = {};
+    for (var i = 0; i < result.rows.length; i++) {
+        row = result.rows[i];
+        // Start a new asset record
+        if (last_asset_id != row.asset_id || last_asset_date.localeCompare(row.date.toString())) {
+            last_asset_id = row.asset_id;
+            last_asset_date = row.date.toString();
 
+            temporal_results.push({
+                'asset_id' : row.asset_id,
+                'asset_type' : row.asset_type,
+                'properties' : [],
+                'sponsor_name': row.sponsor_name,
+                'project_name': row.project_name,
+                'date': row.date,
+                'geometry' : {
+                    'type' : 'Point',
+                    'coordinates' : [row.longitude, row.latitude]
+                }});
+        }
 
-    // var temporal_results = [];
-    // // Should be ordered by asset id then ordered by date
-    // var last_asset_id = -1;
-    // var last_asset_date = '';
-    // var row = {};
-    // for (var i = 0; i < result.rows.length; i++) {
-    //     row = result.rows[i];
-    //     // Start a new asset record
-    //     if (last_asset_id != row.asset_id || last_asset_date != row.date) {
-    //         last_asset_id = row.asset_id;
-    //         last_asset_date = row.date;
-
-    //         temporal_results.push({
-    //             'asset_id' : row.asset_id,
-    //             'asset_type' : row.asset_type,
-    //             'properties' : [],
-    //             'sponsor_name': row.sponsor_name,
-    //             'project_name': row.project_name,
-    //             'date': row.date,
-    //             'geometry' : {
-    //                 'type' : 'Point',
-    //                 'coordinates' : [row.longitude, row.latitude]
-    //             }});
-    //     }
-
-    //     temporal_results[temporal_results.length - 1]['properties'].push({'property': row.property, 'value': row.value});
-    // }
+        temporal_results[temporal_results.length - 1]['properties'].push({'property': row.property, 'value': row.value});
+    }
 
     // var temporal_results = [];
     // var temporal_property = {'property' : '', 'value': ''};
