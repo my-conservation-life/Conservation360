@@ -4,7 +4,7 @@ const moment = require('moment');
 const QUERY_HISTORY = `
     SELECT 
         asset.id        AS asset_id,
-        asset_type.name AS asset_type
+        asset_type.name AS asset_type,
         property.name   AS property,
         history.value   AS value,
         history.date    AS date,
@@ -113,6 +113,8 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
     query += ORDER_BY;
 
     const result = await global.dbPool.query(query, values);
+
+    return result.rows;
 
     var temporal_results = [];
     var temporal_property = {'property' : '', 'value': ''};
