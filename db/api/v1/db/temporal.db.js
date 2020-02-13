@@ -60,29 +60,29 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
         values.push(geometry.coordinates[0]);
         values.push(geometry.coordinates[1]);
         values.push(geometry.radius);
-        query = query + 'AND ' + D_WITHIN + ' ';
+        query = query + ' AND ' + D_WITHIN + ' ';
         break;
     case 'Polygon':
         values.push(utils.db.makeLineStringFromGeoJsonCoordinates(geometry.coordinates));
-        query += 'AND ' + POLYGON_WITHIN + ' ';
+        query += ' AND ' + POLYGON_WITHIN + ' ';
         break;
     }
 
     if ((typeof asset_id !== 'undefined') && (asset_id > 0)) {
         values.push(asset_id);
-        query += `AND asset.id = $${values.length}` + ' ';
+        query += ` AND asset.id = $${values.length}` + ' ';
     }
     if ((typeof sponsor_id !== 'undefined') && (sponsor_id > 0)) {
         values.push(sponsor_id);
-        query += query + `AND sponsor.id = $${values.length}` + ' ';
+        query += query + ` AND sponsor.id = $${values.length}` + ' ';
     }
     if ((typeof project_id !== 'undefined') && (project_id > 0)) {
         values.push(project_id);
-        query += `AND project.id = $${values.length}` + ' ';
+        query += ` AND project.id = $${values.length}` + ' ';
     }
     if ((typeof asset_type_id !== 'undefined') && (asset_type_id > 0)) {
         values.push(asset_type_id);
-        query += `AND asset_type.id = $${values.length}` + ' ';
+        query += ` AND asset_type.id = $${values.length}` + ' ';
     }
     if((typeof start_date !== 'undefined') || (typeof end_date !== 'undefined')) {
         const has_start_date = (typeof start_date !== 'undefined');
@@ -94,18 +94,18 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
                 const idx_start = values.length;
                 values.push(end_date.format(utils.shared.dateStringFormat()));
                 const idx_end = values.length;
-                query += `AND history.date BETWEEN $${idx_start} AND $${idx_end}` + ' ';
+                query += ` AND history.date BETWEEN $${idx_start} AND $${idx_end}` + ' ';
             }
 
         } else if (has_start_date) {
             if(start_date.isValid()) {
                 values.push(start_date.format(utils.shared.dateStringFormat()));
-                query += `AND history.date >= $${values.length}` + ' ';
+                query += ` AND history.date >= $${values.length}` + ' ';
             }
         } else if (has_end_date) {
             if(end_date.isValid()){
                 values.push(end_date.format(utils.shared.dateStringFormat()));
-                query += `AND history.date <= $${values.length}` + ' ';
+                query += ` AND history.date <= $${values.length}` + ' ';
             }
         }
     }
