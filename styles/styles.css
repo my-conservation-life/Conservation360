@@ -36,6 +36,14 @@ a {
     min-width: 180px;
 }
 
+#trello {
+    display: block;
+    max-width: 20%;
+    height: auto;
+    margin: auto;
+    min-width: 180px;
+}
+
 #info {
     display: block;
     margin: auto;
