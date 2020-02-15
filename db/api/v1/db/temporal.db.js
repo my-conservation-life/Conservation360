@@ -127,22 +127,25 @@ const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, as
             last_asset_date = row.date.toString();
 
             temporal_results.push({
-                'asset_id' : row.asset_id,
-                'asset_type' : row.asset_type,
-                'properties' : [],
-                'sponsor_name': row.sponsor_name,
-                'project_name': row.project_name,
-                'date': row.date,
+                'type': 'Feature',
                 'geometry' : {
                     'type' : 'Point',
                     'coordinates' : [row.longitude, row.latitude]
+                },
+                'properties': {
+                    'asset_id' : row.asset_id,
+                    'asset_type' : row.asset_type,
+                    'asset_properties' : [],
+                    'sponsor_name': row.sponsor_name,
+                    'project_name': row.project_name,
+                    'date': row.date,
                 }});
         }
 
-        temporal_results[temporal_results.length - 1]['properties'].push({'property': row.property, 'value': row.value});
+        temporal_results[temporal_results.length - 1]['asset_properties'].push({'property': row.property, 'value': row.value});
     }
 
-    return temporal_results;
+    return {'type': 'FeatureCollection', 'features' : temporal_results};
 };
 
 module.exports = { 
