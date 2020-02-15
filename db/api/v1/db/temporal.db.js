@@ -142,7 +142,7 @@ const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, as
                 }});
         }
 
-        temporal_results[temporal_results.length - 1]['asset_properties'].push({'property': row.property, 'value': row.value});
+        temporal_results[temporal_results.length - 1]['properties']['asset_properties'].push({'property': row.property, 'value': row.value});
     }
 
     return {'type': 'FeatureCollection', 'features' : temporal_results};
