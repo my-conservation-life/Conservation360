@@ -120,7 +120,7 @@ const recursiveExtractBodyParamHelper = (next, paramHeirarchy) => {
         return next;
 
     next = next[paramHeirarchy.shift()];
-    return recursiveExtractBodyParamHelper[next, paramHeirarchy];
+    return recursiveExtractBodyParamHelper(next, paramHeirarchy);
 };
 
 /**
