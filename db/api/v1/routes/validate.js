@@ -263,7 +263,7 @@ const parsePolygonGeometry = (geometry) => {
  */
 const parseDate = (dateString) => {
     // Strictly parse the date
-    const dateFmt = utils.shared.dateStringFormat;
+    const dateFmt = utils.shared.dateStringFormat();
     const m = moment(dateString, dateFmt, true);
     
     if (!m.isValid()) {
