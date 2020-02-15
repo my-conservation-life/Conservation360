@@ -43,9 +43,9 @@ const POLYGON_WITHIN = `
  * 
  * @param {geometry} geometry - a GeoJson geometry
  * @param {number} asset_id - A specific asset's id
- * @param {number} sponsor_name - A sponsor's id
- * @param {number} project_name - A projects's id
- * @param {number} asset_type_name - An asset type's id
+ * @param {string} sponsor_name - A sponsor's id
+ * @param {string} project_name - A projects's id
+ * @param {string} asset_type_name - An asset type's id
  * @param {moment} start_date - A temporal lower bound of the history search
  * @param {moment} end_date - A temporal upper bound of the history search
  * 
@@ -74,7 +74,7 @@ const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, as
     }
     if ((typeof sponsor_name !== 'undefined') && (sponsor_name !== '')) {
         values.push(sponsor_name);
-        query += query + ` AND sponsor.name = $${values.length}` + ' ';
+        query += ` AND sponsor.name = $${values.length}` + ' ';
     }
     if ((typeof project_name !== 'undefined') && (project_name !== '')) {
         values.push(project_name);
