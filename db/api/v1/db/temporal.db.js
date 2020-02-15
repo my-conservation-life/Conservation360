@@ -74,15 +74,15 @@ const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, as
     }
     if ((typeof sponsor_name !== 'undefined') && (sponsor_name !== '')) {
         values.push(sponsor_name);
-        query += ` AND sponsor.name = $${values.length}` + ' ';
+        query += ` AND LOWER(sponsor.name) = LOWER($${values.length})` + ' ';
     }
     if ((typeof project_name !== 'undefined') && (project_name !== '')) {
         values.push(project_name);
-        query += ` AND project.name = $${values.length}` + ' ';
+        query += ` AND LOWER(project.name) = LOWER($${values.length})` + ' ';
     }
     if ((typeof asset_type_name !== 'undefined') && (asset_type_name !== '')) {
         values.push(asset_type_name);
-        query += ` AND asset_type.name = $${values.length}` + ' ';
+        query += ` AND LOWER(asset_type.name) = LOWER($${values.length})` + ' ';
     }
     if((typeof start_date !== 'undefined') || (typeof end_date !== 'undefined')) {
         const has_start_date = (typeof start_date !== 'undefined');
