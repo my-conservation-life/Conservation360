@@ -110,6 +110,19 @@ const extractQueryParam = (req, paramName) => req.query[paramName];
  */
 const extractBodyParam = (req, paramName) => req.body[paramName];
 
+const recursiveExtractBodyParam = (req, paramName) => {
+    const paramHeirarchy = paramName.split('.');
+    return recursiveExtractBodyParamHelper(req.body, paramHeirarchy);
+};
+
+const recursiveExtractBodyParamHelper = (next, paramHeirarchy) => {
+    if (paramHeirarchy.length === 0)
+        return next;
+
+    next = next[paramHeirarchy.shift()];
+    return recursiveExtractBodyParamHelper[next, paramHeirarchy];
+};
+
 /**
  * Extracts the parameter from the request's params.
  * 
@@ -485,7 +498,7 @@ module.exports = {
 
     param: {
         query: extractQueryParam,
-        body: extractBodyParam,
+        body: recursiveExtractBodyParam,
         params: extractParamsParam
     },
 
