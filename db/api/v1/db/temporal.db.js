@@ -43,15 +43,15 @@ const POLYGON_WITHIN = `
  * 
  * @param {geometry} geometry - a GeoJson geometry
  * @param {number} asset_id - A specific asset's id
- * @param {number} sponsor_id - A sponsor's id
- * @param {number} project_id - A projects's id
- * @param {number} asset_type_id - An asset type's id
+ * @param {number} sponsor_name - A sponsor's id
+ * @param {number} project_name - A projects's id
+ * @param {number} asset_type_name - An asset type's id
  * @param {moment} start_date - A temporal lower bound of the history search
  * @param {moment} end_date - A temporal upper bound of the history search
  * 
  * @returns {*} rows - the historic properties that meet the serach parameters
  */
-const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_type_id, start_date, end_date) => {
+const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, asset_type_name, start_date, end_date) => {
     let query = QUERY_HISTORY;
     let values = [];
 
@@ -72,17 +72,17 @@ const temporalSearch = async (geometry, asset_id, sponsor_id, project_id, asset_
         values.push(asset_id);
         query += ` AND asset.id = $${values.length}` + ' ';
     }
-    if ((typeof sponsor_id !== 'undefined') && (sponsor_id > 0)) {
-        values.push(sponsor_id);
-        query += query + ` AND sponsor.id = $${values.length}` + ' ';
+    if ((typeof sponsor_name !== 'undefined') && (sponsor_name !== '')) {
+        values.push(sponsor_name);
+        query += query + ` AND sponsor.name = $${values.length}` + ' ';
     }
-    if ((typeof project_id !== 'undefined') && (project_id > 0)) {
-        values.push(project_id);
-        query += ` AND project.id = $${values.length}` + ' ';
+    if ((typeof project_name !== 'undefined') && (project_name !== '')) {
+        values.push(project_name);
+        query += ` AND project.name = $${values.length}` + ' ';
     }
-    if ((typeof asset_type_id !== 'undefined') && (asset_type_id > 0)) {
-        values.push(asset_type_id);
-        query += ` AND asset_type.id = $${values.length}` + ' ';
+    if ((typeof asset_type_name !== 'undefined') && (asset_type_name !== '')) {
+        values.push(asset_type_name);
+        query += ` AND asset_type.name = $${values.length}` + ' ';
     }
     if((typeof start_date !== 'undefined') || (typeof end_date !== 'undefined')) {
         const has_start_date = (typeof start_date !== 'undefined');

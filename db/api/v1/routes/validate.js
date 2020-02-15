@@ -346,6 +346,30 @@ const parseProjectName = (name) => {
 };
 
 /**
+ * Validates a Sponsors's name. Does not allow empty strings.
+ * 
+ * @param {*} name - the name of the sponsor to parse
+ * @returns {ParseResult} parse success with a valid name or a parse failure
+ */
+const parseSponsorName = (name) => {
+    return (parseString(name, MIN_PROJECT_NAME_LENGTH) 
+        ? ParseResult.success(name) 
+        : ParseResult.failure(`Sponsor names must be at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
+};
+
+/**
+ * Validates an Asset type's name. Does not allow empty strings.
+ * 
+ * @param {*} name - the name of the asset type to parse
+ * @returns {ParseResult} parse success with a valid name or a parse failure
+ */
+const parseAssetTypeName = (name) => {
+    return (parseString(name, MIN_PROJECT_NAME_LENGTH) 
+        ? ParseResult.success(name) 
+        : ParseResult.failure(`Asset type names must be at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
+};
+
+/**
  * Validates if a radius string is a valid intenger.
  * 
  * @param {string} radiusString - the string to validate
@@ -468,6 +492,7 @@ module.exports = {
     type: {
         id: parseId,
         assetDefinition: parseAssetDefinition,
+        assetTypeName: parseAssetTypeName,
         coordinates: parseCoordinates,
         date: parseDate,
         geometry: parseGeometry,
@@ -475,6 +500,7 @@ module.exports = {
         longitude: parseLongitude,
         project: parseProject,
         projectName: parseProjectName,
+        sponsorName: parseSponsorName,
         radius: parseRadius
     },
 
