@@ -202,7 +202,7 @@ const parseGeometry = (geometry) => {
 // We are assuming that this is a geometry of type 'Circle' and has coordinates
 const parseCircleGeometry = (geometry) => {
     if (geometry.coordinates.length != 2)
-        return ParseResult.failure('Circle geometry \'coordinates\' is formatted [lat, lon]');
+        return ParseResult.failure('Circle geometry \'coordinates\' is formatted [lon, lat]');
     
     if (typeof geometry.radius === 'undefined' || !geometry.radius)
         return ParseResult.failure('Circle geometry must have a \'radius\'');
@@ -236,11 +236,11 @@ const parsePolygonGeometry = (geometry) => {
     var i;
     var coordArray;
     var parsedCoordinates = [];
-    for (i = 0; i < geometry.coordinates; i++) {
+    for (i = 0; i < geometry.coordinates.length; i++) {
         coordArray = geometry.coordinates[i];
 
         if (coordArray.length != 2)
-            return ParseResult.failure('A coordinate in the \'coordinates\' is formatted [lat, lon]');
+            return ParseResult.failure('A coordinate in the "coordinates" array is formatted [lon, lat]');
 
         lon = parseFloat(coordArray[0]);
         lat = parseFloat(coordArray[1]);
