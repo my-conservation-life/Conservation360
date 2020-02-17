@@ -254,7 +254,7 @@ const parsePolygonGeometry = (geometry) => {
         }
     }
 
-    if (parseCoordinates[0].toString().localeCompare(parseCoordinates[parseCoordinates.length - 1].toString) !== 0)
+    if (parseCoordinates[0].toString().localeCompare(parseCoordinates[parseCoordinates.length - 1].toString()) !== 0)
         return ParseResult.failure('A "Polygon" must be closed. The first and last "coordinates" are equivalent and must be identical.');
 
     geometry.coordinates = parsedCoordinates;
