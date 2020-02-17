@@ -73,7 +73,7 @@ const makeLineStringFromGeoJsonCoordinates = (coordinates) => {
     var point;
     for(var i = 0; i < coordinates.length; i++) {
         point = coordinates[i];
-        coordinates.push(makeLineStringHelper(point[0], point[1]));
+        coordPairs.push(makeLineStringHelper(point[0], point[1]));
     }
 
     return `LINESTRING(${coordPairs.join(',')})`;
