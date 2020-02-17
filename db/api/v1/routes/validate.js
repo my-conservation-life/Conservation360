@@ -110,19 +110,6 @@ const extractQueryParam = (req, paramName) => req.query[paramName];
  */
 const extractBodyParam = (req, paramName) => req.body[paramName];
 
-// const recursiveExtractBodyParam = (req, paramName) => {
-//     const paramHeirarchy = paramName.split('.');
-//     return recursiveExtractBodyParamHelper(req.body, paramHeirarchy);
-// };
-
-// const recursiveExtractBodyParamHelper = (next, paramHeirarchy) => {
-//     if (paramHeirarchy.length === 0)
-//         return next;
-
-//     next = next[paramHeirarchy.shift()];
-//     return recursiveExtractBodyParamHelper(next, paramHeirarchy);
-// };
-
 /**
  * Extracts the parameter from the request's params.
  * 
@@ -251,6 +238,10 @@ const parsePolygonGeometry = (geometry) => {
     var parsedCoordinates = [];
     for (i = 0; i < geometry.coordinates; i++) {
         coordArray = geometry.coordinates[i];
+
+        if (coordArray.length != 2)
+            return ParseResult.failure('A coordinate in the \'coordinates\' is formatted [lat, lon]');
+
         lon = parseFloat(coordArray[0]);
         lat = parseFloat(coordArray[1]);
 
