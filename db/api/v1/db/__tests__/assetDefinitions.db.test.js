@@ -146,5 +146,42 @@ describe('assetDefinitions.db.storeCSV', () => {
         global.dbPool.connect = jest.fn(async () => { return client; });
     });
 
+    describe('assetDefinitions.db.findAssetTypes', () => {
+        let rows;
+        let query;
+
+        beforeEach(() => {
+            rows = [{}];
+            query = jest.fn(async() => rows);
+            global.dbPool = { query };
+        });
+
+        it('finds all asset types in the database', async () => {
+            const actualRows = await findAssetTypes();
+            expect(actualRows).toEqual(rows);
+        });
+    });
+
+    describe('assetDefinitions.db.findAssetPropByTypeID', () => {
+        let rows;
+        let query;
+        let assetTypeId;
+    
+        beforeEach(() => {
+            rows = [{}];
+            query = jest.fn(async() => rows);
+            global.dbPool = { query };
+    
+            assetTypeId = 1;
+        });
+    
+        it('finds all properties associated with the asset type ID given', async () => {
+            const actualRows = await findAssetPropTypes(assetTypeId);
+            expect(actualRows).toEqual(rows);
+        });
+    });
+
+    
+
     // TODO tests for storeCSV function
 });

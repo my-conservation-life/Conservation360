@@ -1,4 +1,4 @@
-const { getAssetTypes } = require('../assetDefinitions.controller');
+const { getAssetTypes, getAssetPropsByTypeID, getAssetPropTypes } = require('../assetDefinitions.controller');
 const assetDefinitionsDb = require('../../db/assetDefinitions.db');
 
 describe('assetDefinitions.controller.getAssetTypes', () => {
@@ -23,6 +23,62 @@ describe('assetDefinitions.controller.getAssetTypes', () => {
 
     it('returns all asset types in DB', async () => {
         await getAssetTypes(req, res, next);
+        expect(res.json).toHaveBeenCalledWith(data);
+    });
+});
+
+describe('assetDefinitions.controller.getAssetPropsByTypeID', () => {
+    let req;
+    let res;
+    let next;
+    let expectedAssetTypes;
+    let data;
+
+    beforeEach(() => {
+        req = {
+            'body': {
+                
+            }
+        };
+    
+        res = {
+            json: jest.fn()
+        };
+
+        next = jest.fn();
+        expectedAssetTypes = [{}];
+        data = { rows: expectedAssetTypes };
+        assetDefinitionsDb.findAssetPropsByTypeID = jest.fn(async () => data);
+    });
+
+    it('returns all asset types in DB', async () => {
+        await getAssetPropsByTypeID(req, res, next);
+        expect(res.json).toHaveBeenCalledWith(data);
+    });
+});
+
+describe('assetDefinitions.controller.getAssetPropsTypes', () => {
+    let req;
+    let res;
+    let next;
+    let expectedAssetTypes;
+    let data;
+
+    beforeEach(() => {
+        req = {};
+    
+        res = {
+            json: jest.fn()
+        };
+
+        next = jest.fn();
+        expectedAssetTypes = [{}];
+        data = { rows: expectedAssetTypes };
+        assetDefinitionsDb.findAssetPropTypes = jest.fn(async () => data);
+    });
+
+    it('returns all asset types in DB', async () => {
+        await getAssetPropTypes(req, res, next);
         expect(res.json).toHaveBeenCalledWith(data);
     });
 });
