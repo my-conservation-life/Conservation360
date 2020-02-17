@@ -51,22 +51,26 @@ const makeLineStringHelper = (lon, lat) => {
 const makeLineString = (coordinatesList) => {
 
     // An array of LINESTRING coordinate pairs 'lon lat'
-    let coordPairs = [];
+    var coordPairs = [];
 
-    coordinatesList.forEach(point => {
+    var point;
+    for(var i = 0; i < coordinatesList.length; i++) {
+        point = coordinatesList[i];
         coordPairs.push(makeLineStringHelper(point.longitude, point.latitude));
-    });
+    }
 
     return `LINESTRING(${coordPairs.join(',')})`;
 };
 
 const makeLineStringFromGeoJsonCoordinates = (coordinates) => {
 
-    let coordPairs = [];
+    var coordPairs = [];
 
-    coordinates.forEach(p => {
-        coordinates.push(makeLineStringHelper(p[0], p[1]));
-    });
+    var point;
+    for(var i = 0; i < coordinates.length; i++) {
+        point = coordinates[i];
+        coordinates.push(makeLineStringHelper(point[0], point[1]));
+    }
 
     return `LINESTRING(${coordPairs.join(',')})`;
 };
