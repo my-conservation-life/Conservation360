@@ -1,4 +1,5 @@
 const utils = require('../utils');
+const moment = require('moment');
 
 const MIN_PROJECT_NAME_LENGTH = 1;
 
@@ -157,13 +158,13 @@ const parseCoordinates = (coordinateList) => {
 
     var i;
     var point;
-    for(i = 0; i < coordinateList.length; i++)
+    for (i = 0; i < coordinateList.length; i++)
     {
         point = coordinateList[i];
         lon = parseFloat(point.longitude);
         lat = parseFloat(point.latitude);
 
-        if(!isNaN(lon) && validLongitude(lon) 
+        if (!isNaN(lon) && validLongitude(lon) 
             && !isNaN(lat) && validLatitude(lat)) {
             coordinates.push({latitude: lat, longitude: lon});
         }
@@ -173,6 +174,134 @@ const parseCoordinates = (coordinateList) => {
     }
 
     return ParseResult.success(coordinates);
+};
+
+/**
+ * Parses and validates a Geometry Object.
+ * Using GeoJSON as a template https://tools.ietf.org/html/rfc7946
+ * 
+ * @param {geometry} geometry - An object that contains a type and a set of coordinates.
+ * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
+ */
+const parseGeometry = (geometry) => {
+    if (typeof geometry === 'undefined' || !geometry) {
+        return ParseResult.failure('"geometry" was undefined');
+    }
+
+    if (typeof geometry.type === 'undefined' || !geometry.type) {
+        return ParseResult.failure('geometry "type" was undefined');
+    }
+
+    if (!Array.isArray(geometry.coordinates)) {
+        return ParseResult.failure('geometry must have "coordinates" with at least one [lon, lat] or [[lon, lat], ...]');
+    }
+
+    // Types are case sensitive
+    switch (geometry.type) {
+        case 'Circle': 
+            return parseCircleGeometry(geometry);
+        case 'Polygon': 
+            return parsePolygonGeometry(geometry);
+        default:
+            return ParseResult.failure('geometry "type" is case sensitive and can be ("Circle", "Polygon")');
+    }
+};
+
+/**
+ * Parses and validates a Circle Geometry Object
+ * 
+ * @param {CircleGeometry} geometry - A Geometry object that has the type "Circle" and a "radius" property
+ * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
+ */
+const parseCircleGeometry = (geometry) => {
+    if (geometry.coordinates.length != 2) {
+        return ParseResult.failure('Circle geometry "coordinates" is formatted [lon, lat]');
+    }
+    
+    if (typeof geometry.radius === 'undefined' || !geometry.radius) {
+        return ParseResult.failure('Circle geometry must have a "radius"');
+    }
+
+    const lon = parseFloat(geometry.coordinates[0]);
+    const lat = parseFloat(geometry.coordinates[1]);
+
+    if (isNaN(lon) || isNaN(lat)) {
+        return ParseResult.failure('error parsing coordinate values');
+    }
+
+    const radius = parseFloat(geometry.radius);
+
+    if (isNaN(radius)) {
+        return ParseResult.failure('error parsing radius');
+    }
+
+    geometry.radius = radius;
+    geometry.coordinates = [lon, lat];
+
+    return ParseResult.success(geometry);
+};
+
+/**
+ * Parses and validates a Polygon Geometry Object
+ * 
+ * @param {PolygonGeometry} geometry - A Geometry object that has the type "Polygon"
+ * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
+ */
+const parsePolygonGeometry = (geometry) => {
+    if (geometry.coordinates.length < 4) {
+        return ParseResult.failure('For type "Polygon", the "coordinates" member MUST be an array of 4 or more coordinate arrays.');
+    }
+
+    let lat = 0;
+    let lon = 0;
+
+    var i;
+    var coordArray;
+    var parsedCoordinates = [];
+    for (i = 0; i < geometry.coordinates.length; i++) {
+        coordArray = geometry.coordinates[i];
+
+        if (coordArray.length != 2) {
+            return ParseResult.failure('A coordinate in the "coordinates" array is formatted [lon, lat]');
+        }
+
+        lon = parseFloat(coordArray[0]);
+        lat = parseFloat(coordArray[1]);
+
+        if (!isNaN(lon) && validLongitude(lon)
+            && !isNaN(lat) && validLatitude(lat)) {
+            parsedCoordinates.push([lon, lat]);
+        }
+        else {
+            return ParseResult.failure('Unable to parse coordinate. Please format coordinate arrays like [lon, lat]');
+        }
+    }
+
+    if (parsedCoordinates[0].toString().localeCompare(parsedCoordinates[parsedCoordinates.length - 1].toString()) !== 0) {
+        return ParseResult.failure('A "Polygon" must be closed. The first and last "coordinates" are equivalent and must be identical.');
+    }
+
+    geometry.coordinates = parsedCoordinates;
+
+    return ParseResult.success(geometry);
+};
+
+/**
+ * Parses a date from a string
+ * 
+ * @param {string} dateString - a date string in the form YYYY-MM-DD
+ * @returns {ParseResult} - returns Prase success with a moment object, or a parse failure
+ */
+const parseDate = (dateString) => {
+    // Strictly parse the date
+    const dateFmt = utils.shared.dateStringFormat();
+    const m = moment(dateString, dateFmt, true);
+    
+    if (!m.isValid()) {
+        return ParseResult.failure(`Unable to parse date from ${dateString}. The following date format(s) are supported [${dateFmt}]`);
+    }
+
+    return ParseResult.success(m);
 };
 
 /**
@@ -245,6 +374,30 @@ const parseProjectName = (name) => {
     return (parseString(name, MIN_PROJECT_NAME_LENGTH) 
         ? ParseResult.success(name) 
         : ParseResult.failure(`Project Names must be at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
+};
+
+/**
+ * Validates a Sponsors's name. Does not allow empty strings.
+ * 
+ * @param {*} name - the name of the sponsor to parse
+ * @returns {ParseResult} parse success with a valid name or a parse failure
+ */
+const parseSponsorName = (name) => {
+    return (parseString(name, MIN_PROJECT_NAME_LENGTH) 
+        ? ParseResult.success(name) 
+        : ParseResult.failure(`Sponsor names must be at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
+};
+
+/**
+ * Validates an Asset type's name. Does not allow empty strings.
+ * 
+ * @param {*} name - the name of the asset type to parse
+ * @returns {ParseResult} parse success with a valid name or a parse failure
+ */
+const parseAssetTypeName = (name) => {
+    return (parseString(name, MIN_PROJECT_NAME_LENGTH) 
+        ? ParseResult.success(name) 
+        : ParseResult.failure(`Asset type names must be at least ${MIN_PROJECT_NAME_LENGTH} character(s) long`));
 };
 
 /**
@@ -370,11 +523,15 @@ module.exports = {
     type: {
         id: parseId,
         assetDefinition: parseAssetDefinition,
+        assetTypeName: parseAssetTypeName,
         coordinates: parseCoordinates,
+        date: parseDate,
+        geometry: parseGeometry,
         latitude: parseLatitude,
         longitude: parseLongitude,
         project: parseProject,
         projectName: parseProjectName,
+        sponsorName: parseSponsorName,
         radius: parseRadius
     },
 

@@ -13,6 +13,7 @@ const POLYGON_ENDPOINT = `${GEOMETRY_ENDPOINT}/polygon`;
 
 describe('GET assets/geometrySearch/envelope', () => {
     beforeAll(async () => {
+        jest.setTimeout(30000);
         await setup();
         await loadSQL('../schema/sample-data-emptyProjects.sql');
     });
@@ -63,6 +64,7 @@ describe('GET assets/geometrySearch/envelope', () => {
 
 describe('GET assets/geometrySearch/distance', () => {
     beforeAll(async () => {
+        jest.setTimeout(30000);
         await setup();
         await loadSQL('../schema/sample-data-emptyProjects.sql');
     });
@@ -94,6 +96,7 @@ describe('GET assets/geometrySearch/polygon', () => {
     let pack = (lat, lon) => { return { latitude: lat, longitude: lon}; };
 
     beforeAll(async () => {
+        jest.setTimeout(30000);
         await setup();
         await loadSQL('../schema/sample-data-emptyProjects.sql');
     });

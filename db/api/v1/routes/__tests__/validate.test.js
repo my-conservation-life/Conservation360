@@ -1,4 +1,5 @@
 const { validate, ParseResult, type, param } = require('../validate');
+const moment = require('moment');
 
 describe('validate', () => {
     let extractQueryParam;
@@ -195,6 +196,125 @@ describe('validate.type.id', () => {
     it('rejects alphabetic characters', () => {
         const result = type.id('b');
         expect(result.isFailure()).toBe(true);
+    });
+});
+
+describe('validate.type.date', () => {
+    it('rejects and empty string', () => {
+        const result = type.date('');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects strings that are not dates', () => {
+        const result = type.date('this is not a date');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects dates that have extra characters', () => {
+        const result = type.date('2020-02-02 extra stuff');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('returns actionable error messages', () => {
+        const badlyFormattedDate = '02-13-2020';
+        const validDateFormat = 'YYYY-MM-DD';
+        const result = type.date(badlyFormattedDate);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(
+            expect.stringContaining(badlyFormattedDate)
+        );
+        expect(result.error).toEqual(
+            expect.stringContaining(validDateFormat)
+        );
+    });
+
+    it('rejects dates with invalid months', () => {
+        const result = type.date('2020-19-02');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects dates with invalid days', () => {
+        const result = type.date('2020-02-42');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('rejects dates with invalid delimeters', () => {
+        const result = type.date('2020/02/02');
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('successfully parses a date', () => {
+        const validDate = '2020-02-02';
+        const m = moment(validDate, 'YYYY-MM-DD', true);
+        const result = type.date(validDate);
+        expect(result.isSuccess()).toBeTruthy();
+        expect(result.value).toEqual(m);
+    });
+});
+
+describe('validate.type.geometry', () => {
+    it('Rejects undefined and invalid types', () => {
+        const undefinedGeom = undefined;
+        const undefinedTypeGeom = { type: undefined };
+        const resUndefinedGeom = type.geometry(undefinedGeom);
+        const resUndefinedTypeGeom = type.geometry(undefinedTypeGeom);
+
+        expect(resUndefinedGeom.isFailure()).toBeTruthy();
+        expect(resUndefinedGeom.error).toEqual(expect.stringContaining(
+            '"geometry" was undefined'
+        ));
+
+        expect(resUndefinedTypeGeom.isFailure()).toBeTruthy();
+        expect(resUndefinedTypeGeom.error).toEqual(expect.stringContaining(
+            'geometry "type" was undefined'
+        ));
+    });
+
+    it('Accepts geometry type "Circle"', () => {
+        const circle = {type: 'Circle', coordinates: ['1','1'], radius: '100'};
+        const result = type.geometry(circle);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('Accepts geometry type "Polygon"', () => {
+        const polygon = {type: 'Polygon', coordinates: [['1','1'], ['2', '2'], ['3', '3'], ['1', '1']]};
+        const result = type.geometry(polygon);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('Rejects Polygons that are not closed', () => {
+        const polygon = {type: 'Polygon', coordinates: [['1','1'], ['2', '2'], ['3', '3'], ['4','4']]};
+        const result = type.geometry(polygon);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('A "Polygon" must be closed.'));
+    });
+
+    it('Rejects Polygons that have less than 4 coordinates', () => {
+        const polygon = {type: 'Polygon', coordinates: [['1','1'], ['2', '2'], ['3', '3']]};
+        const result = type.geometry(polygon);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('the "coordinates" member MUST be an array of 4 or more coordinate arrays'));
+    });
+
+    it('Rejects Circles with no radius', () => {
+        const circle = {type: 'Circle', coordinates: ['1','1']};
+        const result = type.geometry(circle);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('Circle geometry must have a "radius"'));
+    });
+
+    it('has to have coordinates', () => {
+        const circle = {type: 'Circle', coordinates: undefined};
+        const result = type.geometry(circle);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('geometry must have "coordinates"'));
+    });
+
+    it('is case sensitive and rejects "circle"', () => {
+        const circle = {type: 'circle', coordinates: ['1','1'], radius: '100'};
+        const result = type.geometry(circle);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('geometry "type" is case sensitive'));
     });
 });
 

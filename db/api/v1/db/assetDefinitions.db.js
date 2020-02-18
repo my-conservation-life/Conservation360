@@ -34,6 +34,7 @@ const findAssetTypes = async () => {
             description
         FROM
             asset_type
+        ORDER BY id
     `;
 
     return global.dbPool.query(query);
@@ -173,23 +174,6 @@ const create = async (assetDefinition) => {
     }
 };
 
-// /**
-//  * Gets all properties associated with an asset type using the asset type's ID
-//  * 
-//  * @param {Number} assetTypeId ID of the asset type whose properties are being queried
-//  */
-// const findPropertiesByAssetTypeId = async(assetTypeId) => {
-//     let query = PROPERTIES_QUERY;
-
-//     const values = [];
-//     if ((typeof assetTypeId !== 'undefined') & (assetTypeId > 0)) {
-//         values.push(assetTypeId);
-//         query = query + ` WHERE asset_type_id = $${values.length}`;
-//     }
-
-//     return global.dbPool.query(query, values);
-// };
-
 /**
  * Gets the asset associated given with the asset ID
  * 
@@ -252,6 +236,22 @@ const createAssetProperty = async (client, assetId, propertyId, value) => {
 
     // Generate the values to subsitute into the SQL command
     const values = [assetId, propertyId, value];
+
+    // Execute the SQL command
+    return client.query(query, values);
+};
+
+const addAssetPropertyToHistory = async (client, assetId, propertyId, value, date) => {
+    // Generate the SQL command
+    const query = `
+        INSERT INTO history
+            (asset_id, property_id, value, date)
+        VALUES
+            ($1, $2, $3, $4)
+    `;
+
+    // Generate the values to subsitute into the SQL command
+    const values = [assetId, propertyId, value, date];
 
     // Execute the SQL command
     return client.query(query, values);
@@ -361,16 +361,19 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     value = asset[propertyName];
                     let assetProperties = (await findAssetProperty(assetId, propertyId)).rows;
 
+                    let date = new Date();
                     // Throw an error if a row fails to contain a value for a property that is required
                     if (value === '' && propertyIsRequired) {
                         throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
                     }
                     else if (assetProperties.length > 0) {
                         if (assetProperties[0].value !== value) {
+                            await addAssetPropertyToHistory(client, assetId, propertyId, value, date);
                             await updateAssetProperty(client, assetId, propertyId, value);
                         }
                     }
                     else {
+                        await addAssetPropertyToHistory(client, assetId, propertyId, value, date);
                         await createAssetProperty(client, assetId, propertyId, value);
                     }
                 }
@@ -398,6 +401,7 @@ module.exports = {
     findAsset,
     findAssetProperty,
     createAssetProperty,
+    addAssetPropertyToHistory,
     updateAssetProperty,
     storeCSV
 };
