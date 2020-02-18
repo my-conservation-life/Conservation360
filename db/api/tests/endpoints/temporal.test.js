@@ -6,7 +6,7 @@ const ENDPOINT = '/api/v1/assets/properties/temporalSearch';
 
 describe('GET assets/properties/temporalSearch', () => {
 
-    const polygon_serach = {
+    const polygon_search = {
         'geometry': {
             'type': 'Polygon',
             'coordinates' : [[-16, 44], [-18, 44], [-18, 48], [-16, 48], [-16, 44]]
@@ -43,7 +43,7 @@ describe('GET assets/properties/temporalSearch', () => {
     it('returns HTTP 200 with "Polygon" search', async () => {
         await request(app)
             .get(ENDPOINT)
-            .send(polygon_serach)
+            .send(polygon_search)
             .expect(200);
     });
 
