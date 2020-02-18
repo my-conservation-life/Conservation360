@@ -114,6 +114,4 @@ describe('temporal.db.temporalSearch', () => {
         const results = await temporalSearch(geometry, undefined, undefined, undefined, undefined, undefined, undefined);
         await expect(results).toEqual(expect.objectContaining(expectedGeoJson));
     });
-
-
 });

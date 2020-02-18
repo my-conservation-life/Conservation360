@@ -37,6 +37,7 @@ const D_WITHIN = `
 const POLYGON_WITHIN = `
     ST_Within(asset.location, ST_MakePolygon(ST_GeomFromText($1)))
 `;
+
 /**
  * Searches the history table for asset properties that fall within specific search parameters
  * 
