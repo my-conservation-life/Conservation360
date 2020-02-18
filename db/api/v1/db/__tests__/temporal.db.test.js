@@ -4,15 +4,16 @@ const moment = require('moment');
 describe('temporal.db.temporalSearch', () => {
     let query;
     let rows;
+    let geometry;
 
     beforeEach(() => {
         rows = [];
         query = jest.fn(async () => ({ rows }));
         global.dbPool = { query };
+        geometry = {coordinates: [1, 2], type: 'Circle', radius: 500};
     });
     
     it('performs a ST_DWithin query when given a "Circle" geometry type', async () => {
-        const geometry = {coordinates: [1, 2], type: 'Circle', radius: 500};
         await temporalSearch(geometry, undefined, undefined, undefined, undefined, undefined, undefined);
         expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('ST_DWithin'));
         expect(query.mock.calls[0][1]).toEqual(expect.arrayContaining(
@@ -21,7 +22,7 @@ describe('temporal.db.temporalSearch', () => {
     });
 
     it('performs a ST_Within query when given a "Polygon" geometry type', async () => {
-        const geometry = {coordinates: [[1, 1], [2, 2], [3, 3], [1, 1]], type: 'Polygon'};
+        geometry = {coordinates: [[1, 1], [2, 2], [3, 3], [1, 1]], type: 'Polygon'};
         await temporalSearch(geometry, undefined, undefined, undefined, undefined, undefined, undefined);
         expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('ST_Within'));
         expect(query.mock.calls[0][1]).toEqual(expect.arrayContaining(
@@ -30,7 +31,6 @@ describe('temporal.db.temporalSearch', () => {
     });
 
     it('performs a query for asset properties after a start_date', async () => {
-        const geometry = {coordinates: [1, 2], type: 'Circle', radius: 500};
         const start_string = '2012-05-25';
         const start = moment(start_string, 'YYYY-MM-DD', true);
 
@@ -42,7 +42,6 @@ describe('temporal.db.temporalSearch', () => {
     });
 
     it('performs a query for asset properties before an end_date', async () => {
-        const geometry = {coordinates: [1, 2], type: 'Circle', radius: 500};
         const end_string = '2012-05-25'
         const end = moment(end_string, 'YYYY-MM-DD', true);
 
@@ -54,7 +53,6 @@ describe('temporal.db.temporalSearch', () => {
     });
 
     it('performs a query for asset properties between a start_date and an end_date', async () => {
-        const geometry = {coordinates: [1, 2], type: 'Circle', radius: 500};
         const start_string = '2012-05-20';
         const start = moment(start_string, 'YYYY-MM-DD', true);
         const end_string = '2012-05-25'
@@ -68,7 +66,6 @@ describe('temporal.db.temporalSearch', () => {
     });
 
     it('will further filter queries for sponsors, asset types, and project names', async () => {
-        const geometry = {coordinates: [1, 2], type: 'Circle', radius: 500};
         const sponsor_name = 'SponsorName';
         const asset_type = 'AssetType';
         const project_name = 'ProjectName';
@@ -83,7 +80,6 @@ describe('temporal.db.temporalSearch', () => {
     });
 
     it('formats query results as GeoJson', async () => {
-        const geometry = {coordinates: [1, 2], type: 'Circle', radius: 500};
         rows = [{
             asset_id: 1, 
             asset_type: 'AssetType', 

@@ -253,8 +253,68 @@ describe('validate.type.date', () => {
 });
 
 describe('validate.type.geometry', () => {
-    it('TODO: NEEDS TESTS', () => {
-        expect(false).toBeTruthy();
+    it('Rejects undefined and invalid types', () => {
+        const undefinedGeom = undefined;
+        const undefinedTypeGeom = { type: undefined };
+        const resUndefinedGeom = type.geometry(undefinedGeom);
+        const resUndefinedTypeGeom = type.geometry(undefinedTypeGeom);
+
+        expect(resUndefinedGeom.isFailure()).toBeTruthy();
+        expect(resUndefinedGeom.error).toEqual(expect.stringContaining(
+            '"geometry" was undefined'
+        ));
+
+        expect(resUndefinedTypeGeom.isFailure()).toBeTruthy();
+        expect(resUndefinedTypeGeom.error).toEqual(expect.stringContaining(
+            'geometry "type" was undefined'
+        ));
+    });
+
+    it('Accepts geometry type "Circle"', () => {
+        const circle = {type: 'Circle', coordinates: ['1','1'], radius: '100'};
+        const result = type.geometry(circle);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('Accepts geometry type "Polygon"', () => {
+        const polygon = {type: 'Polygon', coordinates: [['1','1'], ['2', '2'], ['3', '3'], ['1', '1']]};
+        const result = type.geometry(polygon);
+        expect(result.isSuccess()).toBeTruthy();
+    });
+
+    it('Rejects Polygons that are not closed', () => {
+        const polygon = {type: 'Polygon', coordinates: [['1','1'], ['2', '2'], ['3', '3'], ['4','4']]};
+        const result = type.geometry(polygon);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('A "Polygon" must be closed.'));
+    });
+
+    it('Rejects Polygons that have less than 4 coordinates', () => {
+        const polygon = {type: 'Polygon', coordinates: [['1','1'], ['2', '2'], ['3', '3']]};
+        const result = type.geometry(polygon);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('the "coordinates" member MUST be an array of 4 or more coordinate arrays'));
+    });
+
+    it('Rejects Circles with no radius', () => {
+        const circle = {type: 'Circle', coordinates: ['1','1']};
+        const result = type.geometry(circle);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('Circle geometry must have a "radius"'));
+    });
+
+    it('has to have coordinates', () => {
+        const circle = {type: 'Circle', coordinates: undefined};
+        const result = type.geometry(circle);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('geometry must have "coordinates"'));
+    });
+
+    it('is case sensitive and rejects "circle"', () => {
+        const circle = {type: 'circle', coordinates: ['1','1'], radius: '100'};
+        const result = type.geometry(circle);
+        expect(result.isFailure()).toBeTruthy();
+        expect(result.error).toEqual(expect.stringContaining('geometry "type" is case sensitive'));
     });
 });
 

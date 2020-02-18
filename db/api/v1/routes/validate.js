@@ -177,16 +177,22 @@ const parseCoordinates = (coordinateList) => {
 };
 
 
-// Using GeoJSON as a template https://tools.ietf.org/html/rfc7946
+/**
+ * Parses and validates a Geometry Object.
+ * Using GeoJSON as a template https://tools.ietf.org/html/rfc7946
+ * 
+ * @param {geometry} geometry - An object that contains a type and a set of coordinates.
+ * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
+ */
 const parseGeometry = (geometry) => {
     if (typeof geometry === 'undefined' || !geometry)
-        return ParseResult.failure('\'geometry\' was undefined');
+        return ParseResult.failure('"geometry" was undefined');
 
     if (typeof geometry.type === 'undefined' || !geometry.type)
-        return ParseResult.failure('geometry \'type\' was undefined');
+        return ParseResult.failure('geometry "type" was undefined');
 
     if (!Array.isArray(geometry.coordinates))
-        return ParseResult.failure('geometry must have \'coordinates\' with at least one [lon, lat] or [[lon, lat], ...]');
+        return ParseResult.failure('geometry must have "coordinates" with at least one [lon, lat] or [[lon, lat], ...]');
 
     // Types are case sensitive
     switch (geometry.type) {
@@ -195,17 +201,22 @@ const parseGeometry = (geometry) => {
     case 'Polygon': 
         return parsePolygonGeometry(geometry);
     default:
-        return ParseResult.failure('geometry \'type\' is case sensitive and can be (\'Circle\', \'Polygon\')');
+        return ParseResult.failure('geometry "type" is case sensitive and can be ("Circle", "Polygon")');
     }
 };
 
-// We are assuming that this is a geometry of type 'Circle' and has coordinates
+/**
+ * Parses and validates a Circle Geometry Object
+ * 
+ * @param {CircleGeometry} geometry - A Geometry object that has the type "Circle" and a "radius" property
+ * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
+ */
 const parseCircleGeometry = (geometry) => {
     if (geometry.coordinates.length != 2)
-        return ParseResult.failure('Circle geometry \'coordinates\' is formatted [lon, lat]');
+        return ParseResult.failure('Circle geometry "coordinates" is formatted [lon, lat]');
     
     if (typeof geometry.radius === 'undefined' || !geometry.radius)
-        return ParseResult.failure('Circle geometry must have a \'radius\'');
+        return ParseResult.failure('Circle geometry must have a "radius"');
 
 
     const lon = parseFloat(geometry.coordinates[0]);
@@ -225,7 +236,12 @@ const parseCircleGeometry = (geometry) => {
     return ParseResult.success(geometry);
 };
 
-// We are assuming that this is a geometry of type 'Polygon' and has coordinates
+/**
+ * Parses and validates a Polygon Geometry Object
+ * 
+ * @param {PolygonGeometry} geometry - A Geometry object that has the type "Polygon"
+ * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
+ */
 const parsePolygonGeometry = (geometry) => {
     if (geometry.coordinates.length < 4)
         return ParseResult.failure('For type "Polygon", the "coordinates" member MUST be an array of 4 or more coordinate arrays.');

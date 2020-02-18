@@ -1,5 +1,4 @@
 const utils = require('../utils');
-const moment = require('moment');
 
 const QUERY_HISTORY = `
     SELECT 
@@ -49,7 +48,9 @@ const POLYGON_WITHIN = `
  * @param {moment} start_date - A temporal lower bound of the history search
  * @param {moment} end_date - A temporal upper bound of the history search
  * 
- * @returns {*} rows - the historic properties that meet the serach parameters
+ * Using GeoJSON as a template https://tools.ietf.org/html/rfc7946
+ * @returns {FeatureCollection} GeoJson - the historic properties of assets that meet the serach parameters formatted following the GeoJSON standard.
+ * 
  */
 const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, asset_type_name, start_date, end_date) => {
     let query = QUERY_HISTORY;
