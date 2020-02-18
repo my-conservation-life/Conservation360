@@ -159,6 +159,7 @@ describe('assetDefinitions.db.storeCSV', () => {
         it('finds all asset types in the database', async () => {
             const actualRows = await findAssetTypes();
             expect(actualRows).toEqual(rows);
+            expect(query).toHaveBeenCalledWith(expect.stringContaining('asset_type'));
         });
     });
 
@@ -181,7 +182,7 @@ describe('assetDefinitions.db.storeCSV', () => {
         });
     });
 
-    
+
 
     // TODO tests for storeCSV function
 });

@@ -35,6 +35,7 @@ describe('assetDefinitions.findAssetPropTypes', () => {
     it('finds all the asset properties for a given asset type', async () => {
         const assetPropTypes = await assetDefinitions.fetchAssetPropTypes(1);
         expect(fetch.mock.calls[0][0]).toBe(URL);
+        expect(fetch.mock.calls[0][1]).toEqual(expect.objectContaining(1));
         expect(assetPropTypes).toEqual(EXPECTED_ASSET_PROP_TYPES);
     });
 });
