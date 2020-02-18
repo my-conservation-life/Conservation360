@@ -49,7 +49,7 @@ const POLYGON_WITHIN = `
  * @param {moment} end_date - A temporal upper bound of the history search
  * 
  * Using GeoJSON as a template https://tools.ietf.org/html/rfc7946
- * @returns {FeatureCollection} GeoJson - the historic properties of assets that meet the serach parameters formatted following the GeoJSON standard.
+ * @returns {FeatureCollection} GeoJson - the historic properties of assets that meet the search parameters formatted following the GeoJSON standard.
  * 
  */
 const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, asset_type_name, start_date, end_date) => {
@@ -57,16 +57,16 @@ const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, as
     let values = [];
 
     switch (geometry.type) {
-    case 'Circle':
-        values.push(geometry.coordinates[0]);
-        values.push(geometry.coordinates[1]);
-        values.push(geometry.radius);
-        query += ' AND ' + D_WITHIN + ' ';
-        break;
-    case 'Polygon':
-        values.push(utils.db.makeLineStringFromGeoJsonCoordinates(geometry.coordinates));
-        query += ' AND ' + POLYGON_WITHIN + ' ';
-        break;
+        case 'Circle':
+            values.push(geometry.coordinates[0]);
+            values.push(geometry.coordinates[1]);
+            values.push(geometry.radius);
+            query += ' AND ' + D_WITHIN + ' ';
+            break;
+        case 'Polygon':
+            values.push(utils.db.makeLineStringFromGeoJsonCoordinates(geometry.coordinates));
+            query += ' AND ' + POLYGON_WITHIN + ' ';
+            break;
     }
 
     if ((typeof asset_id !== 'undefined') && (asset_id > 0)) {
@@ -85,12 +85,12 @@ const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, as
         values.push(asset_type_name);
         query += ` AND LOWER(asset_type.name) = LOWER($${values.length})` + ' ';
     }
-    if((typeof start_date !== 'undefined') || (typeof end_date !== 'undefined')) {
+    if ((typeof start_date !== 'undefined') || (typeof end_date !== 'undefined')) {
         const has_start_date = (typeof start_date !== 'undefined');
         const has_end_date = (typeof end_date !== 'undefined');
 
         if (has_start_date && has_end_date) {
-            if(start_date.isValid() && end_date.isValid()) {
+            if (start_date.isValid() && end_date.isValid()) {
                 values.push(start_date.format(utils.shared.dateStringFormat()));
                 const idx_start = values.length;
                 values.push(end_date.format(utils.shared.dateStringFormat()));
@@ -99,12 +99,12 @@ const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, as
             }
 
         } else if (has_start_date) {
-            if(start_date.isValid()) {
+            if (start_date.isValid()) {
                 values.push(start_date.format(utils.shared.dateStringFormat()));
                 query += ` AND history.date >= $${values.length}` + ' ';
             }
         } else if (has_end_date) {
-            if(end_date.isValid()){
+            if (end_date.isValid()){
                 values.push(end_date.format(utils.shared.dateStringFormat()));
                 query += ` AND history.date <= $${values.length}` + ' ';
             }

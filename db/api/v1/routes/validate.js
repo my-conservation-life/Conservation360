@@ -158,13 +158,13 @@ const parseCoordinates = (coordinateList) => {
 
     var i;
     var point;
-    for(i = 0; i < coordinateList.length; i++)
+    for (i = 0; i < coordinateList.length; i++)
     {
         point = coordinateList[i];
         lon = parseFloat(point.longitude);
         lat = parseFloat(point.latitude);
 
-        if(!isNaN(lon) && validLongitude(lon) 
+        if (!isNaN(lon) && validLongitude(lon) 
             && !isNaN(lat) && validLatitude(lat)) {
             coordinates.push({latitude: lat, longitude: lon});
         }
@@ -176,7 +176,6 @@ const parseCoordinates = (coordinateList) => {
     return ParseResult.success(coordinates);
 };
 
-
 /**
  * Parses and validates a Geometry Object.
  * Using GeoJSON as a template https://tools.ietf.org/html/rfc7946
@@ -185,23 +184,26 @@ const parseCoordinates = (coordinateList) => {
  * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
  */
 const parseGeometry = (geometry) => {
-    if (typeof geometry === 'undefined' || !geometry)
+    if (typeof geometry === 'undefined' || !geometry) {
         return ParseResult.failure('"geometry" was undefined');
+    }
 
-    if (typeof geometry.type === 'undefined' || !geometry.type)
+    if (typeof geometry.type === 'undefined' || !geometry.type) {
         return ParseResult.failure('geometry "type" was undefined');
+    }
 
-    if (!Array.isArray(geometry.coordinates))
+    if (!Array.isArray(geometry.coordinates)) {
         return ParseResult.failure('geometry must have "coordinates" with at least one [lon, lat] or [[lon, lat], ...]');
+    }
 
     // Types are case sensitive
     switch (geometry.type) {
-    case 'Circle': 
-        return parseCircleGeometry(geometry);
-    case 'Polygon': 
-        return parsePolygonGeometry(geometry);
-    default:
-        return ParseResult.failure('geometry "type" is case sensitive and can be ("Circle", "Polygon")');
+        case 'Circle': 
+            return parseCircleGeometry(geometry);
+        case 'Polygon': 
+            return parsePolygonGeometry(geometry);
+        default:
+            return ParseResult.failure('geometry "type" is case sensitive and can be ("Circle", "Polygon")');
     }
 };
 
@@ -212,23 +214,26 @@ const parseGeometry = (geometry) => {
  * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
  */
 const parseCircleGeometry = (geometry) => {
-    if (geometry.coordinates.length != 2)
+    if (geometry.coordinates.length != 2) {
         return ParseResult.failure('Circle geometry "coordinates" is formatted [lon, lat]');
+    }
     
-    if (typeof geometry.radius === 'undefined' || !geometry.radius)
+    if (typeof geometry.radius === 'undefined' || !geometry.radius) {
         return ParseResult.failure('Circle geometry must have a "radius"');
-
+    }
 
     const lon = parseFloat(geometry.coordinates[0]);
     const lat = parseFloat(geometry.coordinates[1]);
 
-    if (isNaN(lon) || isNaN(lat))
+    if (isNaN(lon) || isNaN(lat)) {
         return ParseResult.failure('error parsing coordinate values');
+    }
 
     const radius = parseFloat(geometry.radius);
 
-    if (isNaN(radius))
+    if (isNaN(radius)) {
         return ParseResult.failure('error parsing radius');
+    }
 
     geometry.radius = radius;
     geometry.coordinates = [lon, lat];
@@ -243,8 +248,9 @@ const parseCircleGeometry = (geometry) => {
  * @returns {ParseResult} success if a valid geometry object. Otherwise a parse failure.
  */
 const parsePolygonGeometry = (geometry) => {
-    if (geometry.coordinates.length < 4)
+    if (geometry.coordinates.length < 4) {
         return ParseResult.failure('For type "Polygon", the "coordinates" member MUST be an array of 4 or more coordinate arrays.');
+    }
 
     let lat = 0;
     let lon = 0;
@@ -255,8 +261,9 @@ const parsePolygonGeometry = (geometry) => {
     for (i = 0; i < geometry.coordinates.length; i++) {
         coordArray = geometry.coordinates[i];
 
-        if (coordArray.length != 2)
+        if (coordArray.length != 2) {
             return ParseResult.failure('A coordinate in the "coordinates" array is formatted [lon, lat]');
+        }
 
         lon = parseFloat(coordArray[0]);
         lat = parseFloat(coordArray[1]);
@@ -270,8 +277,9 @@ const parsePolygonGeometry = (geometry) => {
         }
     }
 
-    if (parsedCoordinates[0].toString().localeCompare(parsedCoordinates[parsedCoordinates.length - 1].toString()) !== 0)
+    if (parsedCoordinates[0].toString().localeCompare(parsedCoordinates[parsedCoordinates.length - 1].toString()) !== 0) {
         return ParseResult.failure('A "Polygon" must be closed. The first and last "coordinates" are equivalent and must be identical.');
+    }
 
     geometry.coordinates = parsedCoordinates;
 

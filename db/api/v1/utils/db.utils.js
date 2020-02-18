@@ -53,7 +53,7 @@ const makeLineString = (coordinatesList) => {
     var coordPairs = [];
 
     var point;
-    for(var i = 0; i < coordinatesList.length; i++) {
+    for (var i = 0; i < coordinatesList.length; i++) {
         point = coordinatesList[i];
         coordPairs.push(makeLineStringHelper(point.longitude, point.latitude));
     }
@@ -71,7 +71,7 @@ const makeLineStringFromGeoJsonCoordinates = (coordinates) => {
     var coordPairs = [];
 
     var point;
-    for(var i = 0; i < coordinates.length; i++) {
+    for (var i = 0; i < coordinates.length; i++) {
         point = coordinates[i];
         coordPairs.push(makeLineStringHelper(point[0], point[1]));
     }
