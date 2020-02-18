@@ -103,7 +103,7 @@ SET row_security = off;
 ```
 
 
-## Backuping up the data_type table
+## Backing up the data_type table
 
 The `schema.sql` file contains a few insert statements at the bottom that populate the `data_type` table. These were manually added to the file. Another option would be to export the data_types table.
 
