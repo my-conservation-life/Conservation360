@@ -15,6 +15,8 @@ export default class Map extends LightningElement {
      * 
      * When this is complete, call initializeleaflet()
      */
+
+
     connectedCallback() {
         Promise.all([
             loadScript(this, leaflet + '/leaflet.js'),
@@ -29,6 +31,7 @@ export default class Map extends LightningElement {
     /**
      * Constructs the Leaflet map on the page and initializes this.map
      */
+    map = L.map('.map-root',{drawControl: true}).setView([18.7669,46.8691])
     initializeLeaflet() {
         const mapRoot = this.template.querySelector('.map-root');
         this.map = L.map(mapRoot);
@@ -36,6 +39,7 @@ export default class Map extends LightningElement {
         L.control.scale().addTo(this.map);
         this.map.setMinZoom(2);
         this.map.setMaxZoom(8);
+        
     }
 
     /**
@@ -48,9 +52,7 @@ export default class Map extends LightningElement {
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
                 attribution: '&copy; ' + mapLink + ' Contributors',
-                //minZoom: 4,
-                maxZoom: 5,
-                maxNativeZoom: 5
+                
             })
             .addTo(this.map);
     }

@@ -82,9 +82,9 @@ export default class GeoQuery extends LightningElement {
             console.log(`Map clicked at lat: ${coord.lat} lon: ${coord.lng}`);
 
             // If you zoom out far enough the world map will start to repeat accross the screan and leaflet 
-            // will return longitudes like 190 degrees for what would technicall be -170
+            // will return longitudes like 190 degrees for what would technically be -170
             let mlat = (((coord.lat + 90) % 180) - 90);
-            let mlon = (((coord.lng + 180) % 360) - 180); //TODO
+            let mlon = (((coord.lng + 180) % 360) - 180); 
 
             // Remember where the user actually clicked so we can put the markers in the correct spot
             let latOff = Math.trunc(coord.lat / 90);
