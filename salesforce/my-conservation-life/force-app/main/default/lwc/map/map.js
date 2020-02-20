@@ -31,17 +31,30 @@ export default class Map extends LightningElement {
     /**
      * Constructs the Leaflet map on the page and initializes this.map
      */
-    map = L.map('.map-root',{drawControl: true}).setView([18.7669,46.8691])
+    //  map = L.map('.map-root',{drawControl: true}).setView([18.7669,46.8691])
     initializeLeaflet() {
         const mapRoot = this.template.querySelector('.map-root');
         this.map = L.map(mapRoot);
         this.map.fitWorld();
         L.control.scale().addTo(this.map);
         this.map.setMinZoom(2);
-        this.map.setMaxZoom(8);
+        this.map.setMaxZoom(17);
+        this.map.drawControl(true);
         
     }
 
+    addDrawTools() {
+        const drawnItems = new L.FeatureGroup();
+        this.map.addLayer(drawnItems);
+        const drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems
+            }
+        });
+        this.map.addControl(drawControl);
+    }
+    
+    
     /**
      * Setup the base OpenStreetMap tile layer
      */
