@@ -1,3 +1,4 @@
+/* eslint-disable vars-on-top */
 import { LightningElement } from 'lwc';
 import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
 
@@ -31,7 +32,6 @@ export default class Map extends LightningElement {
     /**
      * Constructs the Leaflet map on the page and initializes this.map
      */
-    //  map = L.map('.map-root',{drawControl: true}).setView([18.7669,46.8691])
     initializeLeaflet() {
         const mapRoot = this.template.querySelector('.map-root');
         this.map = L.map(mapRoot);
@@ -39,11 +39,11 @@ export default class Map extends LightningElement {
         L.control.scale().addTo(this.map);
         this.map.setMinZoom(2);
         this.map.setMaxZoom(17);
-        this.map.drawControl(true);
-        
-    }
 
-    addDrawTools() {
+    }
+     
+    /**addDrawTools() {
+        //this.map.drawControl(true);
         const drawnItems = new L.FeatureGroup();
         this.map.addLayer(drawnItems);
         const drawControl = new L.Control.Draw({
@@ -51,7 +51,24 @@ export default class Map extends LightningElement {
                 featureGroup: drawnItems
             }
         });
-        this.map.addControl(drawControl);
+        L.control.drawControl(drawControl).addTo(this.map);
+
+        const toolbar = L.Toolbar();
+        const modifiedDraw = L.drawLocal.extend({
+            draw: {
+                toolbar: {
+                    buttons: {
+                        polygon: 'Draw a polygon!'
+                    }
+                }
+            }
+        });
+        this.map.addLayer(modifiedDraw);
+        toolbar.addToolbar(this.map);
+    }*/
+
+    createToolbar() { 
+        
     }
     
     
@@ -68,5 +85,13 @@ export default class Map extends LightningElement {
                 
             })
             .addTo(this.map);
+        var drawnItems = new L.FeatureGroup();
+        this.map.addLayer(drawnItems);
+        var drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems
+            }
+        });
+        this.map.addControl(drawControl);
     }
 }
