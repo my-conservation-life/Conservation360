@@ -1,0 +1,45 @@
+{
+    "/assetPropTypes": {
+        "post": {
+            "description": "Returns all the property types for an asset type.",
+            "requestBody": {
+                "assetTypeID": "The number for the asset type ID",
+                "content": {
+                    "application/json": {}
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "The property types have been returned.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "asset_type_id": {
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "data_type": {
+                                    "type": "string"
+                                },
+                                "required": {
+                                    "type": "boolean"
+                                },
+                                "is_private": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
