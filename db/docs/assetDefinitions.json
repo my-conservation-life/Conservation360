@@ -2,11 +2,20 @@
     "/csv": {
         "put": {
             "requestBody": {
-                "description": "",
+                "description": "A CSV file containing asset data",
                 "content": {
-                    "application/vnd.ms-excel": {
+                    "multipart/form-data": {
                         "schema": {
-                            "$ref": "#/components/schema/asset_property"
+                            "type": "object",
+                            "properties": {
+                                "assetTypeId": {
+                                    "type": "integer"
+                                },
+                                "csv": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
                         },
                         "examples": {
                             "import-csv-example": {
