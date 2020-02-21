@@ -22,7 +22,7 @@
                                 "summary": "Importing data with a valid CSV",
                                 "description": "CSV containing data to be stored",
                                 "value": {
-                                    "asset_type_id": "3",
+                                    "asset_type_id": 3,
                                     "csv": "fire.csv"
                                 }
                             }
