@@ -103,6 +103,7 @@ export default class GeoQuery extends LightningElement {
                 radius: rad
             }).addTo(map);
 
+
             // Query the open source database for assets that are within a radius of 
             // where the user clicked... this should go in a controller module and is only
             // here because I was hacking this together for a demo

@@ -17,7 +17,7 @@ export default class Map extends LightningElement {
      * When this is complete, call initializeleaflet()
      */
 
-
+    
     connectedCallback() {
         Promise.all([
             loadScript(this, leaflet + '/leaflet.js'),
@@ -28,6 +28,7 @@ export default class Map extends LightningElement {
             this.dispatchEvent(new CustomEvent('ready', { detail: this.map }));
         });
     }
+
 
     /**
      * Constructs the Leaflet map on the page and initializes this.map
@@ -41,37 +42,8 @@ export default class Map extends LightningElement {
         this.map.setMaxZoom(17);
 
     }
-     
-    /**addDrawTools() {
-        //this.map.drawControl(true);
-        const drawnItems = new L.FeatureGroup();
-        this.map.addLayer(drawnItems);
-        const drawControl = new L.Control.Draw({
-            edit: {
-                featureGroup: drawnItems
-            }
-        });
-        L.control.drawControl(drawControl).addTo(this.map);
+  
 
-        const toolbar = L.Toolbar();
-        const modifiedDraw = L.drawLocal.extend({
-            draw: {
-                toolbar: {
-                    buttons: {
-                        polygon: 'Draw a polygon!'
-                    }
-                }
-            }
-        });
-        this.map.addLayer(modifiedDraw);
-        toolbar.addToolbar(this.map);
-    }*/
-
-    createToolbar() { 
-        
-    }
-    
-    
     /**
      * Setup the base OpenStreetMap tile layer
      */
@@ -85,13 +57,5 @@ export default class Map extends LightningElement {
                 
             })
             .addTo(this.map);
-        var drawnItems = new L.FeatureGroup();
-        this.map.addLayer(drawnItems);
-        var drawControl = new L.Control.Draw({
-            edit: {
-                featureGroup: drawnItems
-            }
-        });
-        this.map.addControl(drawControl);
     }
 }
