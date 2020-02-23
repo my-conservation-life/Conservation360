@@ -97,6 +97,66 @@ describe('GET assetTypes', () => {
     });
 });
 
+describe('POST assetPropTypes', () => {
+    beforeAll(async () => {
+        jest.setTimeout(30000);
+        await setup();
+
+        // create some default asset types
+        await loadSQL('../schema/sample-data-assetTypes.sql');
+    });
+
+    afterAll(async () => {
+        await teardown();
+    });
+
+    it('gets all asset property types', () => {
+        return request(app)
+            .post('/api/v1/assetPropTypes')
+            .expect(200)
+            .then((res) => {
+                expect(res.body.rows).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(EXPECTED_ASSET_TYPE1),
+                        expect.objectContaining(EXPECTED_ASSET_TYPE2),
+                        expect.objectContaining(EXPECTED_ASSET_TYPE3)
+                    ])
+                );
+                expect(res.body.rows).toHaveLength(3);
+            });
+    });
+});
+
+describe('POST assetPropsByTypeID', () => {
+    beforeAll(async () => {
+        jest.setTimeout(30000);
+        await setup();
+
+        // create some default asset types
+        await loadSQL('../schema/sample-data-assetTypes.sql');
+    });
+
+    afterAll(async () => {
+        await teardown();
+    });
+
+    it('gets all asset property types', () => {
+        return request(app)
+            .post('/api/v1/assetPropsByTypeID')
+            .expect(200)
+            .then((res) => {
+                expect(res.body.rows).toEqual(
+                    expect.arrayContaining([
+                        expect.objectContaining(EXPECTED_ASSET_TYPE1),
+                        expect.objectContaining(EXPECTED_ASSET_TYPE2),
+                        expect.objectContaining(EXPECTED_ASSET_TYPE3)
+                    ])
+                );
+                expect(res.body.rows).toHaveLength(3);
+            });
+    });
+});
+
 
 // TODO - tests for PUT CSV endpoint
 describe('PUT CSV', () => {

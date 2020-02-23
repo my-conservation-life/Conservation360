@@ -1,0 +1,18 @@
+<template>
+    <lightning:layout horizontalalign="space">
+        <lightning:layoutItem size="10">
+            <lightning-combobox
+                name="datasource"
+                label="Export a template CSV"
+                value={value}
+                placeholder={value}
+                options={combo_options}
+                onchange={handleChange}
+            ></lightning-combobox>
+        </lightning:layoutItem>
+        <br/>
+        <lightning:layoutItem size="2">
+            <lightning-button variant="success" label="Download" onclick={download}></lightning-button>
+        </lightning:layoutItem>
+    </lightning:layout>
+</template>

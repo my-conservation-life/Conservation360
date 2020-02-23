@@ -21,6 +21,43 @@ describe('assetDefinitions.findAssetTypes', () => {
     });
 });
 
+describe('assetDefinitions.findAssetPropTypes', () => {
+    const EXPECTED_ASSET_PROP_TYPES = [];
+    let fetch;
+
+    let URL = utils.URL + 'assetPropTypes'
+
+    beforeEach(() => {
+        fetch = createMockFetch(EXPECTED_ASSET_PROP_TYPES);
+        global.fetch = fetch;
+    });
+
+    it('finds all the asset properties for a given asset type', async () => {
+        const assetPropTypes = await assetDefinitions.fetchAssetPropTypes(1);
+        expect(fetch.mock.calls[0][0]).toBe(URL);
+        expect(fetch.mock.calls[0][1]).toEqual(expect.objectContaining(1));
+        expect(assetPropTypes).toEqual(EXPECTED_ASSET_PROP_TYPES);
+    });
+});
+
+describe('assetDefinitions.findAssetPropsByTypeID', () => {
+    const EXPECTED_ASSET_PROPERTIES = [];
+    let fetch;
+
+    let URL = utils.URL + 'assetPropsByTypeID';
+
+    beforeEach(() => {
+        fetch = createMockFetch(EXPECTED_ASSET_PROPERTIES);
+        global.fetch = fetch;
+    });
+
+    it('finds all the asset properties for a given type of asset', async () => {
+        const assetPropsByTypeID = await assetDefinitions.fetchAssetPropsByTypeID(1);
+        expect(fetch.mock.calls[0][0]).toBe(URL);
+        expect(assetPropsByTypeID).toEqual(EXPECTED_ASSET_PROPERTIES);
+    });
+});
+
 describe('assetDefinitions.sendCSV', () => {
     const EXPECTED_RESPONSE = Promise.resolve();
     let fetch;
