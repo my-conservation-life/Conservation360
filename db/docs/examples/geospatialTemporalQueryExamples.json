@@ -1,0 +1,55 @@
+{
+    "circle-query-example": {
+        "summary": "A circular area to query asset historical data.",
+        "description": "A query that specifies a latitude longitude point and a radius to find asset data.",
+        "value": {
+            "geometry": {
+                "type": "Circle",
+                "coordinates": [
+                    -16,
+                    44
+                ],
+                "radius": "1000000"
+            },
+            "start_date": "2020-02-01",
+            "end_date": "2020-02-20",
+            "sponsor": "seneca park zoo society",
+            "asset_type": "fire",
+            "project": "Madagascar reforesting project"
+        }
+    },
+    "polygon-query-example": {
+        "summary": "A polygon area to query asset historical data.",
+        "description": "A query that specifies a polygonal area to query historical data.",
+        "value": {
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        -16,
+                        44
+                    ],
+                    [
+                        -18,
+                        44
+                    ],
+                    [
+                        -18,
+                        48
+                    ],
+                    [
+                        -16,
+                        48
+                    ],
+                    [
+                        -16,
+                        44
+                    ]
+                ]
+            },
+            "sponsor": "seneca park zoo society",
+            "asset_type": "fire",
+            "project": "Madagascar reforesting project"
+        }
+    }
+}
