@@ -146,8 +146,9 @@ const validLongitude = (longitude) => {
 const parseCoordinates = (coordinateList) => {
    
     // There needs to be at least 3 
-    if (coordinateList.length < 3)
+    if (coordinateList.length < 3) {
         return ParseResult.failure('Expected at least 3 points in the coordinates list');
+    }
 
     let lat = 0;
     let lon = 0;
@@ -156,19 +157,16 @@ const parseCoordinates = (coordinateList) => {
 
     var i;
     var point;
-    for(i = 0; i < coordinateList.length; i++)
-    {
+    for (i = 0; i < coordinateList.length; i++) {
         point = coordinateList[i];
         lon = parseFloat(point.longitude);
         lat = parseFloat(point.latitude);
 
-        if(!isNaN(lon) && validLongitude(lon) 
-            && !isNaN(lat) && validLatitude(lat))
-        {
+        if (!isNaN(lon) && validLongitude(lon) 
+            && !isNaN(lat) && validLatitude(lat)) {
             coordinates.push({latitude: lat, longitude: lon});
         }
-        else
-        {
+        else {
             return ParseResult.failure('Unable to parse coordinate. Please format points like {coordinates: [{"latitude": "-14.342", "longitude": "33.123"},...]}');
         }
     }

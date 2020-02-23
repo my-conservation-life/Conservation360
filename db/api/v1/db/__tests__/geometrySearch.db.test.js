@@ -79,3 +79,4 @@ describe('geometrySearch.db.polygonFind', () => {
         expect(query.mock.calls[0][1][0]).toEqual(expect.stringContaining(lineString));
     });
 });
+

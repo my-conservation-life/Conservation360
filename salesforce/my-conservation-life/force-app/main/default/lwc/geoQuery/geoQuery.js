@@ -6,8 +6,8 @@ import utils from 'c/utils';
 const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
 
 
-// import { assets, bboxAssets } from 'c/controllers';
-// import { markerFromAsset } from './utils';
+// TODO import { assets, bboxAssets } from 'c/controllers';
+// TODO import { markerFromAsset } from './utils';
 
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
@@ -58,17 +58,14 @@ export default class GeoQuery extends LightningElement {
         map.on('click', function(e) {
 
             // Remove the old radius search indicator so we can start a new query
-            if (this.mapCircle !== undefined)
-            {
+            if (this.mapCircle !== undefined) {
                 map.removeLayer(this.mapCircle);
             }
 
             // Remove the old markers from the previous query
-            if (this.myAssets !== undefined && this.myAssets.length > 0)
-            {
+            if (this.myAssets !== undefined && this.myAssets.length > 0){
                 let i;
-                for(i = 0; i < this.myAssets.length; i++)
-                {
+                for (i = 0; i < this.myAssets.length; i++) {
                     map.removeLayer(this.myAssets[i]);
                 }
 
@@ -123,14 +120,13 @@ export default class GeoQuery extends LightningElement {
                 console.log(response);
 
                 // Initialize the array if need be
-                if( this.myAssets === undefined){
+                if ( this.myAssets === undefined) {
                     this.myAssets = [];
                 }
 
                 // Iterate over the assets and add them to the map
                 let i;
-                for(i = 0; i < response.length; i++)
-                {
+                for (i = 0; i < response.length; i++) {
                     const a = response[i];
 
                     // Create the map marker. Add back the offset so markers appear where the user clicked.
@@ -147,3 +143,4 @@ export default class GeoQuery extends LightningElement {
         // this.map.on('click', this.onMapClicked);
     }
 }
+
