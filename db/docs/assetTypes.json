@@ -1,0 +1,28 @@
+{
+    "/assetTypes": {
+        "get": {
+            "description": "Returns all asset type IDs and descriptions.",
+            "parameters": [],
+            "responses": {
+                "200": {
+                    "description": "Asset types returned",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties":  {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

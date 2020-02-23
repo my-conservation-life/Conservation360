@@ -1,0 +1,36 @@
+{
+    "/assetPropsByTypeID": {
+        "post": {
+            "description": "Gets all asset properties for a given asset type.",
+            "requestBody": {
+                "assetTypeID": "The asset type ID as an integer",
+                "content": {
+                    "application/json": {}
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "All of the asset properties have been returned.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "value": {
+                                    "type": "string"
+                                },
+                                "property_id": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
