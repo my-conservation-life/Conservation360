@@ -1,8 +1,8 @@
 /* eslint-disable vars-on-top */
 import { LightningElement } from 'lwc';
 import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
-
 import leaflet from '@salesforce/resourceUrl/leaflet';
+import leafletDraw from '@salesforce/resourceUrl/leafletDraw';
 
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
@@ -10,7 +10,7 @@ import leaflet from '@salesforce/resourceUrl/leaflet';
 export default class Map extends LightningElement {
 
     map; // L.map, a leaflet map. constructed in initializeleaflet
-
+    
     /**
      * When the Map LWC is ready, start downloading Leaflet.
      * 
@@ -21,7 +21,10 @@ export default class Map extends LightningElement {
     connectedCallback() {
         Promise.all([
             loadScript(this, leaflet + '/leaflet.js'),
-            loadStyle(this, leaflet + '/leaflet.css')
+            loadStyle(this, leaflet + '/leaflet.css'),
+            loadScript(this, leafletDraw + '/dist/leaflet.draw.js'),
+            loadStyle(this, leafletDraw + '/dist/leaflet.draw.css')
+
         ]).then(() => {
             this.initializeLeaflet();
             this.setupBaseTiles();
@@ -40,10 +43,23 @@ export default class Map extends LightningElement {
         L.control.scale().addTo(this.map);
         this.map.setMinZoom(2);
         this.map.setMaxZoom(17);
-
+        this.addDrawTools();
     }
-  
-
+    
+    /**
+     * Adds the drawing tools to the map interface
+     */
+    addDrawTools() {
+        var drawnItems = new L.FeatureGroup();
+        this.map.addLayer(drawnItems);
+        var drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems
+            }
+        });
+        this.map.addControl(drawControl);
+    }
+    
     /**
      * Setup the base OpenStreetMap tile layer
      */
