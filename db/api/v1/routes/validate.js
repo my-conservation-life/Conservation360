@@ -165,8 +165,7 @@ const parseCoordinates = (coordinateList) => {
         if (!isNaN(lon) && validLongitude(lon) 
             && !isNaN(lat) && validLatitude(lat)) {
             coordinates.push({latitude: lat, longitude: lon});
-        }
-        else {
+        } else {
             return ParseResult.failure('Unable to parse coordinate. Please format points like {coordinates: [{"latitude": "-14.342", "longitude": "33.123"},...]}');
         }
     }

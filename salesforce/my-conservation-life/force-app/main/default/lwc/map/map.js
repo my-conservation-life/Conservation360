@@ -16,7 +16,6 @@ export default class Map extends LightningElement {
      * 
      * When this is complete, call initializeleaflet()
      */
-
     
     connectedCallback() {
         Promise.all([
