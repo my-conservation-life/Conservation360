@@ -1,0 +1,31 @@
+{
+    "/assets/properties/temporalSearch": {
+        "get": {
+            "requestBody": {
+                "description": "Gets an array of assets' historical properties.",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schema/geospacialTemporalQuery"
+                        },
+                        "examples": {
+                            "$ref": "#/examples/geospatialTemporalQueryExamples"
+                        }
+                    }
+                }
+            },
+            "responses": {
+                "200": {
+                    "description": "GeoJson FeatureCollection containing an array of assets' historical properties ",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schema/assetHistoryFeatureCollection"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

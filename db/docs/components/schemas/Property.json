@@ -1,0 +1,36 @@
+{
+    "Property": {
+        "type": "object",
+        "required": [
+            "id",
+            "asset_type_id",
+            "data_type"
+        ],
+        "properties": {
+            "id": {
+                "type": "integer",
+                "description": "the unique ID of the property"
+            },
+            "asset_type_id": {
+                "type": "integer",
+                "description": "the ID of the asset type possessing the property"
+            },
+            "data_type": {
+                "type": "string",
+                "description": "the data type of the information that the property tracks"
+            },
+            "name": {
+                "type": "string",
+                "description": "the name of the property"
+            },
+            "required": {
+                "type": "boolean",
+                "description": "tell whether the property is required to be stored for all assets possessing the property"
+            },
+            "is_private": {
+                "type": "boolean",
+                "description": "tell whether this property should be private from the general public"
+            }
+        }
+    }
+}

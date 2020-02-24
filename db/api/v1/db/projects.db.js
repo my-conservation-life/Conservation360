@@ -16,7 +16,7 @@ const QUERY_FIND = `
         project 
     WHERE 
         TRUE 
-`;
+`; // The WHERE TRUE is needed for the find function to append WHERE clauses properly
 
 // A query to create a new project in the database
 const QUERY_CREATE = `

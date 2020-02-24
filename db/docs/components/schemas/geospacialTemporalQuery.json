@@ -1,0 +1,43 @@
+{
+    "geospatialTemporalQuery": {
+        "type": "Object",
+        "required": [
+            "geometry"
+        ],
+        "properties:": {
+            "asset_id": {
+                "type": "integer",
+                "description": "The ID of the asset."
+            },
+            "sponsor": {
+                "type": "string",
+                "description": "The sponsoring organization of the asset."
+            },
+            "project": {
+                "type": "string",
+                "description": "The project the asset is a part of."
+            },
+            "asset_type": {
+                "type": "string",
+                "description": "They type of asset"
+            },
+            "start_date": {
+                "type": "date",
+                "format": "YYYY-MM-DD",
+                "description": "The lower bounding date the asset entered the database."
+            },
+            "end_date": {
+                "type": "date",
+                "format": "YYYY-MM-DD",
+                "description": "The uper bounding date the asset entered the database."
+            },
+            "geometry": {
+                "type": "object",
+                "description": "The type of geospatial search to query asset data for.",
+                "example": {
+                    "$ref": "examples/geospatialTemporalQueryExamples"
+                }
+            }
+        }
+    }
+}

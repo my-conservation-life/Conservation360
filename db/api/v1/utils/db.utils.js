@@ -49,13 +49,32 @@ const makeLineStringHelper = (lon, lat) => {
  * @returns {string} a postgis LINESTRING
  */
 const makeLineString = (coordinatesList) => {
-
     // An array of LINESTRING coordinate pairs 'lon lat'
-    let coordPairs = [];
+    var coordPairs = [];
 
-    coordinatesList.forEach(point => {
+    var point;
+    for (var i = 0; i < coordinatesList.length; i++) {
+        point = coordinatesList[i];
         coordPairs.push(makeLineStringHelper(point.longitude, point.latitude));
-    });
+    }
+
+    return `LINESTRING(${coordPairs.join(',')})`;
+};
+
+/**
+ * Creates a postgis LINESTRING from an array of GeoJson coordinates
+ * 
+ * @param {Array} coordinates an array of GeoJson coordinates [lon, lat] points
+ * @returns {string} a postgis LINESTRING
+ */
+const makeLineStringFromGeoJsonCoordinates = (coordinates) => {
+    var coordPairs = [];
+
+    var point;
+    for (var i = 0; i < coordinates.length; i++) {
+        point = coordinates[i];
+        coordPairs.push(makeLineStringHelper(point[0], point[1]));
+    }
 
     return `LINESTRING(${coordPairs.join(',')})`;
 };
@@ -77,6 +96,6 @@ module.exports = {
     beginTransaction,
     commitTransaction,
     rollbackTransaction,
-    makeLineString
+    makeLineString,
+    makeLineStringFromGeoJsonCoordinates
 };
-

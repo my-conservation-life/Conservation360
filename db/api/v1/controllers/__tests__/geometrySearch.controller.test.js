@@ -132,4 +132,3 @@ describe('geometrySearch.controller.polygonFind', () => {
         expect(res.json).not.toHaveBeenCalled();
     });
 });
-

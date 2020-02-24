@@ -15,7 +15,7 @@ const QUERY_FIND = `
         JOIN sponsor ON project.sponsor_id = sponsor.id
         JOIN asset_type ON asset.asset_type_id = asset_type.id
     WHERE 
-        TRUE `;
+        TRUE `; // The WHERE TRUE is needed for the find function to append WHERE clauses properly
 
 /**
  * Find project assets.
@@ -76,7 +76,7 @@ const createAssetProperty = async (client, assetId, property) => {
  * @param {*} client The client being used to access the database
  * @param {*} projectId The project id that this asset will be associated with
  * @param {*} assetTypeId The asset definition that this asset will use
- * @param {*} location The lattitude and longitude of this asset
+ * @param {*} location The latitude and longitude of this asset
  */
 const createAsset = async (client, projectId, assetTypeId, location) => {
 
