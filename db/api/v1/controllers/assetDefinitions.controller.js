@@ -55,7 +55,6 @@ const getAssetPropsByTypeID = async (req, res, next) => {
 const find = async (req, res, next) => {
 
     const predicates = req.query;
-
     try {
         const assetDefinitions = await db.assetDefinitions.find(predicates);
         res.json(assetDefinitions);
