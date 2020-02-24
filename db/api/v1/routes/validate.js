@@ -158,8 +158,7 @@ const parseCoordinates = (coordinateList) => {
 
     var i;
     var point;
-    for (i = 0; i < coordinateList.length; i++)
-    {
+    for (i = 0; i < coordinateList.length; i++) {
         point = coordinateList[i];
         lon = parseFloat(point.longitude);
         lat = parseFloat(point.latitude);
@@ -167,8 +166,7 @@ const parseCoordinates = (coordinateList) => {
         if (!isNaN(lon) && validLongitude(lon) 
             && !isNaN(lat) && validLatitude(lat)) {
             coordinates.push({latitude: lat, longitude: lon});
-        }
-        else {
+        } else {
             return ParseResult.failure('Unable to parse coordinate. Please format points like {coordinates: [{"latitude": "-14.342", "longitude": "33.123"},...]}');
         }
     }
@@ -315,6 +313,36 @@ const parseId = (idStr) => {
     return (isNaN(id) || !utils.db.isValidDbInteger(id)) ? 
         ParseResult.failure(`Expected a number between 1 and ${utils.db.DB_INTEGER_MAX}`) : 
         ParseResult.success(id);
+};
+
+/**
+ * Parse a latitude value from a string
+ * 
+ * @param {string} latStr - A string that is parsable into a floating point number
+ * @returns {ParseResult} - Parse success with a float value that is a latitude, or a failure message
+ */
+const parseLatitude = (latStr) => {
+    const lat = parseFloat(latStr);
+    const isValid = (!isNaN(lat) && validLatitude(lat));
+
+    return isValid ?
+        ParseResult.success(lat) :
+        ParseResult.failure('Latitudes must be numbers between -90 and 90');
+};
+
+/**
+ * Parse a longitude value from a string
+ * 
+ * @param {string} lonStr - A string that is parsable into a floating point number
+ * @returns {ParseResult} - Parse success with a float value that is a longitude, or a failure message
+ */
+const parseLongitude = (lonStr) => {
+    const lon = parseFloat(lonStr);
+    const isValid = (!isNaN(lon) && validLongitude(lon));
+
+    return isValid ?
+        ParseResult.success(lon) :
+        ParseResult.failure('Longitudes must be numbers between -180 and 180');
 };
 
 /**
