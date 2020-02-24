@@ -35,11 +35,7 @@ describe('assetDefinitions.controller.getAssetPropsByTypeID', () => {
     let data;
 
     beforeEach(() => {
-        req = {
-            'body': {
-                
-            }
-        };
+        req = { valid : { assetTypeID: 1 } };
     
         res = {
             json: jest.fn()
@@ -65,7 +61,7 @@ describe('assetDefinitions.controller.getAssetPropsTypes', () => {
     let data;
 
     beforeEach(() => {
-        req = {};
+        req = { valid : { assetTypeID: 1 } };
     
         res = {
             json: jest.fn()
