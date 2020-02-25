@@ -6,6 +6,7 @@ const HISTORY_URL = utils.URL + 'assets/properties/temporalSearch';
 export default class TemporalMap extends LightningElement {
     assetsPromise;
     geoTemporalQueryBody;
+    geoLayer;
 
     /**
      * Starts the download for asset details and bounding box early.
@@ -25,7 +26,7 @@ export default class TemporalMap extends LightningElement {
      * convert each asset into a marker that is displayed on the map
      * all at once.
      * 
-     * @param {CustomEvent} event
+     * @param {CustomEvent} event - A dom event
      * @param {Map} event.details - Leaflet Map of the child component
      */
     onMapInitialized(event) {
@@ -113,47 +114,23 @@ export default class TemporalMap extends LightningElement {
 
             
             const historyURL = new URL(HISTORY_URL);
-            console.log('Posting: ' + historyURL.href);
-
             this.geoTemporalQueryBody.geometry.coordinates = [mlon, mlat];
-
-            console.log(this.geoTemporalQueryBody);
             this.assetsPromise = utils.post(historyURL.href, this.geoTemporalQueryBody);
 
-            try {
-                // When the promise is fulfilled handle it
-                this.assetsPromise.then(response => {
-                    try {
-                        // Response should be an array of assets
-                        console.log(response);
-                    } catch (error) {
-                        console.log(error);
-                    }
+            // When the promise is fulfilled handle it
+            this.assetsPromise.then(response => {
+                console.log(response);
 
-                    // // Initialize the array if need be
-                    // if ( this.myAssets === undefined) {
-                    //     this.myAssets = [];
-                    // }
-    
-                    // // Iterate over the assets and add them to the map
-                    // let i;
-                    // for (i = 0; i < response.length; i++) {
-                    //     const a = response[i];
-    
-                    //     // Create the map marker. Add back the offset so markers appear where the user clicked.
-                    //     let m = L.marker(L.latLng(a.lat + (latOff * 90), a.lon + (lonOff * 180))).addTo(map);
-    
-                    //     // Add expanded details for if a user clicks on the marker
-                    //     m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
-    
-                    //     // Keep a reference to the marker so we can remove it later
-                    //     this.myAssets.push(m);
-                    // }
-                });
-            } catch (error) {
-                console.log(error);
-            }
-
+                if (this.geoLayer !== undefined) {
+                    map.removeLayer(this.geoLayer);
+                }
+                this.geoLayer = L.geoJSON(response)
+                    .bindPopup(function (layer) {
+                        let props = layer.feature.properties;
+                        let d = Date.parse(props.date);
+                        return `${props.sponsor_name}: ${props.asset_type}: ${d.getMonth()}/${d.getDate()}/${d.getFullYear()}`;
+                    }).addTo(map);
+            });
 
         });
     }
