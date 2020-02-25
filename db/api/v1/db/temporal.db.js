@@ -114,9 +114,9 @@ const temporalSearch = async (geometry, asset_id, sponsor_name, project_name, as
 
     query += ORDER_BY;
 
-    const result = await global.dbPool.query(query, values);
+    return query;
 
-    return result;
+    const result = await global.dbPool.query(query, values);
 
     var temporal_results = [];
     // Should be ordered by asset id then ordered by date
