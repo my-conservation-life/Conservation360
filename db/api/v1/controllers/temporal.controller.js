@@ -13,6 +13,8 @@ const temporalSearch = async (req, res, next) => {
     const end_date = req.valid.end_date;
     const geometry = req.valid.geometry;
 
+    res.json('hello');
+
     try {
         const ret = await temporalDb.temporalSearch(geometry, asset_id, sponsor_name, project_name,
             asset_type_name, start_date, end_date);
