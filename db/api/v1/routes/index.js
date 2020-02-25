@@ -41,7 +41,7 @@ router.get(
     geometrySearch.polygonFind
 );
 
-router.get(
+router.post(
     '/assets/properties/temporalSearch',
     validate(param.body, 'asset_id', type.id),
     validate(param.body, 'sponsor', type.sponsorName),

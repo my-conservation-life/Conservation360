@@ -1,20 +1,12 @@
-/* eslint-disable no-console */
 import { LightningElement } from 'lwc';
-
 import utils from 'c/utils';
 
-const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
+const HISTORY_URL = utils.URL + 'assets/properties/temporalSearch';
 
-
-// TODO import { assets, bboxAssets } from 'c/controllers';
-// TODO import { markerFromAsset } from './utils';
-
-/* L is the Leaflet object constructed by the leaflet.js script */
-/*global L*/
-export default class GeoQuery extends LightningElement {
+export default class TemporalMap extends LightningElement {
     assetsPromise;
+    geoTemporalQueryBody;
 
-    
     /**
      * Starts the download for asset details and bounding box early.
      */
@@ -42,6 +34,14 @@ export default class GeoQuery extends LightningElement {
 
         // An array of assets
         this.myAssets = [];
+
+        this.geoTemporalQueryBody = {
+            'geometry': {
+                'type': 'Circle',
+                'coordinates' : [-16, 44],
+                'radius' : 100000
+            },
+        };    
 
         // Set the initial view of the map to Madagascar
         map.fitBounds([
@@ -73,6 +73,17 @@ export default class GeoQuery extends LightningElement {
                 this.myAssets = [];
             }
 
+            if (this.geoTemporalQueryBody === undefined)
+            {
+                this.geoTemporalQueryBody = {
+                    'geometry': {
+                        'type': 'Circle',
+                        'coordinates' : [-16, 44],
+                        'radius' : 100000
+                    },
+                };   
+            }
+
             // Get the coordinates of where the user clicked
             let coord = e.latlng;
 
@@ -100,46 +111,48 @@ export default class GeoQuery extends LightningElement {
                 radius: rad
             }).addTo(map);
 
+            
+            const historyURL = new URL(HISTORY_URL);
+            console.log('Getting: ' + historyURL.href);
 
-            // Query the open source database for assets that are within a radius of 
-            // where the user clicked... this should go in a controller module and is only
-            // here because I was hacking this together for a demo
-            const distanceURL = new URL(DISTANCE_URL);
-            distanceURL.searchParams.append('latitude', `${mlat}`);
-            distanceURL.searchParams.append('longitude', `${mlon}`);
-            distanceURL.searchParams.append('radiusMeters', `${rad}`);
+            this.geoTemporalQueryBody.geometry.coordinates = [mlon, mlat];
 
-            console.log('Getting: ' + distanceURL.href);
-
+            console.log(this.geoTemporalQueryBody);
             // Send out the GET request
-            this.assetsPromise = utils.get(distanceURL.href);
+
+            try {
+                this.assetsPromise = utils.post(historyURL.href, this.geoTemporalQueryBody);
+            } catch (error) {
+                console.log(error);
+            }
 
             // When the promise is fulfilled handle it
             this.assetsPromise.then(response => {
                 // Response should be an array of assets
                 console.log(response);
 
-                // Initialize the array if need be
-                if ( this.myAssets === undefined) {
-                    this.myAssets = [];
-                }
+                // // Initialize the array if need be
+                // if ( this.myAssets === undefined) {
+                //     this.myAssets = [];
+                // }
 
-                // Iterate over the assets and add them to the map
-                let i;
-                for (i = 0; i < response.length; i++) {
-                    const a = response[i];
+                // // Iterate over the assets and add them to the map
+                // let i;
+                // for (i = 0; i < response.length; i++) {
+                //     const a = response[i];
 
-                    // Create the map marker. Add back the offset so markers appear where the user clicked.
-                    let m = L.marker(L.latLng(a.lat + (latOff * 90), a.lon + (lonOff * 180))).addTo(map);
+                //     // Create the map marker. Add back the offset so markers appear where the user clicked.
+                //     let m = L.marker(L.latLng(a.lat + (latOff * 90), a.lon + (lonOff * 180))).addTo(map);
 
-                    // Add expanded details for if a user clicks on the marker
-                    m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
+                //     // Add expanded details for if a user clicks on the marker
+                //     m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
 
-                    // Keep a reference to the marker so we can remove it later
-                    this.myAssets.push(m);
-                }
+                //     // Keep a reference to the marker so we can remove it later
+                //     this.myAssets.push(m);
+                // }
             });
         });
-        // this.map.on('click', this.onMapClicked);
     }
+
+
 }
