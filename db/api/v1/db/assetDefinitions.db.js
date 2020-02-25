@@ -156,13 +156,13 @@ const create = async (assetDefinition) => {
         const data = await createAssetType(client, assetDefinition.name, assetDefinition.description);
         const assetTypeId = data.rows[0].id;
 
-        // const propertyPromises = [];
-        // for (let property of assetDefinition.properties) {
-        //     const propertyPromise = createProperty(client, assetTypeId, property);
-        //     propertyPromises.push(propertyPromise);
-        // }
+        const propertyPromises = [];
+        for (let property of assetDefinition.properties) {
+            const propertyPromise = createProperty(client, assetTypeId, property);
+            propertyPromises.push(propertyPromise);
+        }
 
-        // await Promise.all(propertyPromises);
+        await Promise.all(propertyPromises);
         await utils.db.commitTransaction(client);
 
         return assetTypeId;
