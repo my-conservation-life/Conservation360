@@ -3,6 +3,9 @@ import utils from 'c/utils';
 
 const HISTORY_URL = utils.URL + 'assets/properties/temporalSearch';
 
+import leaflet from '@salesforce/resourceUrl/leaflet';
+
+
 export default class TemporalMap extends LightningElement {
     assetsPromise;
     geoTemporalQueryBody;
@@ -51,6 +54,8 @@ export default class TemporalMap extends LightningElement {
 
         // Locks the map region to one earth (prevents dragging)
         map.setMaxBounds([[-90,-180],[90,180]]);
+
+        L.Icon.Default.prototype.options.iconUrl = 'baobab-marker-icon.png';
 
         
         // Implement map "on click" handler
@@ -121,14 +126,33 @@ export default class TemporalMap extends LightningElement {
             this.assetsPromise.then(response => {
                 console.log(response);
 
+                let geojsonMarkerOptions = {
+                    radius: 8,
+                    fillColor: '#228B22',
+                    color: '#000',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                };
+
                 if (this.geoLayer !== undefined) {
                     map.removeLayer(this.geoLayer);
                 }
-                this.geoLayer = L.geoJSON(response)
+                this.geoLayer = L.geoJSON(response, {
+                    pointToLayer: function (feature, latlng) {
+                        switch (feature.properties.asset_type) {
+                        case 'tree':
+                        case 'Tree':
+                            return L.marker(latlng);
+                        default:
+                            return L.circleMarker(latlng, geojsonMarkerOptions);
+                        }
+                        
+                    }})
                     .bindPopup(function (layer) {
                         let props = layer.feature.properties;
-                        let d = Date.parse(props.date);
-                        return `${props.sponsor_name}: ${props.asset_type}: ${d.getMonth()}/${d.getDate()}/${d.getFullYear()}`;
+                        let d = props.date.split('T')[0].split('-');
+                        return `${props.sponsor_name} ${props.asset_type} ${d[1]}/${d[2]}/${d[0]}`;
                     }).addTo(map);
             });
 
