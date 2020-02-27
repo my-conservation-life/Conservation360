@@ -7,7 +7,7 @@ const createTestAsset = async (latitude, longitude, projectId = 1) =>
     global.dbPool.query(
         `INSERT INTO asset (project_id, asset_type_id, location)
          VALUES ($1, 1, ST_POINT($2, $3))`,
-        [projectId, latitude, longitude]
+        [projectId, longitude, latitude]
     );
 
 module.exports = { createTestAsset };

@@ -1,0 +1,23 @@
+{
+    "Asset Property": {
+        "type": "object",
+        "required": [
+            "asset_id",
+            "property_id"
+        ],
+        "properties": {
+            "asset_id": {
+                "type": "bigint",
+                "description": "The asset associated with the property"
+            },
+            "property_id": {
+                "type": "integer",
+                "description": "The property the asset possesses"
+            },
+            "value": {
+                "type": "string",
+                "description": "Value of the property for a particular asset"
+            }
+        }
+    }
+}

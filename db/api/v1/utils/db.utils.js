@@ -32,6 +32,54 @@ const commitTransaction = async (client) => {
 };
 
 /**
+ * Returns a latitude and longitude as a string pair
+ * 
+ * @param {number} lon the points longitude (x)
+ * @param {number} lat the points latitude (y)
+ * @returns {string} a PostGis linestring point pair
+ */
+const makeLineStringHelper = (lon, lat) => {
+    return `${lon} ${lat}`;
+};
+
+/**
+ * Creates a postgis LINESTRING from an array of latitude and longitude points
+ * 
+ * @param {Array} coordinatesList an array of x,y (longitude, latitude) points
+ * @returns {string} a postgis LINESTRING
+ */
+const makeLineString = (coordinatesList) => {
+    // An array of LINESTRING coordinate pairs 'lon lat'
+    var coordPairs = [];
+
+    var point;
+    for (var i = 0; i < coordinatesList.length; i++) {
+        point = coordinatesList[i];
+        coordPairs.push(makeLineStringHelper(point.longitude, point.latitude));
+    }
+
+    return `LINESTRING(${coordPairs.join(',')})`;
+};
+
+/**
+ * Creates a postgis LINESTRING from an array of GeoJson coordinates
+ * 
+ * @param {Array} coordinates an array of GeoJson coordinates [lon, lat] points
+ * @returns {string} a postgis LINESTRING
+ */
+const makeLineStringFromGeoJsonCoordinates = (coordinates) => {
+    var coordPairs = [];
+
+    var point;
+    for (var i = 0; i < coordinates.length; i++) {
+        point = coordinates[i];
+        coordPairs.push(makeLineStringHelper(point[0], point[1]));
+    }
+
+    return `LINESTRING(${coordPairs.join(',')})`;
+};
+
+/**
  * Rollsback a SQL transaction
  * 
  * @param {*} client - node postgres client
@@ -47,5 +95,7 @@ module.exports = {
     isValidDbInteger,
     beginTransaction,
     commitTransaction,
-    rollbackTransaction
+    rollbackTransaction,
+    makeLineString,
+    makeLineStringFromGeoJsonCoordinates
 };

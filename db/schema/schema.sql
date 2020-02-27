@@ -5,12 +5,14 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.2 (Ubuntu 11.2-1.pgdg16.04+1)
+-- Dumped from database version 11.6 (Ubuntu 11.6-1.pgdg16.04+1)
 -- Dumped by pg_dump version 11.2
 
 ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_data_type_fkey";
 ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_asset_type_id_fkey";
 ALTER TABLE IF EXISTS ONLY "public"."project" DROP CONSTRAINT IF EXISTS "project_sponsor_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."history" DROP CONSTRAINT IF EXISTS "history_property_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."history" DROP CONSTRAINT IF EXISTS "history_asset_id_fkey";
 ALTER TABLE IF EXISTS ONLY "public"."asset_property" DROP CONSTRAINT IF EXISTS "asset_property_property_id_fkey";
 ALTER TABLE IF EXISTS ONLY "public"."asset_property" DROP CONSTRAINT IF EXISTS "asset_property_asset_id_fkey";
 ALTER TABLE IF EXISTS ONLY "public"."asset" DROP CONSTRAINT IF EXISTS "asset_project_id_fkey";
@@ -18,6 +20,7 @@ ALTER TABLE IF EXISTS ONLY "public"."asset" DROP CONSTRAINT IF EXISTS "asset_ass
 ALTER TABLE IF EXISTS ONLY "public"."sponsor" DROP CONSTRAINT IF EXISTS "sponsor_pkey";
 ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_pkey";
 ALTER TABLE IF EXISTS ONLY "public"."project" DROP CONSTRAINT IF EXISTS "project_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."history" DROP CONSTRAINT IF EXISTS "history_pkey";
 ALTER TABLE IF EXISTS ONLY "public"."data_type" DROP CONSTRAINT IF EXISTS "data_type_pkey";
 ALTER TABLE IF EXISTS ONLY "public"."asset_type" DROP CONSTRAINT IF EXISTS "asset_type_pkey";
 ALTER TABLE IF EXISTS ONLY "public"."asset_property" DROP CONSTRAINT IF EXISTS "asset_property_pkey";
@@ -33,6 +36,8 @@ DROP SEQUENCE IF EXISTS "public"."property_id_seq";
 DROP TABLE IF EXISTS "public"."property";
 DROP SEQUENCE IF EXISTS "public"."project_id_seq";
 DROP TABLE IF EXISTS "public"."project";
+DROP TABLE IF EXISTS "public"."history";
+DROP SEQUENCE IF EXISTS "public"."history_id_seq";
 DROP TABLE IF EXISTS "public"."data_type";
 DROP SEQUENCE IF EXISTS "public"."asset_type_id_seq";
 DROP TABLE IF EXISTS "public"."asset_type";
@@ -154,6 +159,31 @@ ALTER SEQUENCE "public"."asset_type_id_seq" OWNED BY "public"."asset_type"."id";
 
 CREATE TABLE "public"."data_type" (
     "name" character varying(50) NOT NULL
+);
+
+
+--
+-- Name: history_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE "public"."history_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: history; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE "public"."history" (
+    "id" bigint DEFAULT "nextval"('"public"."history_id_seq"'::"regclass") NOT NULL,
+    "asset_id" bigint NOT NULL,
+    "property_id" bigint NOT NULL,
+    "value" "text" NOT NULL,
+    "date" "date" NOT NULL
 );
 
 
@@ -324,6 +354,14 @@ ALTER TABLE ONLY "public"."data_type"
 
 
 --
+-- Name: history history_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY "public"."history"
+    ADD CONSTRAINT "history_pkey" PRIMARY KEY ("id");
+
+
+--
 -- Name: project project_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -377,6 +415,22 @@ ALTER TABLE ONLY "public"."asset_property"
 
 ALTER TABLE ONLY "public"."asset_property"
     ADD CONSTRAINT "asset_property_property_id_fkey" FOREIGN KEY ("property_id") REFERENCES "public"."property"("id") ON DELETE RESTRICT;
+
+
+--
+-- Name: history history_asset_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY "public"."history"
+    ADD CONSTRAINT "history_asset_id_fkey" FOREIGN KEY ("asset_id") REFERENCES "public"."asset"("id");
+
+
+--
+-- Name: history history_property_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY "public"."history"
+    ADD CONSTRAINT "history_property_id_fkey" FOREIGN KEY ("property_id") REFERENCES "public"."property"("id");
 
 
 --

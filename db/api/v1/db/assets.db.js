@@ -1,19 +1,21 @@
 const utils = require('../utils');
 
-const QUERY_FIND = `SELECT
-sponsor.name AS sponsor_name,
-project.name AS project_name,
-asset.id AS asset_id,
-asset_type.name AS asset_type,
-asset_type.description AS asset_description,
-ST_X(asset.location) AS latitude,
-ST_Y(asset.location) AS longitude
-FROM
-asset
-JOIN project ON asset.project_id = project.id
-JOIN sponsor ON project.sponsor_id = sponsor.id
-JOIN asset_type ON asset.asset_type_id = asset_type.id
-WHERE TRUE `;
+const QUERY_FIND = `
+    SELECT
+        sponsor.name AS sponsor_name,
+        project.name AS project_name,
+        asset.id AS asset_id,
+        asset_type.name AS asset_type,
+        asset_type.description AS asset_description,
+        ST_Y(asset.location) AS latitude,
+        ST_X(asset.location) AS longitude
+    FROM
+        asset
+        JOIN project ON asset.project_id = project.id
+        JOIN sponsor ON project.sponsor_id = sponsor.id
+        JOIN asset_type ON asset.asset_type_id = asset_type.id
+    WHERE 
+        TRUE `; // The WHERE TRUE is needed for the find function to append WHERE clauses properly
 
 /**
  * Find project assets.
@@ -74,7 +76,7 @@ const createAssetProperty = async (client, assetId, property) => {
  * @param {*} client The client being used to access the database
  * @param {*} projectId The project id that this asset will be associated with
  * @param {*} assetTypeId The asset definition that this asset will use
- * @param {*} location The lattitude and longitude of this asset
+ * @param {*} location The latitude and longitude of this asset
  */
 const createAsset = async (client, projectId, assetTypeId, location) => {
 
@@ -88,7 +90,7 @@ const createAsset = async (client, projectId, assetTypeId, location) => {
     `;
 
     // Generate the values to subsitute into the SQL command
-    const values = [projectId, assetTypeId, location.lattitude, location.longitude];
+    const values = [projectId, assetTypeId, location.longitude, location.latitude];
 
     // Execute the SQL command
     return client.query(query, values);

@@ -1,0 +1,35 @@
+{
+    "/csv": {
+        "put": {
+            "requestBody": {
+                "description": "A CSV file containing asset data",
+                "content": {
+                    "multipart/form-data": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "assetTypeId": {
+                                    "type": "integer"
+                                },
+                                "csv": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        },
+                        "examples": {
+                            "import-csv-example": {
+                                "summary": "Importing data with a valid CSV",
+                                "description": "CSV containing data to be stored",
+                                "value": {
+                                    "asset_type_id": 3,
+                                    "csv": "fire.csv"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -2,6 +2,7 @@ const request = require('supertest');
 
 const app = require('../../app');
 const { setup, teardown, loadSQL } = require('../setup');
+const { createTestAsset } = require('../utils');
 
 const ENDPOINT = '/api/v1/bbox-assets';
 
@@ -14,18 +15,6 @@ const NULL_BOX = {
     longitude_min: null,
     longitude_max: null
 };
-
-/**
- * @param {number} latitude latitude of the asset
- * @param {number} longitude longitude of the asset
- * @param {number} [projectId] project ID of the asset
- */
-const createAsset = async (latitude, longitude, projectId = 1) =>
-    global.dbPool.query(
-        `INSERT INTO asset (project_id, asset_type_id, location)
-         VALUES ($1, 1, ST_POINT($2, $3))`,
-        [projectId, latitude, longitude]
-    );
 
 describe('GET bbox-assets', () => {
     beforeAll(async () => {
@@ -51,7 +40,7 @@ describe('GET bbox-assets', () => {
     });
 
     it('returns location of asset with min = max when there is one asset', async () => {
-        await createAsset(34, 27);
+        await createTestAsset(34, 27);
 
         const EXPECTED_BBOX = {
             latitude_min: 34,
@@ -72,9 +61,9 @@ describe('GET bbox-assets', () => {
 
     it('returns bounding box of multiple assets', async () => {
         await Promise.all([
-            createAsset(1, 3),
-            createAsset(-1, -1),
-            createAsset(-2, 0)
+            createTestAsset(1, 3),
+            createTestAsset(-1, -1),
+            createTestAsset(-2, 0)
         ]);
 
         const EXPECTED_BBOX = {
@@ -101,7 +90,7 @@ describe('GET bbox-assets', () => {
     });
 
     it('can filter assets by project ID', async () => {
-        await Promise.all([createAsset(4, 5, 1), createAsset(7, 8, 2)]);
+        await Promise.all([createTestAsset(4, 5, 1), createTestAsset(7, 8, 2)]);
 
         const EXPECTED_BBOX = {
             latitude_min: 7,

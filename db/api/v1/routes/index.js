@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
+
 const { validate, param, type } = require('./validate');
 
 const {
@@ -8,8 +11,47 @@ const {
     assetDefinitions,
     bboxAssets,
     dataTypes,
-    projects
+    geometrySearch,
+    projects,
+    temporal
 } = require('../controllers');
+
+// Geometry Searches
+router.get(
+    '/assets/geometrySearch/envelope',
+    validate(param.query, 'minimumLatitude', type.latitude, true),
+    validate(param.query, 'minimumLongitude', type.longitude, true),
+    validate(param.query, 'maximumLatitude', type.latitude, true),
+    validate(param.query, 'maximumLongitude', type.longitude, true),
+    geometrySearch.envelopeFind
+);
+
+// Geometry Searches
+router.get(
+    '/assets/geometrySearch/distance',
+    validate(param.query, 'latitude', type.latitude, true),
+    validate(param.query, 'longitude', type.longitude, true),
+    validate(param.query, 'radiusMeters', type.radius, true),
+    geometrySearch.distanceFind
+);
+
+router.get(
+    '/assets/geometrySearch/polygon',
+    validate(param.body, 'coordinates', type.coordinates, true),
+    geometrySearch.polygonFind
+);
+
+router.get(
+    '/assets/properties/temporalSearch',
+    validate(param.body, 'asset_id', type.id),
+    validate(param.body, 'sponsor', type.sponsorName),
+    validate(param.body, 'project', type.projectName),
+    validate(param.body, 'asset_type', type.assetTypeName),
+    validate(param.body, 'start_date', type.date),
+    validate(param.body, 'end_date', type.date),
+    validate(param.body, 'geometry', type.geometry, true),
+    temporal.temporalSearch
+);
 
 // Assets
 router.get(
@@ -22,6 +64,10 @@ router.get(
 
 router.post('/assets', assets.create);
 
+router.get('/assetTypes', assetDefinitions.getAssetTypes);
+router.post('/assetPropTypes', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropTypes);
+router.post('/assetPropsByTypeID', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropsByTypeID);
+
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);
 // router.put('/assets/:id', assets.update); //example update
@@ -29,6 +75,9 @@ router.post('/assets', assets.create);
 // Asset Definitions
 router.get('/assetDefinitions', assetDefinitions.find);
 router.post('/assetDefinitions', validate(param.body, 'assetDefinition', type.assetDefinition, true), assetDefinitions.create);
+
+// CSV for importing data
+router.put('/csv', upload.single('csv'), assetDefinitions.storeCSV);
 
 // Bounding Box of Assets
 router.get(
@@ -39,7 +88,6 @@ router.get(
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);
-
 
 // Retrieve Projects
 router.get(

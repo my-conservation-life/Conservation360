@@ -1,3 +1,4 @@
+/* eslint-disable vars-on-top */
 import { LightningElement } from 'lwc';
 import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
 
@@ -15,6 +16,7 @@ export default class Map extends LightningElement {
      * 
      * When this is complete, call initializeleaflet()
      */
+    
     connectedCallback() {
         Promise.all([
             loadScript(this, leaflet + '/leaflet.js'),
@@ -33,8 +35,11 @@ export default class Map extends LightningElement {
         const mapRoot = this.template.querySelector('.map-root');
         this.map = L.map(mapRoot);
         this.map.fitWorld();
+        L.control.scale().addTo(this.map);
+        this.map.setMinZoom(2);
+        this.map.setMaxZoom(17);
     }
-
+  
     /**
      * Setup the base OpenStreetMap tile layer
      */
@@ -45,7 +50,6 @@ export default class Map extends LightningElement {
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
                 attribution: '&copy; ' + mapLink + ' Contributors',
-                maxZoom: 18
             })
             .addTo(this.map);
     }

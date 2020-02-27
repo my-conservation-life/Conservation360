@@ -1,0 +1,40 @@
+<template>
+    <lightning-card title="Import CSV">
+        <div class="slds-m-around_medium">
+            <!-- Fit component on lightning-card -->
+            <div class="slds-col slds-medium-size_3-of-3  slds-small-size_1-of-1">
+                
+                <!-- Asset type selection -->
+                <lightning-combobox
+                    name="AssetTypeComboBox"
+                    label="Asset Type"
+                    value={assetTypeId}
+                    placeholder="Select Asset Type"
+                    options={options}
+                    onchange={handleChange}
+                    required>
+                </lightning-combobox>
+
+                <p>Description: {description}</p><br />
+
+                <!-- CSV file selection -->
+                <lightning-input type="file"
+                    name="csv"
+                    label="Select CSV file"
+                    accept=".csv"
+                    onchange={setCSV}
+                    required>
+                </lightning-input>
+                <p>Selected file: {fileName}</p><br />
+
+                <!-- Send CSV -->
+                <lightning-button variant="brand" label="Import" title="Import CSV" onclick={sendCSVFile} class="slds-m-left_x-small" disabled></lightning-button>
+            
+                <!-- Display Feedback to user -->
+                <p if:true={importing}>Importing CSV...</p>
+                <p if:true={hasSuccess} class="success">{fileSent} has been successfully imported.</p>
+                <p if:true={hasError} class="error long-text">Error: {errorMessage}</p>
+            </div>
+        </div>
+    </lightning-card>
+</template>
