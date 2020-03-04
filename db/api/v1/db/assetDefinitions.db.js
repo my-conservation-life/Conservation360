@@ -47,9 +47,12 @@ const findAssetTypes = async () => {
 const findAssetPropTypes = async (assetTypeID) => {
     let query = PROPERTIES_QUERY;
     query = query + `
-        WHERE asset_type_id=$1
-        AND is_private = false
-        ORDER BY id
+        WHERE
+            asset_type_id=$1
+        AND
+            is_private = false
+        ORDER BY
+            id
     `;
 
     const params = [assetTypeID];
@@ -64,16 +67,22 @@ const findAssetPropTypes = async (assetTypeID) => {
 const findAssetPropsByTypeID = async (assetTypeID) => {
     let query = `
         SELECT
-	        asset.id as id, asset_property.value as value, asset_property.property_id as property_id
+	        asset.id as id, asset.location as location, asset_property.value as value, asset_property.property_id as property_id, property.is_private as is_private
         FROM
 	        asset
 
         INNER JOIN
 	        asset_property
         ON
-	        asset_property.asset_id=asset.id
+            asset_property.asset_id = asset.id
+        INNER JOIN
+            property
+        ON
+            asset_property.property_id = property.id
         WHERE
-	        asset_type_id = $1
+            asset_type_id = $1
+        AND
+            property.is_private = false
         ORDER BY
             property_id
     `;
