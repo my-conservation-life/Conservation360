@@ -48,7 +48,7 @@ const findAssetPropTypes = async (assetTypeID) => {
     let query = PROPERTIES_QUERY;
     query = query + `
         WHERE
-            asset_type_id=$1
+            asset_type_id = $1
         AND
             is_private = false
         ORDER BY
