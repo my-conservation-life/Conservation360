@@ -1,6 +1,6 @@
 {
     "/assets/properties/temporalSearch": {
-        "get": {
+        "post": {
             "requestBody": {
                 "description": "Gets an array of assets' historical properties.",
                 "content": {
