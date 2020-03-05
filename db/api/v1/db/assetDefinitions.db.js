@@ -72,7 +72,7 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
             ST_Y(asset.location) as latitude,
             asset_property.value as value,
             asset_property.property_id as property_id
-        /*    property.is_private as is_private */
+            property.is_private as is_private 
         FROM
 	        asset
         JOIN
