@@ -109,10 +109,10 @@ export default class GeoQuery extends LightningElement {
             distanceURL.searchParams.append('longitude', `${mlon}`);
             distanceURL.searchParams.append('radiusMeters', `${rad}`);
 
-            console.log('Getting: ' + distanceURL.href);
+            console.log('Posting to: ' + distanceURL.href);
 
             // Send out the GET request
-            this.assetsPromise = utils.get(distanceURL.href);
+            this.assetsPromise = utils.post(distanceURL.href);
 
             // When the promise is fulfilled handle it
             this.assetsPromise.then(response => {
@@ -143,4 +143,3 @@ export default class GeoQuery extends LightningElement {
         // this.map.on('click', this.onMapClicked);
     }
 }
-
