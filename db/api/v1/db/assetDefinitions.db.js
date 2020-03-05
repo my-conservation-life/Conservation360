@@ -72,11 +72,14 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
         FROM
 	        asset
         INNER JOIN
-	        asset_property
+	        asset_property, property
         ON
-            asset_property.asset_id = asset.id
+            asset_property.asset_id = asset.id,
+            asset_property.property_id = property.id
         WHERE
             asset_type_id = $1
+        AND
+            property.is_private = false
         ORDER BY
             property_id
     `;
