@@ -78,11 +78,8 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
 	        asset_property
         ON
             asset_property.asset_id = asset.id
-        
         WHERE
             asset_type_id = $1
-        AND
-            property.is_private = false
         ORDER BY
             property_id
     `;
@@ -90,6 +87,9 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
     //         property
     //     ON
     //         asset_property.property_id = property.id
+    //
+    // AND
+    //         property.is_private = false
 
     const params = [assetTypeID];
 
