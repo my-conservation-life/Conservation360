@@ -67,18 +67,18 @@ const findAssetPropTypes = async (assetTypeID) => {
 const findAssetPropsByTypeID = async (assetTypeID) => {
     let query = `
         SELECT
-            asset.id as id, ST_X(asset.location) as longitude, ST_Y(asset.location) as latitude,
-            asset_property.value as value, asset_property.property_id as property_id
+            asset.id as id,
+            ST_X(asset.location) as longitude,
+            ST_Y(asset.location) as latitude,
+            asset_property.value as value,
+            asset_property.property_id as property_id
         FROM
 	        asset
         JOIN
 	        asset_property
         ON
             asset_property.asset_id = asset.id
-        JOIN
-            property
-        ON
-            asset_property.property_id = property.id
+        
         WHERE
             asset_type_id = $1
         AND
@@ -86,6 +86,10 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
         ORDER BY
             property_id
     `;
+    // JOIN
+    //         property
+    //     ON
+    //         asset_property.property_id = property.id
 
     const params = [assetTypeID];
 
