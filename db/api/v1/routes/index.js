@@ -17,7 +17,7 @@ const {
 } = require('../controllers');
 
 // Geometry Searches
-router.get(
+router.post(
     '/assets/geometrySearch/envelope',
     validate(param.query, 'minimumLatitude', type.latitude, true),
     validate(param.query, 'minimumLongitude', type.longitude, true),
@@ -27,7 +27,7 @@ router.get(
 );
 
 // Geometry Searches
-router.get(
+router.post(
     '/assets/geometrySearch/distance',
     validate(param.query, 'latitude', type.latitude, true),
     validate(param.query, 'longitude', type.longitude, true),
@@ -35,13 +35,13 @@ router.get(
     geometrySearch.distanceFind
 );
 
-router.get(
+router.post(
     '/assets/geometrySearch/polygon',
     validate(param.body, 'coordinates', type.coordinates, true),
     geometrySearch.polygonFind
 );
 
-router.get(
+router.post(
     '/assets/properties/temporalSearch',
     validate(param.body, 'asset_id', type.id),
     validate(param.body, 'sponsor', type.sponsorName),
