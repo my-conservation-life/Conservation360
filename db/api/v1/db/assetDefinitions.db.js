@@ -280,6 +280,22 @@ const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
     return client.query(query, values);
 };
 
+const addLocation = async(client, longitude, latitude) => {
+    // Generate the SQL command
+    const query = `
+        INSERT INTO asset
+            (location)
+        VALUES
+            (ST_MakePoint($1, $2))
+    `;
+
+    // Generate the values to subsitute into the SQL command
+    const values = [longitude, latitude];
+
+    // Execute the SQL command
+    return client.query(query, values);
+};
+
 /**
  * Stores contents of CSV into the DB
  * 
@@ -349,7 +365,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             }
 
             for (const propertyName in asset) {
-                if (propertyName !== 'asset_id') {
+                if (propertyName !== 'asset_id' && propertyName !== 'longitude' && propertyName !== 'latitude') {
                     // Throw an error if CSV contains a header that is not associated with the selected asset type
                     if (!(propertyName in properties)) {
                         throw 'The selected CSV file either contains an empty column, is missing a header, or contains a property that is not being tracked (' + propertyName + ')';
@@ -381,6 +397,16 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     }
                 }
             }
+        }
+
+        if (!('latitude' in properties) || !('longitude' in properties)) {
+            throw 'The selected CSV file is missing a latitude and/or longitude column';
+        }
+        else {
+            let longitude = properties['longitude'];
+            let latitude = properties['latitude'];
+
+            await addLocation(client, longitude, latitude);
         }
         await utils.db.commitTransaction(client);
     }
