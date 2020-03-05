@@ -67,7 +67,7 @@ const findAssetPropTypes = async (assetTypeID) => {
 const findAssetPropsByTypeID = async (assetTypeID) => {
     let query = `
         SELECT
-            asset.id as id, Select ST_X(asset.location) as longitude, Select ST_Y(asset.location) as latitude,
+            asset.id as id, ST_X(asset.location) as longitude, ST_Y(asset.location) as latitude,
             asset_property.value as value, asset_property.property_id as property_id
         FROM
 	        asset
