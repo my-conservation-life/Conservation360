@@ -52,7 +52,7 @@ export default class ExportCSV extends LightningElement {
         assetDefinitions.fetchAssetPropTypes(this.valueID)
             .then(properties => {
                 // [asset_type_id],[asset_type_name]
-                rows = ['asset_type_id', 'asset_id', 'location'];
+                rows = ['asset_type_id', 'asset_id', 'longitude', 'latitude'];
                 for (i = 0; i < properties.rows.length; i++) {
                     rows.push(properties.rows[i]['name']);
                 }
@@ -72,7 +72,8 @@ export default class ExportCSV extends LightningElement {
                             rows = [];
                             rows.push(this.valueID);
                             rows.push(keys[i]);
-                            rows.push(data.rows[i]['location']);
+                            rows.push(data.rows[i]['longitude']);
+                            rows.push(data.rows[i]['latitude']);
                             for (j = 0; j < props[keys[i]].length; j++) {
                                 rows.push(props[keys[i]][j]);
                             }
