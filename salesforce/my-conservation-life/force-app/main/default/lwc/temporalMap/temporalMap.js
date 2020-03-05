@@ -135,6 +135,15 @@ export default class TemporalMap extends LightningElement {
                     fillOpacity: 0.8
                 };
 
+                let lemurMarkerOptions = {
+                    radius: 8,
+                    fillColor: '#C2C5CC',
+                    color: '#695F4F',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                };
+
                 if (this.geoLayer !== undefined) {
                     map.removeLayer(this.geoLayer);
                 }
@@ -144,6 +153,9 @@ export default class TemporalMap extends LightningElement {
                         case 'tree':
                         case 'Tree':
                             return L.marker(latlng);
+                        case 'lemur':
+                        case 'Lemur':
+                            return L.circleMarker(latlng, lemurMarkerOptions);
                         default:
                             return L.circleMarker(latlng, geojsonMarkerOptions);
                         }
@@ -152,12 +164,34 @@ export default class TemporalMap extends LightningElement {
                     .bindPopup(function (layer) {
                         let props = layer.feature.properties;
                         let d = props.date.split('T')[0].split('-');
-                        return `${props.sponsor_name} ${props.asset_type} ${d[1]}/${d[2]}/${d[0]}`;
+
+                        let propRows = '';
+
+                        let p = {};
+                        for (let i = 0; i < props.asset_properties.length; i++)
+                        {
+                            p = props.asset_properties[i];
+                            propRows += `<tr>
+                                          <td>${p.property}</td>
+                                          <td>${p.value}</td>
+                                        </tr>`;
+                        }
+
+                        let propTable = `<div style="height:100px;overflow:auto;">
+                                            <table style="width:100%">
+                                                <tr>
+                                                    <th>Property</th>
+                                                    <th>Value</th>
+                                                </tr>
+                                                    ${propRows}
+                                            </table>
+                                        </div>`;
+
+
+                        return `<p>${props.asset_type}<br />Sponsor: ${props.sponsor_name}<br />Uploaded: ${d[1]}/${d[2]}/${d[0]}</p>${propTable}`;
                     }).addTo(map);
             });
 
         });
     }
-
-
 }
