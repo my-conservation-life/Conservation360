@@ -49,7 +49,7 @@ export default class ExportHeaders extends LightningElement {
 
         assetDefinitions.fetchAssetPropTypes(this.valueID)
             .then(properties => {
-                rows = ['asset_id', 'location'];
+                rows = ['asset_id', 'longitude', 'latitude'];
                 for (i = 0; i < properties.rows.length; i++) {
                     rows.push(properties.rows[i]['name']);
                 }
