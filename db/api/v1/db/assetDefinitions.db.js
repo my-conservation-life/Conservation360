@@ -285,9 +285,9 @@ const addLocation = async(client, assetId, longitude, latitude) => {
     const query = `
         UPDATE asset
         SET
-            location=ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography
+            location=ST_MakePoint($1, $2)
         WHERE
-            assetId=$3
+            id=$3
     `;
 
     // Generate the values to subsitute into the SQL command
