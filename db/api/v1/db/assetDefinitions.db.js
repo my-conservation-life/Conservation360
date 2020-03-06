@@ -284,10 +284,8 @@ const addLocation = async(client, assetId, longitude, latitude) => {
     // Generate the SQL command
     const query = `
         UPDATE asset
-        SET
-            location=ST_MakePoint($1, $2)
-        WHERE
-            id=$3
+        SET location=ST_MakePoint($1, $2)
+        WHERE id=$3
     `;
 
     // Generate the values to subsitute into the SQL command
@@ -398,16 +396,16 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     }
                 }
             }
-        }
 
-        if (!('latitude' in properties) || !('longitude' in properties)) {
-            throw 'The selected CSV file is missing a latitude and/or longitude column';
-        }
-        else {
-            let longitude = parseFloat(properties['longitude']);
-            let latitude = parseFloat(properties['latitude']);
-
-            await addLocation(client, assetId, longitude, latitude);
+            if (!('latitude' in properties) || !('longitude' in properties)) {
+                throw 'The selected CSV file is missing a latitude and/or longitude column';
+            }
+            else {
+                let longitude = parseFloat(properties['longitude']);
+                let latitude = parseFloat(properties['latitude']);
+    
+                await addLocation(client, assetId, longitude, latitude);
+            }
         }
         await utils.db.commitTransaction(client);
     }
