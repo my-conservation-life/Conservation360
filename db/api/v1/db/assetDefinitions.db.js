@@ -280,17 +280,18 @@ const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
     return client.query(query, values);
 };
 
-const addLocation = async(client, longitude, latitude) => {
+const addLocation = async(client, assetId, longitude, latitude) => {
     // Generate the SQL command
     const query = `
-        INSERT INTO asset
-            (location)
-        VALUES
-            (ST_MakePoint($1, $2))
+        UPDATE asset
+        SET
+            location=ST_MakePoint($1, $2)
+        WHERE
+            assetId=$3
     `;
 
     // Generate the values to subsitute into the SQL command
-    const values = [longitude, latitude];
+    const values = [longitude, latitude, assetId];
 
     // Execute the SQL command
     return client.query(query, values);
@@ -406,7 +407,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             let longitude = parseFloat(properties['longitude']);
             let latitude = parseFloat(properties['latitude']);
 
-            await addLocation(client, longitude, latitude);
+            await addLocation(client, assetId, longitude, latitude);
         }
         await utils.db.commitTransaction(client);
     }
