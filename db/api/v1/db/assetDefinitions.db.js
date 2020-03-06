@@ -280,6 +280,13 @@ const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
     return client.query(query, values);
 };
 
+/**
+ * Updates the location of an asset by encoding longitude and latitude coordinates
+ * @param {*} client Node Postgres client
+ * @param {Number} assetId ID of the asset whose location is to be added/updated
+ * @param {Number} longitude Longitude of the asset
+ * @param {Number} latitude Latitude of the asset
+ */
 const addLocation = async(client, assetId, longitude, latitude) => {
     // Generate the SQL command
     const query = `
@@ -397,6 +404,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                 }
             }
 
+            // Add location of asset to the DB
             if (!('latitude' in properties) || !('longitude' in properties)) {
                 throw 'The selected CSV file is missing a latitude and/or longitude column';
             }
