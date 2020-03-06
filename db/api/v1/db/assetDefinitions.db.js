@@ -286,7 +286,7 @@ const addLocation = async(client, longitude, latitude) => {
         INSERT INTO asset
             (location)
         VALUES
-            (ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography)
+            (ST_MakePoint($1, $2))
     `;
 
     // Generate the values to subsitute into the SQL command
@@ -403,8 +403,8 @@ const storeCSV = async(assetTypeId, csvJson) => {
             throw 'The selected CSV file is missing a latitude and/or longitude column';
         }
         else {
-            let longitude = properties['longitude'];
-            let latitude = properties['latitude'];
+            let longitude = parseFloat(properties['longitude']);
+            let latitude = parseFloat(properties['latitude']);
 
             await addLocation(client, longitude, latitude);
         }
