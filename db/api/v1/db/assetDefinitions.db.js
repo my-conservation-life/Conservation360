@@ -286,7 +286,7 @@ const addLocation = async(client, longitude, latitude) => {
         INSERT INTO asset
             (location)
         VALUES
-            (ST_MakePoint($1, $2))
+            (a)
     `;
 
     // Generate the values to subsitute into the SQL command
