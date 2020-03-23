@@ -24,7 +24,7 @@ ALTER TABLE IF EXISTS ONLY "public"."history" DROP CONSTRAINT IF EXISTS "history
 ALTER TABLE IF EXISTS ONLY "public"."data_type" DROP CONSTRAINT IF EXISTS "data_type_pkey";
 ALTER TABLE IF EXISTS ONLY "public"."asset_type" DROP CONSTRAINT IF EXISTS "asset_type_pkey";
 ALTER TABLE IF EXISTS ONLY "public"."asset_property" DROP CONSTRAINT IF EXISTS "asset_property_pkey";
-ALTER TABLE IF EXISTS ONLY "public"."asset" DROP CONSTRAINT IF EXISTS"asset_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."asset" DROP CONSTRAINT IF EXISTS "asset_pkey";
 ALTER TABLE IF EXISTS "public"."sponsor" ALTER COLUMN "id" DROP DEFAULT;
 ALTER TABLE IF EXISTS "public"."property" ALTER COLUMN "id" DROP DEFAULT;
 ALTER TABLE IF EXISTS "public"."project" ALTER COLUMN "id" DROP DEFAULT;
