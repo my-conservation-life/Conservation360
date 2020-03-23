@@ -8,44 +8,44 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 -- Dumped from database version 11.7 (Ubuntu 11.7-2.pgdg16.04+1)
 -- Dumped by pg_dump version 12.1 (Ubuntu 12.1-1.pgdg18.04+1)
 
-ALTER TABLE ONLY "public"."property" DROP CONSTRAINT "property_data_type_fkey";
-ALTER TABLE ONLY "public"."property" DROP CONSTRAINT "property_asset_type_id_fkey";
-ALTER TABLE ONLY "public"."project" DROP CONSTRAINT "project_sponsor_id_fkey";
-ALTER TABLE ONLY "public"."history" DROP CONSTRAINT "history_property_id_fkey";
-ALTER TABLE ONLY "public"."history" DROP CONSTRAINT "history_asset_id_fkey";
-ALTER TABLE ONLY "public"."asset_property" DROP CONSTRAINT "asset_property_property_id_fkey";
-ALTER TABLE ONLY "public"."asset_property" DROP CONSTRAINT "asset_property_asset_id_fkey";
-ALTER TABLE ONLY "public"."asset" DROP CONSTRAINT "asset_project_id_fkey";
-ALTER TABLE ONLY "public"."asset" DROP CONSTRAINT "asset_asset_type_id";
-ALTER TABLE ONLY "public"."sponsor" DROP CONSTRAINT "sponsor_pkey";
-ALTER TABLE ONLY "public"."property" DROP CONSTRAINT "property_pkey";
-ALTER TABLE ONLY "public"."project" DROP CONSTRAINT "project_pkey";
-ALTER TABLE ONLY "public"."history" DROP CONSTRAINT "history_pkey";
-ALTER TABLE ONLY "public"."data_type" DROP CONSTRAINT "data_type_pkey";
-ALTER TABLE ONLY "public"."asset_type" DROP CONSTRAINT "asset_type_pkey";
-ALTER TABLE ONLY "public"."asset_property" DROP CONSTRAINT "asset_property_pkey";
-ALTER TABLE ONLY "public"."asset" DROP CONSTRAINT "asset_pkey";
-ALTER TABLE "public"."sponsor" ALTER COLUMN "id" DROP DEFAULT;
-ALTER TABLE "public"."property" ALTER COLUMN "id" DROP DEFAULT;
-ALTER TABLE "public"."project" ALTER COLUMN "id" DROP DEFAULT;
-ALTER TABLE "public"."asset_type" ALTER COLUMN "id" DROP DEFAULT;
-ALTER TABLE "public"."asset" ALTER COLUMN "id" DROP DEFAULT;
-DROP SEQUENCE "public"."sponsor_id_seq";
-DROP TABLE "public"."sponsor";
-DROP SEQUENCE "public"."property_id_seq";
-DROP TABLE "public"."property";
-DROP SEQUENCE "public"."project_id_seq";
-DROP TABLE "public"."project";
-DROP TABLE "public"."history";
-DROP SEQUENCE "public"."history_id_seq";
-DROP TABLE "public"."data_type";
-DROP SEQUENCE "public"."asset_type_id_seq";
-DROP TABLE "public"."asset_type";
-DROP TABLE "public"."asset_property";
-DROP SEQUENCE "public"."asset_id_seq";
-DROP VIEW "public"."asset_expandedlocation";
-DROP TABLE "public"."asset";
-DROP FUNCTION "public"."get_xmlbinary"();
+ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_data_type_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_asset_type_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."project" DROP CONSTRAINT IF EXISTS "project_sponsor_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."history" DROP CONSTRAINT IF EXISTS "history_property_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."history" DROP CONSTRAINT IF EXISTS "history_asset_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."asset_property" DROP CONSTRAINT IF EXISTS "asset_property_property_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."asset_property" DROP CONSTRAINT IF EXISTS "asset_property_asset_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."asset" DROP CONSTRAINT IF EXISTS "asset_project_id_fkey";
+ALTER TABLE IF EXISTS ONLY "public"."asset" DROP CONSTRAINT IF EXISTS "asset_asset_type_id";
+ALTER TABLE IF EXISTS ONLY "public"."sponsor" DROP CONSTRAINT IF EXISTS "sponsor_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."project" DROP CONSTRAINT IF EXISTS "project_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."history" DROP CONSTRAINT IF EXISTS "history_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."data_type" DROP CONSTRAINT IF EXISTS "data_type_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."asset_type" DROP CONSTRAINT IF EXISTS "asset_type_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."asset_property" DROP CONSTRAINT IF EXISTS "asset_property_pkey";
+ALTER TABLE IF EXISTS ONLY "public"."asset" DROP CONSTRAINT IF EXISTS"asset_pkey";
+ALTER TABLE IF EXISTS "public"."sponsor" ALTER COLUMN "id" DROP DEFAULT;
+ALTER TABLE IF EXISTS "public"."property" ALTER COLUMN "id" DROP DEFAULT;
+ALTER TABLE IF EXISTS "public"."project" ALTER COLUMN "id" DROP DEFAULT;
+ALTER TABLE IF EXISTS "public"."asset_type" ALTER COLUMN "id" DROP DEFAULT;
+ALTER TABLE IF EXISTS "public"."asset" ALTER COLUMN "id" DROP DEFAULT;
+DROP SEQUENCE IF EXISTS "public"."sponsor_id_seq";
+DROP TABLE IF EXISTS "public"."sponsor";
+DROP SEQUENCE IF EXISTS "public"."property_id_seq";
+DROP TABLE IF EXISTS "public"."property";
+DROP SEQUENCE IF EXISTS "public"."project_id_seq";
+DROP TABLE IF EXISTS "public"."project";
+DROP TABLE IF EXISTS "public"."history";
+DROP SEQUENCE IF EXISTS "public"."history_id_seq";
+DROP TABLE IF EXISTS "public"."data_type";
+DROP SEQUENCE IF EXISTS "public"."asset_type_id_seq";
+DROP TABLE IF EXISTS "public"."asset_type";
+DROP TABLE IF EXISTS "public"."asset_property";
+DROP SEQUENCE IF EXISTS "public"."asset_id_seq";
+DROP VIEW IF EXISTS "public"."asset_expandedlocation";
+DROP TABLE IF EXISTS "public"."asset";
+DROP FUNCTION IF EXISTS "public"."get_xmlbinary"();
 --
 -- Name: get_xmlbinary(); Type: FUNCTION; Schema: public; Owner: -
 --
@@ -467,5 +467,3 @@ INSERT INTO data_type (name) VALUES ('number');
 INSERT INTO data_type (name) VALUES ('datetime');
 INSERT INTO data_type (name) VALUES ('location');
 INSERT INTO data_type (name) VALUES ('text');
-
-
