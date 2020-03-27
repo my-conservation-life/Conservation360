@@ -65,6 +65,26 @@ const findAssetPropTypes = async (assetTypeID) => {
  * @param {number} assetTypeID - the asset type ID
  */
 const findAssetPropsByTypeID = async (assetTypeID) => {
+    // let query = `
+    //     SELECT
+    //         asset.id                    AS id,
+    //         ST_X(asset.location)        AS longitude,
+    //         ST_Y(asset.location)        AS latitude,
+    //         asset_property.value        AS value,
+    //         asset_property.property_id  AS property_id
+    //     --    property.is_private         AS is_private
+    //     FROM
+	//         asset
+    //     --    JOIN asset_property     ON asset_property.asset_id = asset.id
+    //     --    JOIN property           ON asset_property.property_id = property.id
+    //     WHERE
+    //         asset_type_id = $1
+    //     -- AND
+    //     --    property.is_private = false
+    //     ORDER BY
+    //         property_id
+    // `;
+
     let query = `
         SELECT
             asset.id                    AS id,
@@ -72,15 +92,10 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
             ST_Y(asset.location)        AS latitude,
             asset_property.value        AS value,
             asset_property.property_id  AS property_id
-        --    property.is_private         AS is_private
         FROM
 	        asset
-        --    JOIN asset_property     ON asset_property.asset_id = asset.id
-        --    JOIN property           ON asset_property.property_id = property.id
         WHERE
             asset_type_id = $1
-        -- AND
-        --    property.is_private = false
         ORDER BY
             property_id
     `;
