@@ -68,8 +68,8 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
     let query = `
         SELECT
             asset.id                    AS id,
-        --    ST_X(asset.location)        AS longitude,
-        --    ST_Y(asset.location)        AS latitude,
+            ST_X(asset.location)        AS longitude,
+            ST_Y(asset.location)        AS latitude,
             asset_property.value        AS value,
             asset_property.property_id  AS property_id
         --    property.is_private         AS is_private
@@ -79,7 +79,7 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
         --    JOIN property           ON asset_property.property_id = property.id
         WHERE
             asset_type_id = $1
-        --AND
+        -- AND
         --    property.is_private = false
         ORDER BY
             property_id
