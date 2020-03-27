@@ -75,14 +75,14 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
         --    property.is_private         AS is_private
         FROM
 	        asset
-            JOIN asset_property     ON asset_property.asset_id = asset.id
-            JOIN property           ON asset_property.property_id = property.id
+        --    JOIN asset_property     ON asset_property.asset_id = asset.id
+        --    JOIN property           ON asset_property.property_id = property.id
         WHERE
             asset_type_id = $1
         --AND
         --    property.is_private = false
-        --ORDER BY
-        --    property_id
+        ORDER BY
+            property_id
     `;
 
     const params = [assetTypeID];
