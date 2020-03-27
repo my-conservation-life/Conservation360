@@ -87,13 +87,17 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
 
     let query = `
         SELECT
-            asset.id                    AS id,
+            asset.id as id,
+            asset_property.value as value,
+            asset_property.property_id as property_id,
             ST_X(asset.location)        AS longitude,
-            ST_Y(asset.location)        AS latitude,
-            asset_property.value        AS value,
-            asset_property.property_id  AS property_id
+            ST_Y(asset.location)        AS latitude
         FROM
-	        asset
+            asset
+        INNER JOIN
+            asset_property
+        ON
+            asset_property.asset_id=asset.id
         WHERE
             asset_type_id = $1
         ORDER BY
