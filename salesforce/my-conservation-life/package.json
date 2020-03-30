@@ -8,13 +8,18 @@
     "test:unit:debug": "lwc-jest --debug",
     "test:unit:coverage": "lwc-jest --coverage"
   },
+  "dependencies": {},
   "devDependencies": {
-    "eslint": "^5.16.0",
     "@salesforce/eslint-config-lwc": "^0.3.0",
+<<<<<<< HEAD
     "@salesforce/lwc-jest": "^0.4.14"
   },
   "dependencies": {
     "leaflet-draw": "^1.0.4",
     "url-join": "^4.0.1"
+=======
+    "@salesforce/lwc-jest": "^0.6.0",
+    "eslint": "^5.16.0"
+>>>>>>> 351202a9fcf7c2b70a0936c8ded8db52b275d4ae
   }
 }

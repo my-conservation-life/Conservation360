@@ -1,0 +1,46 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [longitude, latitude]
+            },
+            "properties": {
+                "asset_id": {
+                    "type": "integer",
+                    "description": "The unique ID of the asset"
+                },
+                "asset_type": {
+                    "type": "string",
+                    "description": "The type of asset"
+                },
+                "asset_properties": [
+                    {
+                        "property": {
+                            "type": "string",
+                            "description": "The property name"
+                        },
+                        "value": {
+                            "type": "string",
+                            "description": "The property value"
+                        }
+                    }
+                ],
+                "sponsor_name": {
+                    "type": "string",
+                    "description": "The name of the sponsoring organization the asset belongs to."
+                },
+                "project_name": {
+                    "type": "string",
+                    "description": "The name of the project the asset belongs to."
+                },
+                "date": {
+                    "type": "string",
+                    "description": "The date the asset properties entered the database."
+                }
+            }
+        }
+    ]
+}

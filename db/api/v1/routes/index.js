@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
+
 const { validate, param, type } = require('./validate');
 
 const {
@@ -9,7 +12,8 @@ const {
     bboxAssets,
     dataTypes,
     geometrySearch,
-    projects
+    projects,
+    temporal
 } = require('../controllers');
 
 // Geometry Searches
@@ -37,6 +41,18 @@ router.get(
     geometrySearch.polygonFind
 );
 
+router.get(
+    '/assets/properties/temporalSearch',
+    validate(param.body, 'asset_id', type.id),
+    validate(param.body, 'sponsor', type.sponsorName),
+    validate(param.body, 'project', type.projectName),
+    validate(param.body, 'asset_type', type.assetTypeName),
+    validate(param.body, 'start_date', type.date),
+    validate(param.body, 'end_date', type.date),
+    validate(param.body, 'geometry', type.geometry, true),
+    temporal.temporalSearch
+);
+
 // Assets
 router.get(
     '/assets',
@@ -48,6 +64,10 @@ router.get(
 
 router.post('/assets', assets.create);
 
+router.get('/assetTypes', assetDefinitions.getAssetTypes);
+router.post('/assetPropTypes', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropTypes);
+router.post('/assetPropsByTypeID', validate(param.body, 'assetTypeID', type.id, true), assetDefinitions.getAssetPropsByTypeID);
+
 // router.post('/assets', assets.create); //example create
 // router.get('/assets/:id', assets.get);
 // router.put('/assets/:id', assets.update); //example update
@@ -55,6 +75,9 @@ router.post('/assets', assets.create);
 // Asset Definitions
 router.get('/assetDefinitions', assetDefinitions.find);
 router.post('/assetDefinitions', validate(param.body, 'assetDefinition', type.assetDefinition, true), assetDefinitions.create);
+
+// CSV for importing data
+router.put('/csv', upload.single('csv'), assetDefinitions.storeCSV);
 
 // Bounding Box of Assets
 router.get(
@@ -65,7 +88,6 @@ router.get(
 
 // Data Types
 router.get('/dataTypes', dataTypes.find);
-
 
 // Retrieve Projects
 router.get(

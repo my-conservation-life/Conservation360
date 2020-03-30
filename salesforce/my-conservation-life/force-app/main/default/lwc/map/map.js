@@ -56,7 +56,6 @@ export default class Map extends LightningElement {
         });
         this.map.addControl(drawControl);
     }
-    
     /**
      * Setup the base OpenStreetMap tile layer
      */
@@ -67,7 +66,6 @@ export default class Map extends LightningElement {
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
                 attribution: '&copy; ' + mapLink + ' Contributors',
-                
             })
             .addTo(this.map);
     }

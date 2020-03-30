@@ -31,10 +31,10 @@ export default class CreateAsset extends LightningElement {
     // The selected asset definition's property definitions
     @track propertiesValue;
 
-    // A manually created property for the required lattitude property
-    @track lattitude = {
+    // A manually created property for the required latitude property
+    @track latitude = {
         asset_type_id:0,
-        name:'location-lattitude',
+        name:'location-latitude',
         data_type:'number',
         required:true,
         is_private:false
@@ -112,8 +112,8 @@ export default class CreateAsset extends LightningElement {
         // Display to the user that this task is in progress
         this.template.querySelector('.status-text').value = 'Saving...';
 
-        // Get the lattitude and longitude CreateAssetProperty objects
-        const latt = this.template.querySelector('.location-lattitude').getPropertyValue();
+        // Get the latitude and longitude CreateAssetProperty objects
+        const latt = this.template.querySelector('.location-latitude').getPropertyValue();
         const long = this.template.querySelector('.location-longitude').getPropertyValue();
 
         // Get the custom CreateAssetProperty objects
@@ -132,7 +132,7 @@ export default class CreateAsset extends LightningElement {
         const asset = {
             project: {id:1},
             type: {id:this.typeIdValue},
-            location:{lattitude:latt, longitude:long},
+            location:{latitude:latt, longitude:long},
             properties: props
         };
 

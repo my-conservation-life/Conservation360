@@ -10,8 +10,8 @@ import utils from 'c/utils';
 const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
 
 
-// import { assets, bboxAssets } from 'c/controllers';
-// import { markerFromAsset } from './utils';
+// TODO import { assets, bboxAssets } from 'c/controllers';
+// TODO import { markerFromAsset } from './utils';
 
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
@@ -111,7 +111,6 @@ export default class GeoQuery extends LightningElement {
                     if( this.myAssets === undefined){
                         this.myAssets = [];
                     }
-
                     // Iterate over the assets and add them to the map
                     let i;
                     for(i = 0; i < response.length; i++)
@@ -120,6 +119,7 @@ export default class GeoQuery extends LightningElement {
 
                         // Create the map marker. Add back the offset so markers appear where the user clicked.
                         let m = L.marker(L.latLng(a.lat + (latOff * 90), a.lon + (lonOff * 180))).addTo(map);
+
 
                         // Add expanded details for if a user clicks on the marker
                         m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
@@ -225,3 +225,4 @@ export default class GeoQuery extends LightningElement {
 // //         this.myAssets.push(m);
 // //     }
 // // });
+

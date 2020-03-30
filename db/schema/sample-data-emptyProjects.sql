@@ -1,4 +1,4 @@
-INSERT INTO sponsor (name) VALUES ('Seneca Park Zoo');
+INSERT INTO sponsor (name) VALUES ('Seneca Park Zoo Society');
 INSERT INTO sponsor (name) VALUES ('Bronx Zoo');
 
 INSERT INTO project (sponsor_id, name, description) VALUES (1, 'Madagascar Reforesting Project', 'Replanting Trees in Madagascar');

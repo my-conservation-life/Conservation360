@@ -1,0 +1,28 @@
+{
+    "Asset": {
+        "type": "object",
+        "required": [
+            "id",
+            "project_id",
+            "asset_type_id"
+        ],
+        "properties": {
+            "id": {
+                "type": "bigint",
+                "description": "the ID of the asset"
+            },
+            "project_id": {
+                "type": "integer",
+                "description": "the ID of the project tracking the asset"
+            },
+            "asset_type_id": {
+                "type": "integer",
+                "description": "the ID of the asset type that the asset belongs to"
+            },
+            "location": {
+                "type": "geometry",
+                "description": "the location of the asset"
+            }
+        }
+    }
+}
