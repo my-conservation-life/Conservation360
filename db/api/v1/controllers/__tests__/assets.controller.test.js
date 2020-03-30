@@ -28,14 +28,22 @@ describe('assets.controller.find', () => {
 
     it('accesses DB and sends JSON response when no project_id is provided', async () => {
         await find(req, res, next);
-        expect(assetsDb.find).toHaveBeenCalledWith(undefined, undefined, undefined);
+        expect(assetsDb.find).toHaveBeenCalledWith(undefined, undefined, undefined, undefined);
         expect(res.json).toHaveBeenCalledWith(EXPECTED_ASSETS);
     });
 
     it('accesses DB and sends JSON response when project_id is provided', async () => {
         req.valid['project_id'] = 2;
         await find(req, res, next);
-        expect(assetsDb.find).toHaveBeenCalledWith(undefined, 2, undefined);
+        expect(assetsDb.find).toHaveBeenCalledWith(undefined, 2, undefined, undefined);
+        expect(res.json).toHaveBeenCalledWith(EXPECTED_ASSETS);
+    });
+
+    it('accesses DB and sends JSON response when project_id is provided', async () => {
+        const valid_donor_codes = ['abc123', 'cc1211'];
+        req.valid['donor_code'] = valid_donor_codes;
+        await find(req, res, next);
+        expect(assetsDb.find).toHaveBeenCalledWith(undefined, undefined, undefined, valid_donor_codes);
         expect(res.json).toHaveBeenCalledWith(EXPECTED_ASSETS);
     });
 

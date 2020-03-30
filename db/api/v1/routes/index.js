@@ -53,6 +53,16 @@ router.post(
     temporal.temporalSearch
 );
 
+// donor code search
+router.post(
+    '/assets/donor',
+    validate(param.body, 'sponsor_id', type.id),
+    validate(param.body, 'project_id', type.id),
+    validate(param.body, 'asset_type_id', type.id),
+    validate(param.body, 'donor_code', type.donorCode),
+    assets.find
+);
+
 // Assets
 router.get(
     '/assets',
