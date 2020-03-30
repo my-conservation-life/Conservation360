@@ -22,25 +22,33 @@ const QUERY_FIND = `
  *
  * Returns all assets across all projects unless projectId is given.
  *
+ * @param {number} sponsorId - The ID of the sponsor
  * @param {number} [projectId] - (assumes isValidDbInteger(projectId)): optional: filter assets by this Project ID
+ * @param {number} assetType - the ID of the asset type
+ * @param {Array} donor_codes - a list of donor codes that the asset could have
  * @returns {object[]|undefined} array of assets with fields (id, project_id, latitude, and longitude), or undefined if projectId is invalid.
  * @throws error if the DB query failed to execute
  */
-const find = async (sponsorId, projectId, assetType) => {
+const find = async (sponsorId, projectId, assetType, donor_codes = undefined) => {
     let query = QUERY_FIND;
     let values = [];
-    if ((typeof sponsorId !== 'undefined') & (sponsorId > 0)) {
+    if ((typeof sponsorId !== 'undefined') && (sponsorId > 0)) {
         values.push(sponsorId);
         query = query + `AND sponsor_id = $${values.length}` + ' ';
     }
-    if ((typeof projectId !== 'undefined') & (projectId > 0)) {
+    if ((typeof projectId !== 'undefined') && (projectId > 0)) {
         values.push(projectId);
         query = query + `AND project_id = $${values.length}` + ' ';
     }
-    if ((typeof assetType !== 'undefined') & (assetType > 0)) {
+    if ((typeof assetType !== 'undefined') && (assetType > 0)) {
         values.push(assetType);
         query = query + `AND asset_type_id = $${values.length}` + ' ';
     }
+    if ((typeof donor_codes !== 'undefined') && (donor_codes.length > 0)) {
+        values.push(donor_codes);
+        query = query + `AND donor_code = ANY($${values.length})` + ' ';
+    }
+
     const result = await global.dbPool.query(query, values);
     return result.rows;
 };
