@@ -56,10 +56,10 @@ router.post(
 // donor code search
 router.post(
     '/assets/donor',
-    validate(param.query, 'sponsor_id', type.id),
-    validate(param.query, 'project_id', type.id),
-    validate(param.query, 'asset_type_id', type.id),
-    validate(param.query, 'donor_code', type.donorCode),
+    validate(param.body, 'sponsor_id', type.id),
+    validate(param.body, 'project_id', type.id),
+    validate(param.body, 'asset_type_id', type.id),
+    validate(param.body, 'donor_code', type.donorCode),
     assets.find
 );
 
