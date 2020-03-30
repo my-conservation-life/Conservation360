@@ -16,8 +16,6 @@ export default class Map extends LightningElement {
      * 
      * When this is complete, call initializeleaflet()
      */
-
-    
     connectedCallback() {
         Promise.all([
             loadScript(this, leaflet + '/leaflet.js'),
@@ -31,7 +29,6 @@ export default class Map extends LightningElement {
             this.dispatchEvent(new CustomEvent('ready', { detail: this.map }));
         });
     }
-
 
     /**
      * Constructs the Leaflet map on the page and initializes this.map
