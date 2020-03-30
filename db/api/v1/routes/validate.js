@@ -520,14 +520,15 @@ const parseDonorCode = (donor_codes) => {
         return ParseResult.success([donor_codes]);
     } else if (Array.isArray(donor_codes) && donor_codes.length != 0) {
         var allStrings = true;
-        for(const code in donor_codes) {
+        for (const code in donor_codes) {
             if (!parseString(code)) { 
                 allStrings = false;
                 break;
             }
         }
-        if (allStrings)
+        if (allStrings) {
             return ParseResult.success(donor_codes);
+        }
     }
 
     return ParseResult.failure('donor_code must be a string or an array of strings.');

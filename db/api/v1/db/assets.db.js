@@ -33,18 +33,22 @@ const QUERY_FIND = `
 const find = async (sponsorId, projectId, assetType, donorCodes = undefined) => {
     let query = QUERY_FIND;
     let values = [];
+
     if ((typeof sponsorId !== 'undefined') && (sponsorId > 0)) {
         values.push(sponsorId);
         query = query + `AND sponsor_id = $${values.length}` + ' ';
     }
+
     if ((typeof projectId !== 'undefined') && (projectId > 0)) {
         values.push(projectId);
         query = query + `AND project_id = $${values.length}` + ' ';
     }
+
     if ((typeof assetType !== 'undefined') && (assetType > 0)) {
         values.push(assetType);
         query = query + `AND asset_type_id = $${values.length}` + ' ';
     }
+
     if ((typeof donorCodes !== 'undefined') && (donorCodes.length > 0)) {
         values.push(donorCodes);
         query = query + `AND donor_code = ANY ($${values.length})` + ' ';
