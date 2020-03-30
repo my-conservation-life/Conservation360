@@ -85,25 +85,6 @@ const findAssetPropsByTypeID = async (assetTypeID) => {
             property_id
     `;
 
-    // let query = `
-    //     SELECT
-    //         asset.id AS id,
-    //         asset_property.value AS value,
-    //         asset_property.property_id AS property_id,
-    //         ST_X(asset.location)        AS longitude,
-    //         ST_Y(asset.location)        AS latitude
-    //     FROM
-    //         asset
-    //     INNER JOIN
-    //         asset_property
-    //     ON
-    //         asset_property.asset_id=asset.id
-    //     WHERE
-    //         asset_type_id = $1
-    //     ORDER BY
-    //         property_id
-    // `;
-
     const params = [assetTypeID];
 
     return global.dbPool.query(query, params);
