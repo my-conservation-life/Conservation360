@@ -46,7 +46,7 @@ const find = async (sponsorId, projectId, assetType, donor_codes = undefined) =>
     }
     if ((typeof donor_codes !== 'undefined') && (donor_codes.length > 0)) {
         values.push(donor_codes);
-        query = query + `AND donor_code = ANY($${values.length})` + ' ';
+        query = query + `donor_code IS NOT NULL AND donor_code = ANY($${values.length})` + ' ';
     }
 
     const result = await global.dbPool.query(query, values);
