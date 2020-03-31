@@ -100,7 +100,7 @@ export default class GeoQuery extends LightningElement {
                 console.log('Getting: ' + distanceURL.href);
 
                 // Send out the GET request
-                this.assetsPromise = utils.get(distanceURL.href);
+                this.assetsPromise = utils.post(distanceURL.href);
 
                 // When the promise is fulfilled handle it
                 this.assetsPromise.then(response => {

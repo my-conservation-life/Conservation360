@@ -52,6 +52,14 @@ export default class Map extends LightningElement {
         var drawControl = new L.Control.Draw({
             edit: {
                 featureGroup: drawnItems
+            },
+            draw: {
+                polygon: {
+                    allowIntersection: false
+                },
+                polyline: false,
+                marker: false,
+                circlemarker: false
             }
         });
         this.map.addControl(drawControl);
