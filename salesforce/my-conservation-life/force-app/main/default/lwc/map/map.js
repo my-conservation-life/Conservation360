@@ -50,16 +50,20 @@ export default class Map extends LightningElement {
         var drawnItems = new L.FeatureGroup();
         this.map.addLayer(drawnItems);
         var drawControl = new L.Control.Draw({
-            edit: {
-                featureGroup: drawnItems
-            },
             draw: {
                 polygon: {
-                    allowIntersection: false
+                    allowIntersection: false, //Disallows crossing over of lines in polygons
+                    drawError: {
+                        color: '#8B0000', //Turns darkred
+                        message: '<strong>Intersecting lines not allowed<strong>'
+                    }
                 },
                 polyline: false,
                 marker: false,
                 circlemarker: false
+            },
+            edit: {
+                featureGroup: drawnItems
             }
         });
         this.map.addControl(drawControl);
