@@ -9,8 +9,7 @@ import utils from 'c/utils';
 const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
 const POLY_URL = utils.URL + '/assets/geometrySearch/polygon';
 
-// TODO import { assets, bboxAssets } from 'c/controllers';
-// TODO import { markerFromAsset } from './utils';
+import { assets, bboxAssets } from 'c/controllers';
 
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
@@ -22,8 +21,8 @@ export default class GeoQuery extends LightningElement {
      * Starts the download for asset details and bounding box early.
      */
     connectedCallback() {
-        // this.assetsPromise = assets.find({ projectId: parseInt(this.projectId, 10) });
-        // this.assetsBboxPromise = bboxAssets.get(parseInt(this.projectId, 10));
+        this.assetsPromise = assets.find({ projectId: parseInt(this.projectId, 10) });
+        this.assetsBboxPromise = bboxAssets.get(parseInt(this.projectId, 10));
     }
 
     /**
@@ -39,6 +38,42 @@ export default class GeoQuery extends LightningElement {
      * @param {CustomEvent} event
      * @param {Map} event.details - Leaflet Map of the child component
      */
+
+    responseGather(asset) { 
+        this.assetsPromise = asset;
+        // When the promise is fulfilled handle it
+        this.assetsPromise.then(response => {
+            // Response should be an array of assets
+            console.log(response);
+
+            // Initialize the array if need be
+            if( this.myAssets === undefined){
+                this.myAssets = [];
+            }
+
+            // Iterate over the assets and add them to the map
+            let i;
+            for(i = 0; i < response.length; i++)
+            {
+                const a = response[i];
+
+                // Create the map marker. Add back the offset so markers appear where the user clicked.
+                let m;
+                if (a.asset_type === "Tree") {
+                    m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
+                } else {
+                    m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                }
+
+                // Add expanded details for if a user clicks on the marker
+                m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
+
+                // // Keep a reference to the marker so we can remove it later
+                this.myAssets.push(m);
+            }
+        });
+    }
+
     onMapInitialized(event) {
         // Get the leaflet map... I have been having a hard time making this a class variable... 
         const map = event.detail;
@@ -96,33 +131,39 @@ export default class GeoQuery extends LightningElement {
                 // Send out the POST request
                 this.assetsPromise = utils.post(distanceURL.href);
 
-                // When the promise is fulfilled handle it
-                this.assetsPromise.then(response => {
-                    // Response should be an array of assets
-                    console.log(response);
+                responseGather(this.assetsPromise);
 
-                    // Initialize the array if need be
-                    if( this.myAssets === undefined){
-                        this.myAssets = [];
-                    }
-                    // Iterate over the assets and add them to the map
-                    let i;
-                    for(i = 0; i < response.length; i++)
-                    {
-                        const a = response[i];
+                // // When the promise is fulfilled handle it
+                // this.assetsPromise.then(response => {
+                //     // Response should be an array of assets
+                //     console.log(response);
 
-                        // Create the map marker. Add back the offset so markers appear where the user clicked.
-                        console.log(baobabIcon);
-                        let m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
+                //     // Initialize the array if need be
+                //     if( this.myAssets === undefined){
+                //         this.myAssets = [];
+                //     }
 
+                //     // Iterate over the assets and add them to the map
+                //     let i;
+                //     for(i = 0; i < response.length; i++)
+                //     {
+                //         const a = response[i];
 
-                        // Add expanded details for if a user clicks on the marker
-                        m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
+                //         // Create the map marker. Add back the offset so markers appear where the user clicked.
+                //         let m;
+                //         if (a.asset_type === "Tree") {
+                //             m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
+                //         } else {
+                //             m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                //         }
 
-                        // // Keep a reference to the marker so we can remove it later
-                        this.myAssets.push(m);
-                    }
-                });
+                //         // Add expanded details for if a user clicks on the marker
+                //         m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
+
+                //         // // Keep a reference to the marker so we can remove it later
+                //         this.myAssets.push(m);
+                //     }
+                // });
             } 
             
             if (type === 'polygon' || type === 'rectangle') {
@@ -165,8 +206,12 @@ export default class GeoQuery extends LightningElement {
                         const a = response[i];
 
                         // Create the map marker. Add back the offset so markers appear where the user clicked.
-                        let m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
-
+                        let m;
+                        if (a.asset_type === "Tree") {
+                            m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
+                        } else {
+                            m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                        }
 
                         // Add expanded details for if a user clicks on the marker
                         m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
@@ -175,8 +220,7 @@ export default class GeoQuery extends LightningElement {
                         this.myAssets.push(m);
                     }
                 });
-            }
-             
+            }   
         });
     } 
 }
