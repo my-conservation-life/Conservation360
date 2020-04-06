@@ -56,6 +56,15 @@ export default class Map extends LightningElement {
                     drawError: {
                         color: '#8B0000', //Turns darkred
                         message: '<strong>Intersecting lines not allowed<strong>'
+                    },
+                    shapeOptions: {
+                        color: '#007300'
+                    }
+                },
+                rectangle: {
+                    showArea: false,
+                    shapeOptions: {
+                        color: '#e59400'
                     }
                 },
                 polyline: false,

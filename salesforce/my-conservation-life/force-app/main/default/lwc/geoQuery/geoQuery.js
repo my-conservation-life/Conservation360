@@ -125,7 +125,7 @@ export default class GeoQuery extends LightningElement {
                     }
                 });
 
-            } if (type === 'polygon') {
+            } if (type === 'polygon' || type === 'rectangle') {
                 map.addLayer(layer);
                 let polyLatLng = e.layer.getLatLngs();
                 console.log("The polygon is at " + polyLatLng);
@@ -175,10 +175,7 @@ export default class GeoQuery extends LightningElement {
                     }
                 });
 
-            } if (type === 'rectangle') {
-                let rectLatLng = e.layer.getLatLngs();
-                console.log("The rectangle is at " + rectLatLng);
-            }
+            } 
         });
     } 
 }
