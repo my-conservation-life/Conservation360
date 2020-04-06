@@ -72,7 +72,9 @@ export default class Map extends LightningElement {
                 circlemarker: false
             },
             edit: {
-                featureGroup: drawnItems
+                featureGroup: drawnItems,
+                remove: false,
+                edit: false
             }
         });
         this.map.addControl(drawControl);

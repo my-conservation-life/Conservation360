@@ -8,8 +8,6 @@ import utils from 'c/utils';
 
 const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
 const POLY_URL = utils.URL + '/assets/geometrySearch/polygon';
-const RECT_URL = utils.URL + '/assets/geometrySearch/envelope'
-
 
 // TODO import { assets, bboxAssets } from 'c/controllers';
 // TODO import { markerFromAsset } from './utils';
@@ -68,6 +66,12 @@ export default class GeoQuery extends LightningElement {
             var type = e.layerType,
                 layer = e.layer;
 
+            //Sets the icons for the trees
+            var baobabIcon = L.icon({
+                iconUrl: "https://i.imgur.com/RQM5bdh.png",
+                iconSize: [32, 32]
+            });
+
             if (type === 'circle') {
                 //Gets the center point from the circle object
                 map.addLayer(layer);
@@ -81,12 +85,6 @@ export default class GeoQuery extends LightningElement {
 
                 editableLayers.addLayer(layer);
                 console.log(`Map clicked at lat: ${centerPnt.lat} lon: ${centerPnt.lng}`);
-
-                // Remember where the user actually clicked so we can put the markers in the correct spot
-                let latOff = Math.trunc(centerPnt.lat / 90);
-                let lonOff = Math.trunc(centerPnt.lng / 180);
-
-                console.log(`Translates to lat: ${centerPnt.lat} lat offset: ${latOff} lon: ${centerPnt.lng} lon offset: ${lonOff}`);
                 
                 const distanceURL = new URL(DISTANCE_URL);
                 distanceURL.searchParams.append('latitude', `${centerPnt.lat}`);
@@ -114,18 +112,20 @@ export default class GeoQuery extends LightningElement {
                         const a = response[i];
 
                         // Create the map marker. Add back the offset so markers appear where the user clicked.
-                        let m = L.marker(L.latLng(a.lat + (latOff * 90), a.lon + (lonOff * 180))).addTo(map);
+                        console.log(baobabIcon);
+                        let m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
 
 
                         // Add expanded details for if a user clicks on the marker
                         m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
 
-                        // Keep a reference to the marker so we can remove it later
+                        // // Keep a reference to the marker so we can remove it later
                         this.myAssets.push(m);
                     }
                 });
-
-            } if (type === 'polygon' || type === 'rectangle') {
+            } 
+            
+            if (type === 'polygon' || type === 'rectangle') {
                 map.addLayer(layer);
                 let polyLatLng = e.layer.getLatLngs();
                 console.log("The polygon is at " + polyLatLng);
@@ -157,6 +157,7 @@ export default class GeoQuery extends LightningElement {
                     if( this.myAssets === undefined){
                         this.myAssets = [];
                     }
+
                     // Iterate over the assets and add them to the map
                     let i;
                     for(i = 0; i < response.length; i++)
@@ -164,7 +165,7 @@ export default class GeoQuery extends LightningElement {
                         const a = response[i];
 
                         // Create the map marker. Add back the offset so markers appear where the user clicked.
-                        let m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                        let m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
 
 
                         // Add expanded details for if a user clicks on the marker
@@ -174,8 +175,8 @@ export default class GeoQuery extends LightningElement {
                         this.myAssets.push(m);
                     }
                 });
-
-            } 
+            }
+             
         });
     } 
 }
