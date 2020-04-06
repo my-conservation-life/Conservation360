@@ -38,7 +38,6 @@ export default class GeoQuery extends LightningElement {
      * @param {CustomEvent} event
      * @param {Map} event.details - Leaflet Map of the child component
      */
-
     responseGather(asset) { 
         this.assetsPromise = asset;
         // When the promise is fulfilled handle it
@@ -47,14 +46,13 @@ export default class GeoQuery extends LightningElement {
             console.log(response);
 
             // Initialize the array if need be
-            if( this.myAssets === undefined){
+            if (this.myAssets === undefined) {
                 this.myAssets = [];
             }
 
             // Iterate over the assets and add them to the map
             let i;
-            for(i = 0; i < response.length; i++)
-            {
+            for (i = 0; i < response.length; i++) {
                 const a = response[i];
 
                 // Create the map marker. Add back the offset so markers appear where the user clicked.
@@ -131,7 +129,7 @@ export default class GeoQuery extends LightningElement {
                 // Send out the POST request
                 this.assetsPromise = utils.post(distanceURL.href);
 
-                responseGather(this.assetsPromise);
+                this.responseGather(this.assetsPromise);
 
                 // // When the promise is fulfilled handle it
                 // this.assetsPromise.then(response => {
