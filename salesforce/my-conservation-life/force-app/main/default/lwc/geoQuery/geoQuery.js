@@ -16,7 +16,6 @@ import { assets, bboxAssets } from 'c/controllers';
 export default class GeoQuery extends LightningElement {
     assetsPromise;
 
-    
     /**
      * Starts the download for asset details and bounding box early.
      */
@@ -39,41 +38,6 @@ export default class GeoQuery extends LightningElement {
      * @param {Map} event.details - Leaflet Map of the child component
      */
 
-    responseGather(asset) { 
-        this.assetsPromise = asset;
-        // When the promise is fulfilled handle it
-        this.assetsPromise.then(response => {
-            // Response should be an array of assets
-            console.log(response);
-
-            // Initialize the array if need be
-            if( this.myAssets === undefined){
-                this.myAssets = [];
-            }
-
-            // Iterate over the assets and add them to the map
-            let i;
-            for(i = 0; i < response.length; i++)
-            {
-                const a = response[i];
-
-                // Create the map marker. Add back the offset so markers appear where the user clicked.
-                let m;
-                if (a.asset_type === "Tree") {
-                    m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
-                } else {
-                    m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
-                }
-
-                // Add expanded details for if a user clicks on the marker
-                m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
-
-                // // Keep a reference to the marker so we can remove it later
-                this.myAssets.push(m);
-            }
-        });
-    }
-
     onMapInitialized(event) {
         // Get the leaflet map... I have been having a hard time making this a class variable... 
         const map = event.detail;
@@ -88,12 +52,6 @@ export default class GeoQuery extends LightningElement {
 
         // Locks the map region to one earth (prevents dragging)
         map.setMaxBounds([[-90,-180],[90,180]]);
-
-        
-        // Implement map "on click" handler
-        // If we could keep a reference to the map via a class variable (this.map = event.detail) this would be a lot cleaner
-        // to bad this map doesn't wish to cooperate at the time being.
-
         var editableLayers = new L.FeatureGroup();
         map.addLayer(editableLayers);
 
@@ -104,6 +62,12 @@ export default class GeoQuery extends LightningElement {
             //Sets the icons for the trees
             var baobabIcon = L.icon({
                 iconUrl: "https://i.imgur.com/RQM5bdh.png",
+                iconSize: [32, 32]
+            });
+
+            //Sets the icon for lemurs
+            var lemurIcon = L.icon({
+                iconUrl: "https://i.imgur.com/d2uKnLn.png",
                 iconSize: [32, 32]
             });
 
@@ -118,9 +82,11 @@ export default class GeoQuery extends LightningElement {
                 let rad = layer.getRadius();
                 console.log("The radius is " + rad);
 
+                //Adds the circle to the map
                 editableLayers.addLayer(layer);
                 console.log(`Map clicked at lat: ${centerPnt.lat} lon: ${centerPnt.lng}`);
                 
+                //Gets the information needed for the query to the DB
                 const distanceURL = new URL(DISTANCE_URL);
                 distanceURL.searchParams.append('latitude', `${centerPnt.lat}`);
                 distanceURL.searchParams.append('longitude', `${centerPnt.lng}`);
@@ -131,39 +97,39 @@ export default class GeoQuery extends LightningElement {
                 // Send out the POST request
                 this.assetsPromise = utils.post(distanceURL.href);
 
-                responseGather(this.assetsPromise);
+                // When the promise is fulfilled handle it
+                //Tried to break this entire block out into a separate method but the LWC gets weird when that happens.
+                this.assetsPromise.then(response => {
+                    // Response should be an array of assets
+                    console.log(response);
 
-                // // When the promise is fulfilled handle it
-                // this.assetsPromise.then(response => {
-                //     // Response should be an array of assets
-                //     console.log(response);
+                    // Initialize the array if need be
+                    if (this.myAssets === undefined) {
+                        this.myAssets = [];
+                    }
 
-                //     // Initialize the array if need be
-                //     if( this.myAssets === undefined){
-                //         this.myAssets = [];
-                //     }
+                    // Iterate over the assets and add them to the map
+                    let i;
+                    for (i = 0; i < response.length; i++) {
+                        const a = response[i];
 
-                //     // Iterate over the assets and add them to the map
-                //     let i;
-                //     for(i = 0; i < response.length; i++)
-                //     {
-                //         const a = response[i];
+                        // Create the map marker, asset type determine the icon
+                        let m;
+                        if (a.asset_type === "Tree") {
+                            m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
+                        } else if (a.asset_type === "Lemur") {
+                            m = L.marker(L.latLng(a.lat, a.lon), {icon: lemurIcon}).addTo(map);
+                        } else {
+                            m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                        }
 
-                //         // Create the map marker. Add back the offset so markers appear where the user clicked.
-                //         let m;
-                //         if (a.asset_type === "Tree") {
-                //             m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
-                //         } else {
-                //             m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
-                //         }
+                        // Add expanded details for if a user clicks on the marker
+                        m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
 
-                //         // Add expanded details for if a user clicks on the marker
-                //         m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
-
-                //         // // Keep a reference to the marker so we can remove it later
-                //         this.myAssets.push(m);
-                //     }
-                // });
+                        // // Keep a reference to the marker so we can remove it later
+                        this.myAssets.push(m);
+                    }
+                });
             } 
             
             if (type === 'polygon' || type === 'rectangle') {
@@ -195,20 +161,21 @@ export default class GeoQuery extends LightningElement {
                     console.log(response);
 
                     // Initialize the array if need be
-                    if( this.myAssets === undefined){
+                    if (this.myAssets === undefined) {
                         this.myAssets = [];
                     }
 
                     // Iterate over the assets and add them to the map
                     let i;
-                    for(i = 0; i < response.length; i++)
-                    {
+                    for (i = 0; i < response.length; i++) {
                         const a = response[i];
 
                         // Create the map marker. Add back the offset so markers appear where the user clicked.
                         let m;
                         if (a.asset_type === "Tree") {
                             m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
+                        } else if (a.asset_type === "Lemur") {
+                            m = L.marker(L.latLng(a.lat, a.lon), {icon: lemurIcon}).addTo(map);
                         } else {
                             m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
                         }
