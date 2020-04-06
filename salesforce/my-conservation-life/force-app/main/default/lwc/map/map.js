@@ -16,6 +16,7 @@ export default class Map extends LightningElement {
      * 
      * When this is complete, call initializeleaflet()
      */
+    
     connectedCallback() {
         Promise.all([
             loadScript(this, leaflet + '/leaflet.js'),
@@ -79,6 +80,7 @@ export default class Map extends LightningElement {
         });
         this.map.addControl(drawControl);
     }
+
     /**
      * Setup the base OpenStreetMap tile layer
      */

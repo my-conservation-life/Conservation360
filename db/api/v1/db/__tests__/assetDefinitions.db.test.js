@@ -184,7 +184,6 @@ describe('assetDefinitions.db.storeCSV', () => {
         it('finds all asset types in the database', async () => {
             const actualRows = await findAssetTypes();
             expect(actualRows).toEqual(rows);
-            expect(query).toHaveBeenCalledWith(expect.stringContaining('asset_type'));
         });
     });
 
@@ -203,7 +202,7 @@ describe('assetDefinitions.db.storeCSV', () => {
     
         it('finds all properties associated with the asset type ID given', async () => {
             const actualRows = await findAssetPropTypes(assetTypeId);
-            expect(actualRows).toEqual(rows);
+            expect(actualRows.rows).toEqual(rows);
         });
     });
 

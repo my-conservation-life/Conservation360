@@ -15,7 +15,7 @@ import { assets, bboxAssets } from 'c/controllers';
 /*global L*/
 export default class GeoQuery extends LightningElement {
     assetsPromise;
-
+  
     /**
      * Starts the download for asset details and bounding box early.
      */
@@ -38,7 +38,7 @@ export default class GeoQuery extends LightningElement {
      * @param {Map} event.details - Leaflet Map of the child component
      */
 
-    onMapInitialized(event) {
+     onMapInitialized(event) {
         // Get the leaflet map... I have been having a hard time making this a class variable... 
         const map = event.detail;
 
