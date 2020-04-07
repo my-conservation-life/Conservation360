@@ -1,4 +1,8 @@
+/**
+ * The DonorCodeController queries Salesforce for Donations
+ */
 public with sharing class DonorCodeController {
+    
     @AuraEnabled(cacheable=true)
     public static List<Donation__c> getAllDonorCodes() {
         return [

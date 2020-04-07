@@ -20,24 +20,4 @@ public with sharing class DonorCodeControllerTest {
         // But Salesforce requires 75% test coverage to deploy Apex
         System.assertEquals(donations.size(), donations.size());
     }
-
-    @IsTest
-    static void testGetAllDonorCodes2() {
-        Test.startTest();
-        List<Donation__c> donations = DonorCodeController.getAllDonorCodes();
-        Test.stopTest();
-        // Faking the Test Because didn't have time to learn how to use this test suite.
-        // But Salesforce requires 75% test coverage to deploy Apex
-        System.assertEquals(donations.size(), donations.size());
-    }
-
-    @IsTest
-    static void testGetAllDonorCodes3() {
-        Test.startTest();
-        List<Donation__c> donations = DonorCodeController.getAllDonorCodes();
-        Test.stopTest();
-        // Faking the Test Because didn't have time to learn how to use this test suite.
-        // But Salesforce requires 75% test coverage to deploy Apex
-        System.assertEquals(donations.size(), donations.size());
-    }
 }
