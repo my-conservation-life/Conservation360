@@ -37,7 +37,7 @@ export default class GeoQuery extends LightningElement {
      * @param {CustomEvent} event
      * @param {Map} event.details - Leaflet Map of the child component
      */
-     onMapInitialized(event) {
+    onMapInitialized(event) {
         // Get the leaflet map... I have been having a hard time making this a class variable... 
         const map = event.detail;
 
