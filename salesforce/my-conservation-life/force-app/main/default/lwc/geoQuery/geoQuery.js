@@ -107,20 +107,20 @@ export default class GeoQuery extends LightningElement {
                     // Iterate over the assets and add them to the map
                     let assetIndex;
                     for (assetIndex = 0; assetIndex < response.length; assetIndex++) {
-                        const a = response[assetIndex];
+                        const assetResponse = response[assetIndex];
 
                         // Create the map marker, asset type determine the icon
                         let markerIcon;
-                        if (a.asset_type === 'Tree') {
-                            markerIcon = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
-                        } else if (a.asset_type === 'Lemur') {
-                            markerIcon = L.marker(L.latLng(a.lat, a.lon), {icon: lemurIcon}).addTo(map);
+                        if (assetResponse.asset_type === 'Tree') {
+                            markerIcon = L.marker(L.latLng(assetResponse.lat, assetResponse.lon), {icon: baobabIcon}).addTo(map);
+                        } else if (assetResponse.asset_type === 'Lemur') {
+                            markerIcon = L.marker(L.latLng(assetResponse.lat, assetResponse.lon), {icon: lemurIcon}).addTo(map);
                         } else {
-                            markerIcon = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                            markerIcon = L.marker(L.latLng(assetResponse.lat, assetResponse.lon)).addTo(map);
                         }
 
                         // Add expanded details for if a user clicks on the marker
-                        markerIcon.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
+                        markerIcon.bindPopup(`${assetResponse.asset_type}\n\r${assetResponse.project_name}`);
 
                         // // Keep a reference to the marker so we can remove it later
                         this.myAssets.push(markerIcon);
@@ -162,22 +162,22 @@ export default class GeoQuery extends LightningElement {
                     }
 
                     // Iterate over the assets and add them to the map
-                    let i;
-                    for (i = 0; i < response.length; i++) {
-                        const a = response[i];
+                    let assetIndex;
+                    for (assetIndex = 0; assetIndex < response.length; assetIndex++) {
+                        const assetResponse = response[assetIndex];
 
                         // Create the map marker. Add back the offset so markers appear where the user clicked.
                         let markerIcon;
-                        if (a.asset_type === 'Tree') {
-                            markerIcon = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
-                        } else if (a.asset_type === 'Lemur') {
-                            markerIcon = L.marker(L.latLng(a.lat, a.lon), {icon: lemurIcon}).addTo(map);
+                        if (assetResponse.asset_type === 'Tree') {
+                            markerIcon = L.marker(L.latLng(assetResponse.lat, assetResponse.lon), {icon: baobabIcon}).addTo(map);
+                        } else if (assetResponse.asset_type === 'Lemur') {
+                            markerIcon = L.marker(L.latLng(assetResponse.lat, assetResponse.lon), {icon: lemurIcon}).addTo(map);
                         } else {
-                            markerIcon = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                            markerIcon = L.marker(L.latLng(assetResponse.lat, assetResponse.lon)).addTo(map);
                         }
 
                         // Add expanded details for if a user clicks on the marker
-                        markerIcon.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
+                        markerIcon.bindPopup(`${assetResponse.asset_type}\n\r${assetResponse.project_name}`);
 
                         // Keep a reference to the marker so we can remove it later
                         this.myAssets.push(markerIcon);
