@@ -346,36 +346,6 @@ const parseLongitude = (lonStr) => {
 };
 
 /**
- * Parse a latitude value from a string
- * 
- * @param {string} latStr - A string that is parsable into a floating point number
- * @returns {ParseResult} - Parse success with a float value that is a latitude, or a failure message
- */
-const parseLatitude = (latStr) => {
-    const lat = parseFloat(latStr);
-    const isValid = (!isNaN(lat) && validLatitude(lat));
-
-    return isValid ?
-        ParseResult.success(lat) :
-        ParseResult.failure('Latitudes must be numbers between -90 and 90');
-};
-
-/**
- * Parse a longitude value from a string
- * 
- * @param {string} lonStr - A string that is parsable into a floating point number
- * @returns {ParseResult} - Parse success with a float value that is a longitude, or a failure message
- */
-const parseLongitude = (lonStr) => {
-    const lon = parseFloat(lonStr);
-    const isValid = (!isNaN(lon) && validLongitude(lon));
-
-    return isValid ?
-        ParseResult.success(lon) :
-        ParseResult.failure('Longitudes must be numbers between -180 and 180');
-};
-
-/**
  *  Validates if it is a string and within min/max length
  * 
  * @param {*} name - the variable to parse
