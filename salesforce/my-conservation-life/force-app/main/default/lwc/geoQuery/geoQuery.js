@@ -20,8 +20,7 @@ export default class GeoQuery extends LightningElement {
      * Starts the download for asset details and bounding box early.
      */
     connectedCallback() {
-        this.assetsPromise = assets.find({ projectId: parseInt(this.projectId, 10) });
-        this.assetsBboxPromise = bboxAssets.get(parseInt(this.projectId, 10));
+        //Handled elsewhere
     }
 
     /**
@@ -109,9 +108,9 @@ export default class GeoQuery extends LightningElement {
                     }
 
                     // Iterate over the assets and add them to the map
-                    let i;
-                    for (i = 0; i < response.length; i++) {
-                        const a = response[i];
+                    let assetIndex;
+                    for (assetIndex = 0; assetIndex < response.length; assetIndex++) {
+                        const a = response[assetIndex];
 
                         // Create the map marker, asset type determine the icon
                         let m;
