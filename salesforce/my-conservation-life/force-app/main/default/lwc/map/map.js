@@ -9,7 +9,6 @@ import leafletDraw from '@salesforce/resourceUrl/leafletDraw';
 
 export default class Map extends LightningElement {
     map; // L.map, a leaflet map. constructed in initializeleaflet
-    
     /**
      * When the Map LWC is ready, start downloading Leaflet.
      * 
@@ -21,7 +20,6 @@ export default class Map extends LightningElement {
             loadStyle(this, leaflet + '/leaflet.css'),
             loadScript(this, leafletDraw + '/dist/leaflet.draw.js'),
             loadStyle(this, leafletDraw + '/dist/leaflet.draw.css')
-
         ]).then(() => {
             this.initializeLeaflet();
             this.setupBaseTiles();
@@ -89,7 +87,6 @@ export default class Map extends LightningElement {
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
                 attribution: '&copy; ' + mapLink + ' Contributors',
-            })
-            .addTo(this.map);
+            }).addTo(this.map);
     }
 }
