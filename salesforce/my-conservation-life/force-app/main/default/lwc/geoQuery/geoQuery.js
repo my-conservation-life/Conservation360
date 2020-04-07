@@ -9,8 +9,6 @@ import utils from 'c/utils';
 const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
 const POLY_URL = utils.URL + 'assets/geometrySearch/polygon';
 
-import { assets, bboxAssets } from 'c/controllers';
-
 /* L is the Leaflet object constructed by the leaflet.js script */
 /*global L*/
 export default class GeoQuery extends LightningElement {
@@ -59,13 +57,13 @@ export default class GeoQuery extends LightningElement {
 
             //Sets the icons for the trees
             var baobabIcon = L.icon({
-                iconUrl: "https://i.imgur.com/RQM5bdh.png",
+                iconUrl: 'https://i.imgur.com/RQM5bdh.png',
                 iconSize: [32, 32]
             });
 
             //Sets the icon for lemurs
             var lemurIcon = L.icon({
-                iconUrl: "https://i.imgur.com/d2uKnLn.png",
+                iconUrl: 'https://i.imgur.com/d2uKnLn.png',
                 iconSize: [32, 32]
             });
 
@@ -74,11 +72,11 @@ export default class GeoQuery extends LightningElement {
                 map.addLayer(layer);
                 var centerPnt = layer.getLatLng();
                 var center = [centerPnt.lng,centerPnt.lat];
-                console.log("The center point is " + center);
+                console.log('The center point is ' + center);
                
                 //Gets the radius from the created circle object
                 let rad = layer.getRadius();
-                console.log("The radius is " + rad);
+                console.log('The radius is ' + rad);
 
                 //Adds the circle to the map
                 editableLayers.addLayer(layer);
@@ -112,20 +110,20 @@ export default class GeoQuery extends LightningElement {
                         const a = response[assetIndex];
 
                         // Create the map marker, asset type determine the icon
-                        let m;
-                        if (a.asset_type === "Tree") {
-                            m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
-                        } else if (a.asset_type === "Lemur") {
-                            m = L.marker(L.latLng(a.lat, a.lon), {icon: lemurIcon}).addTo(map);
+                        let markerIcon;
+                        if (a.asset_type === 'Tree') {
+                            markerIcon = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
+                        } else if (a.asset_type === 'Lemur') {
+                            markerIcon = L.marker(L.latLng(a.lat, a.lon), {icon: lemurIcon}).addTo(map);
                         } else {
-                            m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                            markerIcon = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
                         }
 
                         // Add expanded details for if a user clicks on the marker
-                        m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
+                        markerIcon.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
 
                         // // Keep a reference to the marker so we can remove it later
-                        this.myAssets.push(m);
+                        this.myAssets.push(markerIcon);
                     }
                 });
             } 
@@ -133,11 +131,11 @@ export default class GeoQuery extends LightningElement {
             if (type === 'polygon' || type === 'rectangle') {
                 map.addLayer(layer);
                 let polyLatLng = e.layer.getLatLngs();
-                console.log("The polygon is at " + polyLatLng);
+                console.log('The polygon is at ' + polyLatLng);
                 
                 var body = {
                     coordinates: []
-                }
+                };
                 
                 var vertices;
                 let polyPoints = polyLatLng[0].length;
@@ -169,23 +167,25 @@ export default class GeoQuery extends LightningElement {
                         const a = response[i];
 
                         // Create the map marker. Add back the offset so markers appear where the user clicked.
-                        let m;
-                        if (a.asset_type === "Tree") {
-                            m = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
-                        } else if (a.asset_type === "Lemur") {
-                            m = L.marker(L.latLng(a.lat, a.lon), {icon: lemurIcon}).addTo(map);
+                        let markerIcon;
+                        if (a.asset_type === 'Tree') {
+                            markerIcon = L.marker(L.latLng(a.lat, a.lon), {icon: baobabIcon}).addTo(map);
+                        } else if (a.asset_type === 'Lemur') {
+                            markerIcon = L.marker(L.latLng(a.lat, a.lon), {icon: lemurIcon}).addTo(map);
                         } else {
-                            m = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
+                            markerIcon = L.marker(L.latLng(a.lat, a.lon)).addTo(map);
                         }
 
                         // Add expanded details for if a user clicks on the marker
-                        m.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
+                        markerIcon.bindPopup(`${a.asset_type}\n\r${a.project_name}`);
 
                         // Keep a reference to the marker so we can remove it later
-                        this.myAssets.push(m);
+                        this.myAssets.push(markerIcon);
                     }
                 });
-            }   
+            } else {
+                console.log('They shouldn\'t have been able to get here');
+            }
         });
     } 
 }
