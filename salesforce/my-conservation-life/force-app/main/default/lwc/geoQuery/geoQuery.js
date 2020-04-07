@@ -7,7 +7,7 @@ import leafletDraw from '@salesforce/resourceUrl/leafletDraw';
 import utils from 'c/utils';
 
 const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
-const POLY_URL = utils.URL + '/assets/geometrySearch/polygon';
+const POLY_URL = utils.URL + 'assets/geometrySearch/polygon';
 
 import { assets, bboxAssets } from 'c/controllers';
 
