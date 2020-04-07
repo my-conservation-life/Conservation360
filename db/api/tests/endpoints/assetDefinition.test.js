@@ -80,8 +80,8 @@ describe('GET assetTypes', () => {
         await teardown();
     });
 
-    it('gets all asset types', () => {
-        return request(app)
+    it('gets all asset types', async () => {
+        await request(app)
             .get('/api/v1/assetTypes')
             .expect(200)
             .then((res) => {
@@ -110,9 +110,10 @@ describe('POST assetPropTypes', () => {
         await teardown();
     });
 
-    it('gets all asset property types', () => {
-        return request(app)
+    it('gets all asset property types', async () => {
+        await request(app)
             .post('/api/v1/assetPropTypes')
+            .send({'assetTypeID' : '1'})
             .expect(200)
             .then((res) => {
                 expect(res.body.rows).toEqual(
@@ -122,7 +123,7 @@ describe('POST assetPropTypes', () => {
                         expect.objectContaining(EXPECTED_ASSET_TYPE3)
                     ])
                 );
-                expect(res.body.rows).toHaveLength(3);
+                expect(res.body.rows).toHaveLength(1);
             });
     });
 });
@@ -140,9 +141,10 @@ describe('POST assetPropsByTypeID', () => {
         await teardown();
     });
 
-    it('gets all asset property types', () => {
-        return request(app)
+    it('gets all asset property types', async () => {
+        await request(app)
             .post('/api/v1/assetPropsByTypeID')
+            .send({'assetTypeID' : '1'})
             .expect(200)
             .then((res) => {
                 expect(res.body.rows).toEqual(

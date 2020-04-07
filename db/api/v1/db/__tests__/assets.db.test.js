@@ -29,6 +29,15 @@ describe('assets.db.find', () => {
         expect(query.mock.calls[0][1]).toEqual([54]);
     });
 
+    it('executes correct DB query when donor_code is specified', async () => {
+        const valid_donor_codes = ['abc123', 'xyz987'];
+        await find(undefined, undefined, undefined, valid_donor_codes);
+
+        expect(query).toHaveBeenCalledTimes(1);
+        expect(query.mock.calls[0][0]).toEqual(expect.stringContaining('AND donor_code = ANY'));
+        expect(query.mock.calls[0][1]).toEqual(expect.arrayContaining([valid_donor_codes]));
+    });
+
     it('returns an array of asset rows', async () => {
         rows = [
             { id: 1, project_id: 1, latitude: 2, longitude: 3 },

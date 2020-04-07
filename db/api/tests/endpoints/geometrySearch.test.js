@@ -11,7 +11,7 @@ const DISTANCE_ENDPOINT = `${GEOMETRY_ENDPOINT}/distance`;
 const POLYGON_ENDPOINT = `${GEOMETRY_ENDPOINT}/polygon`;
 
 
-describe('GET assets/geometrySearch/envelope', () => {
+describe('POST assets/geometrySearch/envelope', () => {
     beforeAll(async () => {
         jest.setTimeout(30000);
         await setup();
@@ -35,7 +35,7 @@ describe('GET assets/geometrySearch/envelope', () => {
         });
 
         await request(app)
-            .get(ENVELOPE_ENDPOINT + `?${envelopeQuery}`)
+            .post(ENVELOPE_ENDPOINT + `?${envelopeQuery}`)
             .expect(200);
     });
 
@@ -51,7 +51,7 @@ describe('GET assets/geometrySearch/envelope', () => {
         });
 
         await request(app)
-            .get(ENVELOPE_ENDPOINT + `?${envelopeQuery}`)
+            .post(ENVELOPE_ENDPOINT + `?${envelopeQuery}`)
             .expect(200)
             .then((res) => {
                 expect(res.body).toHaveLength(1);
@@ -62,7 +62,7 @@ describe('GET assets/geometrySearch/envelope', () => {
     });
 });
 
-describe('GET assets/geometrySearch/distance', () => {
+describe('POST assets/geometrySearch/distance', () => {
     beforeAll(async () => {
         jest.setTimeout(30000);
         await setup();
@@ -85,12 +85,12 @@ describe('GET assets/geometrySearch/distance', () => {
         });
 
         await request(app)
-            .get(DISTANCE_ENDPOINT + `?${distanceQuery}`)
+            .post(DISTANCE_ENDPOINT + `?${distanceQuery}`)
             .expect(200);
     });
 });
 
-describe('GET assets/geometrySearch/polygon', () => {
+describe('POST assets/geometrySearch/polygon', () => {
 
     // Helper function
     let pack = (lat, lon) => { return { latitude: lat, longitude: lon}; };
@@ -114,7 +114,7 @@ describe('GET assets/geometrySearch/polygon', () => {
 
         const validBody = { coordinates : [pack('13.3', '33'), pack('12', '44'), pack('12', '3')]};
         await request(app)
-            .get(POLYGON_ENDPOINT)
+            .post(POLYGON_ENDPOINT)
             .send(validBody)
             .expect(200);
     });

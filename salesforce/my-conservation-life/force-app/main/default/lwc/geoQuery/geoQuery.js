@@ -7,7 +7,7 @@ import leafletDraw from '@salesforce/resourceUrl/leafletDraw';
 import utils from 'c/utils';
 
 const DISTANCE_URL = utils.URL + 'assets/geometrySearch/distance';
-const POLY_URL = utils.URL + '/assets/geometrySearch/polygon';
+const POLY_URL = utils.URL + 'assets/geometrySearch/polygon';
 
 import { assets, bboxAssets } from 'c/controllers';
 
@@ -15,7 +15,7 @@ import { assets, bboxAssets } from 'c/controllers';
 /*global L*/
 export default class GeoQuery extends LightningElement {
     assetsPromise;
-
+  
     /**
      * Starts the download for asset details and bounding box early.
      */
@@ -36,7 +36,6 @@ export default class GeoQuery extends LightningElement {
      * @param {CustomEvent} event
      * @param {Map} event.details - Leaflet Map of the child component
      */
-
     onMapInitialized(event) {
         // Get the leaflet map... I have been having a hard time making this a class variable... 
         const map = event.detail;
