@@ -8,7 +8,6 @@ import leafletDraw from '@salesforce/resourceUrl/leafletDraw';
 /*global L*/
 
 export default class Map extends LightningElement {
-
     map; // L.map, a leaflet map. constructed in initializeleaflet
     
     /**
@@ -16,7 +15,6 @@ export default class Map extends LightningElement {
      * 
      * When this is complete, call initializeleaflet()
      */
-    
     connectedCallback() {
         Promise.all([
             loadScript(this, leaflet + '/leaflet.js'),
