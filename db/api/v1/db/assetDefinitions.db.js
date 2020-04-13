@@ -46,7 +46,14 @@ const findAssetTypes = async () => {
  */
 const findAssetPropTypes = async (assetTypeID) => {
     let query = PROPERTIES_QUERY;
-    query = query + ' WHERE asset_type_id=$1 ORDER BY id';
+    query = query + `
+        WHERE
+            asset_type_id = $1
+        AND
+            is_private = false
+        ORDER BY
+            id
+    `;
 
     const params = [assetTypeID];
 
@@ -60,16 +67,20 @@ const findAssetPropTypes = async (assetTypeID) => {
 const findAssetPropsByTypeID = async (assetTypeID) => {
     let query = `
         SELECT
-	        asset.id as id, asset_property.value as value, asset_property.property_id as property_id
+            asset.id                    AS id,
+            ST_X(asset.location)        AS longitude,
+            ST_Y(asset.location)        AS latitude,
+            asset_property.value        AS value,
+            asset_property.property_id  AS property_id,
+            property.is_private         AS is_private
         FROM
-	        asset
-
-        INNER JOIN
-	        asset_property
-        ON
-	        asset_property.asset_id=asset.id
+            asset
+            JOIN asset_property     ON asset_property.asset_id = asset.id
+            JOIN property           ON asset_property.property_id = property.id
         WHERE
-	        asset_type_id = $1
+            asset.asset_type_id = $1
+        AND
+            property.is_private = false
         ORDER BY
             property_id
     `;
@@ -281,6 +292,28 @@ const updateAssetProperty = async(client, assetId, propertyId, newValue) => {
 };
 
 /**
+ * Updates the location of an asset by encoding longitude and latitude coordinates
+ * @param {*} client Node Postgres client
+ * @param {Number} assetId ID of the asset whose location is to be added/updated
+ * @param {Number} longitude Longitude of the asset
+ * @param {Number} latitude Latitude of the asset
+ */
+const addLocation = async(client, assetId, longitude, latitude) => {
+    // Generate the SQL command
+    const query = `
+        UPDATE asset
+        SET location=ST_MakePoint($1, $2)
+        WHERE id=$3
+    `;
+
+    // Generate the values to subsitute into the SQL command
+    const values = [longitude, latitude, assetId];
+
+    // Execute the SQL command
+    return client.query(query, values);
+};
+
+/**
  * Stores contents of CSV into the DB
  * 
  * @param {Number} assetTypeId ID of the asset type associated with the headers in the CSV
@@ -349,7 +382,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             }
 
             for (const propertyName in asset) {
-                if (propertyName !== 'asset_id') {
+                if (propertyName !== 'asset_id' && propertyName !== 'longitude' && propertyName !== 'latitude') {
                     // Throw an error if CSV contains a header that is not associated with the selected asset type
                     if (!(propertyName in properties)) {
                         throw 'The selected CSV file either contains an empty column, is missing a header, or contains a property that is not being tracked (' + propertyName + ')';
@@ -365,18 +398,28 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     // Throw an error if a row fails to contain a value for a property that is required
                     if (value === '' && propertyIsRequired) {
                         throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
-                    }
-                    else if (assetProperties.length > 0) {
+                    } else if (value === '') {
+                        continue;
+                    } else if (assetProperties.length > 0) {
                         if (assetProperties[0].value !== value) {
                             await addAssetPropertyToHistory(client, assetId, propertyId, value, date);
                             await updateAssetProperty(client, assetId, propertyId, value);
                         }
-                    }
-                    else {
+                    } else {
                         await addAssetPropertyToHistory(client, assetId, propertyId, value, date);
                         await createAssetProperty(client, assetId, propertyId, value);
                     }
                 }
+            }
+
+            // Add location of asset to the DB
+            if (!('latitude' in properties) || !('longitude' in properties)) {
+                throw 'The selected CSV file is missing a latitude and/or longitude column';
+            } else {
+                let longitude = parseFloat(properties['longitude']);
+                let latitude = parseFloat(properties['latitude']);
+    
+                await addLocation(client, assetId, longitude, latitude);
             }
         }
         await utils.db.commitTransaction(client);

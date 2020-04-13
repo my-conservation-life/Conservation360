@@ -5,8 +5,8 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.6 (Ubuntu 11.6-1.pgdg16.04+1)
--- Dumped by pg_dump version 11.2
+-- Dumped from database version 11.7 (Ubuntu 11.7-2.pgdg16.04+1)
+-- Dumped by pg_dump version 12.1 (Ubuntu 12.1-1.pgdg18.04+1)
 
 ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_data_type_fkey";
 ALTER TABLE IF EXISTS ONLY "public"."property" DROP CONSTRAINT IF EXISTS "property_asset_type_id_fkey";
@@ -74,7 +74,8 @@ CREATE TABLE "public"."asset" (
     "id" bigint NOT NULL,
     "project_id" integer,
     "asset_type_id" integer NOT NULL,
-    "location" "public"."geometry"(Point)
+    "location" "public"."geometry"(Point),
+    "donor_code" "text"
 );
 
 

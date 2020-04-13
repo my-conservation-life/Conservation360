@@ -17,7 +17,7 @@ const {
 } = require('../controllers');
 
 // Geometry Searches
-router.get(
+router.post(
     '/assets/geometrySearch/envelope',
     validate(param.query, 'minimumLatitude', type.latitude, true),
     validate(param.query, 'minimumLongitude', type.longitude, true),
@@ -27,7 +27,7 @@ router.get(
 );
 
 // Geometry Searches
-router.get(
+router.post(
     '/assets/geometrySearch/distance',
     validate(param.query, 'latitude', type.latitude, true),
     validate(param.query, 'longitude', type.longitude, true),
@@ -35,13 +35,13 @@ router.get(
     geometrySearch.distanceFind
 );
 
-router.get(
+router.post(
     '/assets/geometrySearch/polygon',
     validate(param.body, 'coordinates', type.coordinates, true),
     geometrySearch.polygonFind
 );
 
-router.get(
+router.post(
     '/assets/properties/temporalSearch',
     validate(param.body, 'asset_id', type.id),
     validate(param.body, 'sponsor', type.sponsorName),
@@ -51,6 +51,16 @@ router.get(
     validate(param.body, 'end_date', type.date),
     validate(param.body, 'geometry', type.geometry, true),
     temporal.temporalSearch
+);
+
+// donor code search
+router.post(
+    '/assets/donor',
+    validate(param.body, 'sponsor_id', type.id),
+    validate(param.body, 'project_id', type.id),
+    validate(param.body, 'asset_type_id', type.id),
+    validate(param.body, 'donor_code', type.donorCode),
+    assets.find
 );
 
 // Assets

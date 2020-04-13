@@ -685,3 +685,29 @@ describe('validate.param.params', () => {
         expect(result).toBe(undefined);
     });
 });
+
+describe('validate.type.donorCode', () => {
+    it('parses a single donor code and returns an array', () => {
+        const donor_code = 'FF00ABC';
+        const result = type.donorCode(donor_code);
+        expect(result.isSuccess()).toBeTruthy();
+        expect(result.value).toEqual(expect.arrayContaining([donor_code]));
+    });
+
+    it('parses an array of donor codes', () => {
+        const donor_code = ['FF00ABC', 'AABB1122'];
+        const result = type.donorCode(donor_code);
+        expect(result.isSuccess()).toBeTruthy();
+        expect(result.value).toEqual(expect.arrayContaining(donor_code));
+    });
+
+    it('returns a ParseResult.failure() if the donor code is Undefined', () => {
+        const result = type.donorCode(undefined);
+        expect(result.isFailure()).toBeTruthy();
+    });
+
+    it('returns a ParseResult.failure() if the donor code is an empty array', () => {
+        const result = type.donorCode([]);
+        expect(result.isFailure()).toBeTruthy();
+    });
+});

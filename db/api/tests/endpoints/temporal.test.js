@@ -4,7 +4,7 @@ const { setup, teardown, loadSQL } = require('../setup');
 
 const ENDPOINT = '/api/v1/assets/properties/temporalSearch';
 
-describe('GET assets/properties/temporalSearch', () => {
+describe('POST assets/properties/temporalSearch', () => {
 
     const polygon_search = {
         'geometry': {
@@ -42,14 +42,14 @@ describe('GET assets/properties/temporalSearch', () => {
 
     it('returns HTTP 200 with "Polygon" search', async () => {
         await request(app)
-            .get(ENDPOINT)
+            .post(ENDPOINT)
             .send(polygon_search)
             .expect(200);
     });
 
     it('returns HTTP 200 with "Circle" search', async () => {
         await request(app)
-            .get(ENDPOINT)
+            .post(ENDPOINT)
             .send(circle_search)
             .expect(200);
     });
