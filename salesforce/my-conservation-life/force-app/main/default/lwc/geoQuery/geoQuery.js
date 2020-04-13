@@ -13,7 +13,7 @@ const POLY_URL = utils.URL + 'assets/geometrySearch/polygon';
 /*global L*/
 export default class GeoQuery extends LightningElement {
     assetsPromise;
-  
+
     /**
      * Starts the download for asset details and bounding box early.
      */
