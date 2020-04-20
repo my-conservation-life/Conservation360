@@ -124,7 +124,7 @@ router.put(
     projects.update
 );
 
-// router.get('/sponsors', sponsors.getSponsors);
+router.get('/sponsors', sponsors.getSponsors);
 // router.get('/all_projects', projects.getAllProjects);
 
 module.exports = router;

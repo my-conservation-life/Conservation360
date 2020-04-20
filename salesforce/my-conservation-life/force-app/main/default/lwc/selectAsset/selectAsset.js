@@ -7,7 +7,7 @@ import { assetDefinitions, sponsors, projects } from 'c/controllers';
 export default class SelectAsset extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
-    @track asset
+    @track asset;
     @track assets;
     @track sponsor;
     @track all_sponsors;
@@ -27,14 +27,14 @@ export default class SelectAsset extends LightningElement {
 
         assetDefinitions.fetchAssetTypes()
             .then(data => {
-                var temp_options = [];
+                var temp_assets = [];
                 for (i = 0; i < data.rows.length; i++) {
-                    temp_options.push({
-                        'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
+                    temp_assets.push({
+                        'label': data.rows[i]['name'],
                         'value': data.rows[i]['id']
                     });
                 }
-                this.assets = temp_options;
+                this.assets = temp_assets;
             })
             .catch(e => {
                 console.log('Exception: ', e);
