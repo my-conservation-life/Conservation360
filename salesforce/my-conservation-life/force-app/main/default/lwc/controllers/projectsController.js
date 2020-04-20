@@ -61,9 +61,18 @@ const update = (id, project) => {
     const updateURL = new URL(PROJECTS_URL + `/${id}`);
     return utils.put(updateURL.href, {'project': project});
 };
+
+/**
+ * Finds all projects.
+ */
+const fetchAllProjects = () => {
+    const url = utils.URL + 'all_projects';
+    return utils.get(url);
+};
     
 export default {
     find,
     create,
-    update
+    update,
+    fetchAllProjects
 };
