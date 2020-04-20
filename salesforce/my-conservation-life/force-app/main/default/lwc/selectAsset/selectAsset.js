@@ -40,35 +40,49 @@ export default class SelectAsset extends LightningElement {
                 console.log('Exception: ', e);
             });
 
-        sponsors.fetchSponsors()
-            .then(data => {
-                var temp_sponsors = [];
-                for (j = 0; j < data.rows.length; j++) {
-                    temp_sponsors.push({
-                        'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
-                        'value': data.rows[i]['id']
-                    });
-                }
-                this.all_sponsors = temp_sponsors;
-            })
-            .catch(e => {
-                console.log('Exception: ', e);
-            });
+        // sponsors.fetchSponsors()
+        //     .then(data => {
+        //         var temp_sponsors = [];
+        //         for (j = 0; j < data.rows.length; j++) {
+        //             temp_sponsors.push({
+        //                 'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
+        //                 'value': data.rows[i]['id']
+        //             });
+        //         }
+        //         this.all_sponsors = temp_sponsors;
+        //     })
+        //     .catch(e => {
+        //         console.log('Exception: ', e);
+        //     });
+
+        this.all_sponsors = [
+            {
+                'label': 'spons 1',
+                'value': '1'
+            }
+        ];
+
+        this.all_projects = [
+            {
+                'label': 'proj 1',
+                'value': '1'
+            }
+        ];
         
-        projects.fetchAllProjects()
-            .then(data => {
-                var temp_projects = [];
-                for (l = 0; l < data.rows.length; l++) {
-                    temp_projects.push({
-                        'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
-                        'value': data.rows[i]['id']
-                    });
-                }
-                this.all_projects = temp_projects;
-            })
-            .catch(e => {
-                console.log('Exception: ', e);
-            });
+        // projects.fetchAllProjects()
+        //     .then(data => {
+        //         var temp_projects = [];
+        //         for (l = 0; l < data.rows.length; l++) {
+        //             temp_projects.push({
+        //                 'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
+        //                 'value': data.rows[i]['id']
+        //             });
+        //         }
+        //         this.all_projects = temp_projects;
+        //     })
+        //     .catch(e => {
+        //         console.log('Exception: ', e);
+        //     });
     }
 
     handleSponsorChange(event) {
