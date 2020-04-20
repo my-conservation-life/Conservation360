@@ -1,10 +1,10 @@
 <template>
-  <lightning-card>
+  <lightning-card title="Select Asset">
     <div class="slds-p-around_x-large">
       <h1 class="slds-text-heading_large">{state.title}</h1>
 
       <lightning-combobox
-        options={sponsors}
+        options={all_sponsors}
         value={sponsor}
         onchange={handleSponsorChange}
       ></lightning-combobox>
