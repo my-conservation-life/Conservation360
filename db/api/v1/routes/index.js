@@ -13,7 +13,8 @@ const {
     dataTypes,
     geometrySearch,
     projects,
-    temporal
+    temporal,
+    sponsors
 } = require('../controllers');
 
 // Geometry Searches
@@ -122,5 +123,8 @@ router.put(
     validate(param.body, 'project', type.project, true),
     projects.update
 );
+
+// router.get('/sponsors', sponsors.getSponsors);
+// router.get('/all_projects', projects.getAllProjects);
 
 module.exports = router;
