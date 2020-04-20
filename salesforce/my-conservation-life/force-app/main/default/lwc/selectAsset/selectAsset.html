@@ -1,5 +1,5 @@
 <template>
-  <lightning-card title="Select Asset">
+  <lightning-card title="Asset Filters">
     <div class="slds-p-around_x-large">
 
       <lightning-combobox
@@ -9,7 +9,7 @@
         placeholder={sponsor}
         label="Sponsor"
       ></lightning-combobox>
-
+      <br/>
       <lightning-combobox
         options={all_projects}
         value={project}
@@ -17,7 +17,7 @@
         placeholder={project}
         label="Project"
       ></lightning-combobox>
-
+      <br/>
       <lightning-combobox
         options={assets}
         value={asset}

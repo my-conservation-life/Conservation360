@@ -57,15 +57,15 @@ export default class SelectAsset extends LightningElement {
 
         this.all_sponsors = [
             {
-                'label': 'spons: 1',
-                'value': 'spons: 1'
+                'label': 'Seneca Park Zoo Society: 1',
+                'value': 'Seneca Park Zoo Society: 1'
             }
         ];
 
         this.all_projects = [
             {
-                'label': 'proj: 1',
-                'value': 'proj: 1'
+                'label': 'Madagascar Reforestation: 1',
+                'value': 'Madagascar Reforestation: 1'
             }
         ];
         
