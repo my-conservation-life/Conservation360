@@ -7,11 +7,11 @@ import { assetDefinitions, sponsors, projects } from 'c/controllers';
 export default class SelectAsset extends LightningElement {
     @wire(CurrentPageReference) pageRef;
 
-    @track asset;
+    @track asset = 'Select an asset type...';
     @track assets;
-    @track sponsor;
+    @track sponsor = 'Select a sponsor...';
     @track all_sponsors;
-    @track project;
+    @track project = 'Select a project...';
     @track all_projects;
 
     @track

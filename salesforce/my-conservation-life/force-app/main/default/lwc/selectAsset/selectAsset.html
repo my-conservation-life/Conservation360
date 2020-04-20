@@ -7,22 +7,25 @@
         options={all_sponsors}
         value={sponsor}
         onchange={handleSponsorChange}
+        placeholder={sponsor}
+        label="Sponsor"
       ></lightning-combobox>
-      <lightning-badge label="Sponsor"></lightning-badge>
 
       <lightning-combobox
         options={all_projects}
         value={project}
         onchange={handleProjectChange}
+        placeholder={project}
+        label="Project"
       ></lightning-combobox>
-      <lightning-badge label="Project"></lightning-badge>
 
       <lightning-combobox
         options={assets}
         value={asset}
         onchange={handleAssetChange}
+        placeholder={asset}
+        label="Asset Type"
       ></lightning-combobox>
-      <lightning-badge label="Asset"></lightning-badge>
 
     </div>
   </lightning-card>
