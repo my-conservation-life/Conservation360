@@ -2,7 +2,7 @@ import { LightningElement, wire, track } from 'lwc';
 //import { assets } from 'c/controllers';
 import { CurrentPageReference } from 'lightning/navigation';
 import { fireEvent } from 'c/pubsub';
-import { assetDefinitions, sponsors } from 'c/controllers';
+import { assetDefinitions, sponsors, projects } from 'c/controllers';
 
 export default class SelectAsset extends LightningElement {
     @wire(CurrentPageReference) pageRef;
@@ -11,42 +11,20 @@ export default class SelectAsset extends LightningElement {
     @track assets;
     @track sponsor;
     @track all_sponsors;
+    @track project;
+    @track all_projects;
 
     @track
     state = {
         title: 'Select Asset Type'
     };
 
-    get sponsors() {
-        var ret = [];
-
-        ret.push({
-            label: 'Default: Any',
-            value: '0'
-        });
-
-        ret.push({
-            label: 'Seneca Park Zoo',
-            value: '1'
-        });
-    
-        if (ret.sizeOf === 0) {
-            return [
-                {
-                    label: 'Default: Any',
-                    value: '0'
-                }
-            ];
-        }
-    
-        return ret;
-    }
-
     /**
      * Sets the combobox options.
      */
     connectedCallback() {
-        var i, j;
+        var i, j, l;
+
         assetDefinitions.fetchAssetTypes()
             .then(data => {
                 var temp_options = [];
@@ -61,6 +39,7 @@ export default class SelectAsset extends LightningElement {
             .catch(e => {
                 console.log('Exception: ', e);
             });
+
         sponsors.fetchSponsors()
             .then(data => {
                 var temp_sponsors = [];
@@ -75,39 +54,21 @@ export default class SelectAsset extends LightningElement {
             .catch(e => {
                 console.log('Exception: ', e);
             });
-    }
-
-    @track
-    project;
-    get projects() {
-        var ret = []; //Set Up Return
-
-        //Push all projects to return
-        ret.push({
-            label: 'Default: Any',
-            value: '0'
-        });
-        ret.push({
-            label: 'Madagascar Lemur Conservation',
-            value: '1'
-        });
-        ret.push({
-            label: 'Madagascar Reforesting',
-            value: '2'
-        });
-        ret.push({
-            label: 'African Elephant Conservation',
-            value: '3'
-        });
-        if (ret.sizeOf === 0) {
-            return [
-                {
-                    label: 'Default: Any',
-                    value: '0'
+        
+        projects.fetchAllProjects()
+            .then(data => {
+                var temp_projects = [];
+                for (l = 0; l < data.rows.length; l++) {
+                    temp_projects.push({
+                        'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
+                        'value': data.rows[i]['id']
+                    });
                 }
-            ];
-        }
-        return ret;
+                this.all_projects = temp_projects;
+            })
+            .catch(e => {
+                console.log('Exception: ', e);
+            });
     }
 
     handleSponsorChange(event) {

@@ -153,8 +153,25 @@ const update = async (projectId, project) => {
     }
 };
 
+/**
+ * Query to find all projects.
+ */
+const findAllProjects = async () => {
+    let query = `
+        SELECT
+            id,
+            name
+        FROM
+            project
+        ORDER BY id
+    `;
+
+    return global.dbPool.query(query);
+};
+
 module.exports = {
     find,
     create,
-    update
+    update,
+    findAllProjects
 };

@@ -2,6 +2,7 @@
  * Maps Project related requests to the correct database function and returns a response.
  */
 
+const db = require('../db');
 const projectsDb = require('../db/projects.db');
 
 /**
@@ -61,8 +62,26 @@ const update = async (req, res, next) => {
     }
 };
 
+/**
+ * Gets all the projects from the database.
+ * @param {*} req - the request
+ * @param {*} res - the response
+ * @param {*} next - the next middleware function
+ */
+const getAllProjects = async (req, res, next) => {
+    const predicates = req.query;
+
+    try {
+        const projects = await db.projects.findAllProjects(predicates);
+        res.json(projects);
+    } catch (e) {
+        next(e);
+    }
+};
+
 module.exports = {
     find,
     create,
-    update
+    update,
+    getAllProjects
 };

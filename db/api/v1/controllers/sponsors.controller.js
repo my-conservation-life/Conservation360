@@ -10,7 +10,7 @@ const getSponsors = async (req, res, next) => {
     const predicates = req.query;
 
     try {
-        const sponsors = await db.assetDefinitions.findSponsors(predicates);
+        const sponsors = await db.sponsors.findSponsors(predicates);
         res.json(sponsors);
     } catch (e) {
         next(e);
