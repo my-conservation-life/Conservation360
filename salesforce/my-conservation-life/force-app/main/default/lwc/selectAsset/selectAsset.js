@@ -16,7 +16,7 @@ export default class SelectAsset extends LightningElement {
 
     @track
     state = {
-        title: 'Select Asset Type'
+        title: 'Asset Filters'
     };
 
     /**
@@ -30,8 +30,8 @@ export default class SelectAsset extends LightningElement {
                 var temp_assets = [];
                 for (i = 0; i < data.rows.length; i++) {
                     temp_assets.push({
-                        'label': data.rows[i]['name'],
-                        'value': data.rows[i]['id']
+                        'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
+                        'value': data.rows[i]['name'] + ': ' + data.rows[i]['id']
                     });
                 }
                 this.assets = temp_assets;
@@ -46,7 +46,7 @@ export default class SelectAsset extends LightningElement {
         //         for (j = 0; j < data.rows.length; j++) {
         //             temp_sponsors.push({
         //                 'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
-        //                 'value': data.rows[i]['id']
+        //                 'value': data.rows[i]['name'] + ': ' + data.rows[i]['id']
         //             });
         //         }
         //         this.all_sponsors = temp_sponsors;
@@ -57,15 +57,15 @@ export default class SelectAsset extends LightningElement {
 
         this.all_sponsors = [
             {
-                'label': 'spons 1',
-                'value': '1'
+                'label': 'spons: 1',
+                'value': 'spons: 1'
             }
         ];
 
         this.all_projects = [
             {
-                'label': 'proj 1',
-                'value': '1'
+                'label': 'proj: 1',
+                'value': 'proj: 1'
             }
         ];
         
@@ -75,7 +75,7 @@ export default class SelectAsset extends LightningElement {
         //         for (l = 0; l < data.rows.length; l++) {
         //             temp_projects.push({
         //                 'label': data.rows[i]['name'] + ': ' + data.rows[i]['id'],
-        //                 'value': data.rows[i]['id']
+        //                 'value': data.rows[i]['name'] + ': ' + data.rows[i]['id']
         //             });
         //         }
         //         this.all_projects = temp_projects;
@@ -87,16 +87,16 @@ export default class SelectAsset extends LightningElement {
 
     handleSponsorChange(event) {
         this.sponsor = event.detail.value;
-        fireEvent(this.pageRef, 'selectedSponsor', this.sponsor);
+        fireEvent(this.pageRef, 'selectedSponsor', event.detail.value.split(':')[1].trimLeft());
     }
   
     handleProjectChange(event) {
         this.project = event.detail.value;
-        fireEvent(this.pageRef, 'selectedProject', this.project);
+        fireEvent(this.pageRef, 'selectedProject', event.detail.value.split(':')[1].trimLeft());
     }
 
     handleAssetChange(event) {
         this.asset = event.detail.value;
-        fireEvent(this.pageRef, 'selectedAsset', this.asset);
+        fireEvent(this.pageRef, 'selectedAsset', event.detail.value.split(':')[1].trimLeft());
     }
 }
