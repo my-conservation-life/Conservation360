@@ -41,10 +41,28 @@ const findAssetTypes = async () => {
 };
 
 /**
- * Query to find the property types for a given assetTypeID.
+ * Query to find all property types for a given assetTypeID.
  * @param {number} assetTypeID - the asset type ID
  */
-const findAssetPropTypes = async (assetTypeID) => {
+const findAllAssetPropTypes = async (assetTypeID) => {
+    let query = PROPERTIES_QUERY;
+    query = query + `
+        WHERE
+            asset_type_id = $1
+        ORDER BY
+            id
+    `;
+
+    const params = [assetTypeID];
+
+    return global.dbPool.query(query, params);
+};
+
+/**
+ * Query to find the non-private property types for a given assetTypeID.
+ * @param {number} assetTypeID - the asset type ID
+ */
+const findNonPrivateAssetPropTypes = async (assetTypeID) => {
     let query = PROPERTIES_QUERY;
     query = query + `
         WHERE
@@ -321,7 +339,7 @@ const addLocation = async(client, assetId, longitude, latitude) => {
  */
 const storeCSV = async(assetTypeId, csvJson) => {
     // Get properties associated with the selected asset type
-    const propertyArray = (await findAssetPropTypes(assetTypeId)).rows;
+    const propertyArray = (await findAllAssetPropTypes(assetTypeId)).rows;
 
     // Create a property object to be more accessible
     const properties = {};
@@ -385,7 +403,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                 if (propertyName !== 'asset_id' && propertyName !== 'longitude' && propertyName !== 'latitude') {
                     // Throw an error if CSV contains a header that is not associated with the selected asset type
                     if (!(propertyName in properties)) {
-                        throw 'The selected CSV file either contains an empty column, is missing a header, or contains a property that is not being tracked (' + propertyName + ')';
+                        throw 'The selected CSV file contains a property that is not affiliated with the selected asset type. (' + propertyName + ')';
                     }
 
                     property = properties[propertyName];
@@ -437,7 +455,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
 
 module.exports = {
     findAssetTypes,
-    findAssetPropTypes,
+    findNonPrivateAssetPropTypes,
     findAssetPropsByTypeID,
     find,
     create,

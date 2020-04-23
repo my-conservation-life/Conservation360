@@ -30,7 +30,7 @@ const getAssetTypes = async (req, res, next) => {
 */
 const getAssetPropTypes = async (req, res, next) => {
     try {
-        const prop_types = await db.assetDefinitions.findAssetPropTypes(req.valid.assetTypeID);
+        const prop_types = await db.assetDefinitions.findNonPrivateAssetPropTypes(req.valid.assetTypeID);
         res.json(prop_types);
     } catch (e) {
         next(e);
