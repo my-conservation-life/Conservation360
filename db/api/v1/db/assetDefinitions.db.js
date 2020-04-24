@@ -408,7 +408,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                 if (propertyName !== 'asset_id' && propertyName !== 'longitude' && propertyName !== 'latitude') {
                     // Throw an error if CSV contains a header that is not associated with the selected asset type
                     if (!(propertyName in properties)) {
-                        throw 'The selected CSV file contains a property that is not affiliated with the selected asset type. (' + propertyName + ')';
+                        throw 'The selected CSV file may contain a property that is not affiliated with the selected asset type. If this is not the case, make sure to check your CSV for irrelevant columns such as blank columns and columns with blank headers. (' + propertyName + ')';
                     }
 
                     property = properties[propertyName];
