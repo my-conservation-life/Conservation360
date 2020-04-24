@@ -4,6 +4,7 @@
 
 const db = require('../db');
 const csv = require('csvtojson');
+const papa = require('papaparse');
 
 /**
 * Gets all the different asset types from the database.
@@ -87,9 +88,13 @@ const storeCSV = async(req, res, next) => {
     const csvFile = req.file;
     const csvPath = csvFile.path;
     try {
-        const json = await csv().fromFile(csvPath);
-        const result = await db.assetDefinitions.storeCSV(assetTypeId, json);
-        res.json({result: result});
+        // const json = await csv().fromFile(csvPath);
+        Papa.parse(csvFile, {
+            complete: function(json) {
+                const result = await db.assetDefinitions.storeCSV(assetTypeId, json);
+                res.json({result: result});
+            }
+        });
     } catch (error) {
         next(error);
     }
