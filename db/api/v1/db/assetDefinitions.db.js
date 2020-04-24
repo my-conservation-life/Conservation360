@@ -372,7 +372,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
         }
 
         // Check that latitude and longitude are specified in the CSV
-        if (!('latitude' in properties) || !('longitude' in properties)) {
+        if (!('latitude' in asset) || !('longitude' in asset)) {
             throw 'The selected CSV file is missing a latitude and/or longitude column';
         }
 
