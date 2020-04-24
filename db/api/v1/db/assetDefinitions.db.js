@@ -379,7 +379,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
         // Check that all headers associated with the selected asset type are contained in the CSV
         for (const propertyName in properties) {
             if (!(propertyName in asset)) {
-                throw 'The selected CSV file is missing a header (' + propertyName + ')';
+                throw 'The selected CSV file is missing a header (' + propertyName + ', ' + JSON.stringify(asset) + ')';
             }
         }
 
