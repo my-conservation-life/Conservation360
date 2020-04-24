@@ -88,13 +88,13 @@ const storeCSV = async(req, res, next) => {
     const csvFile = req.file;
     const csvPath = csvFile.path;
     try {
-        // const json = await csv().fromFile(csvPath);
-        Papa.parse(csvFile, {
-            complete: function(results) {
-                const result = await db.assetDefinitions.storeCSV(assetTypeId, results);
-                res.json({result: result});
-            }
-        });
+        const json = await csv().fromFile(csvPath);
+        // Papa.parse(csvFile, {
+        //     complete: function(results) {
+        //         const result = await db.assetDefinitions.storeCSV(assetTypeId, results);
+        //         res.json({result: result});
+        //     }
+        // });
     } catch (error) {
         next(error);
     }
