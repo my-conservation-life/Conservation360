@@ -391,7 +391,12 @@ const storeCSV = async(assetTypeId, csvJson) => {
 
             // Check that each row contains an asset ID
             if (assetId === '') {
-                throw 'The selected CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
+                let errorMessage = 'The selected CSV file contains a row that is missing an asset ID\n';
+                for (const propertyName in asset) {
+                    errorMessage = errorMessage + propertyName + ": " + asset[propertyName] + '\n';
+                }
+                throw errorMessage;
+                // throw 'The selected CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
             }
 
             // Check that the asset exists
@@ -440,7 +445,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             let latitude = parseFloat(asset['latitude']);
 
             if (isNaN(longitude) || isNaN(latitude)) {
-                throw 'The selected CSV file contains a row missing a longitude or latitude value (' + JSON.stringify(asset) + ')';
+                throw 'The selected CSV file contains a row missing a longitude or latitude value (Asset ID ' + assetId + ')';
             }
             await addLocation(client, assetId, longitude, latitude);
         }
