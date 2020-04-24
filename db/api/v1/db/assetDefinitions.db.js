@@ -371,6 +371,11 @@ const storeCSV = async(assetTypeId, csvJson) => {
             throw 'The selected CSV file is missing an asset ID column.';
         }
 
+        // Check that latitude and longitude are specified in the CSV
+        if (!('latitude' in properties) || !('longitude' in properties)) {
+            throw 'The selected CSV file is missing a latitude and/or longitude column';
+        }
+
         // Check that all headers associated with the selected asset type are contained in the CSV
         for (const propertyName in properties) {
             if (!(propertyName in asset)) {
@@ -431,14 +436,9 @@ const storeCSV = async(assetTypeId, csvJson) => {
             }
 
             // Add location of asset to the DB
-            if (!('latitude' in properties) || !('longitude' in properties)) {
-                throw 'The selected CSV file is missing a latitude and/or longitude column'  + JSON.stringify(csvJson[0]);
-            } else {
-                let longitude = parseFloat(properties['longitude']);
-                let latitude = parseFloat(properties['latitude']);
-    
-                await addLocation(client, assetId, longitude, latitude);
-            }
+            let longitude = parseFloat(asset['longitude']);
+            let latitude = parseFloat(asset['latitude']);
+            await addLocation(client, assetId, longitude, latitude);
         }
         await utils.db.commitTransaction(client);
     }
