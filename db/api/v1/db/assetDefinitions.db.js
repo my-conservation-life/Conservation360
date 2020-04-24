@@ -391,12 +391,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
 
             // Check that each row contains an asset ID
             if (assetId === '') {
-                let errorMessage = 'The selected CSV file contains a row that is missing an asset ID\n';
-                for (const propertyName in asset) {
-                    errorMessage = errorMessage + propertyName + ": " + asset[propertyName] + '\n';
-                }
-                throw errorMessage;
-                // throw 'The selected CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
+                throw 'The selected CSV file contains a row that is missing an asset ID (' + JSON.stringify(asset) + ')';
             }
 
             // Check that the asset exists
@@ -425,7 +420,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
                     let date = new Date();
                     // Throw an error if a row fails to contain a value for a property that is required
                     if (value === '' && propertyIsRequired) {
-                        throw 'The selected CSV file is missing a required value (' + propertyName + ', ' + JSON.stringify(asset) + ')';
+                        throw 'The selected CSV file is missing a required value (' + propertyName + ', Asset ID ' + assetId + ')';
                     } else if (value === '') {
                         continue;
                     } else if (assetProperties.length > 0) {
