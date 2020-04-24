@@ -440,7 +440,7 @@ const storeCSV = async(assetTypeId, csvJson) => {
             let latitude = parseFloat(asset['latitude']);
 
             if (longitude === "" || latitude === "") {
-                throw 'The selected CSV file contains a row missing a longitude or latitude value (' + JSON.stringify(asset) + ')'
+                throw 'The selected CSV file contains a row missing a longitude or latitude value (' + JSON.stringify(asset) + ')';
             }
             await addLocation(client, assetId, longitude, latitude);
         }
