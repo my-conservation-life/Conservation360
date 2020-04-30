@@ -19,6 +19,15 @@ a {
     min-width: 200px;
 }
 
+#poster {
+    position: relative;
+    display: block;
+    max-width: 40%;
+    height: auto;
+    margin: auto;
+    min-width: 200px;
+}
+
 #github {
     display: block;
     max-width: 15%;
