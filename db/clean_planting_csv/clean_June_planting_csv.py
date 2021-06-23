@@ -1,7 +1,6 @@
 import pandas as pd
 
 data_raw = pd.read_csv('June_planting.csv')
-#print(list(data_raw.columns))
 
 #check if required columns are there
 if set(['asset_id','latitude','longitude']).issubset(data_raw.columns):
@@ -12,21 +11,15 @@ else:
 
 #split date/time
 data_raw[['date of planting','time of planting']] = data_raw['date/time of planting'].str.split(' ', 1, expand=True)
-#print(data_raw['date of planting'].head())
 
-#reformat date to dd/mm/yyyy
+#reformat date to mm/dd/yyyy
 data_raw['date of planting'] = pd.to_datetime(data_raw['date of planting']).dt.strftime('%m/%d/%Y')
-#print(data_raw['date of planting'].head())
 
 #delete orig date/time column
 data_raw = data_raw.drop(columns=['date/time of planting'])
-#print(list(data_raw.columns))
 
 #insert underscore for any spaces in column names
 data_raw.columns = data_raw.columns.str.replace(' ', '_')
-#print(list(data_raw.columns))
-
-#any additional reformatting of the time column needed??
 
 #output processed csv
 data_raw.to_csv('June_planting_processed.csv', index=False)
