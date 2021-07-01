@@ -1,4 +1,5 @@
 import pandas as pd
+import uuid
 
 data_raw = pd.read_csv('June_planting.csv')
 
@@ -21,6 +22,11 @@ data_raw = data_raw.drop(columns=['date/time of planting'])
 #insert underscore for any spaces in column names
 data_raw.columns = data_raw.columns.str.replace(' ', '_')
 
+#fill asset_id column if blank
+if len(data_raw.index) == data_raw['asset_id'].isna().sum():
+    DIGITS = 16
+    data_raw['asset_id'] = [int(uuid.uuid4().hex[:DIGITS], base=16) for _ in range(len(data_raw.index))]
+    
 #output processed csv
 data_raw.to_csv('June_planting_processed.csv', index=False)
 print('processed csv outputted as June_planting_processed.csv')
