@@ -1,4 +1,6 @@
+
 const find = async () => {
+    
     const query = `
         SELECT
             name
@@ -7,6 +9,7 @@ const find = async () => {
     `;
 
     const db = await global.dbPool.query(query);
+    
     return db.rows;
 };
 

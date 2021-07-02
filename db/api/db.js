@@ -11,6 +11,7 @@ const initializeDbConnections = () => {
             host: process.env.DATABASE_UNIX_SOCKET_DIR
         };
     } else {
+        console.log('Configured database to connect using a url');
         dbConfig = {
             connectionString: process.env.DATABASE_URL,
             ssl: true,
