@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Conservation360 api's
 
 ## Development
@@ -45,3 +46,13 @@ DATABASE_URL=postgres://<postgres_user>:<password>@localhost:5432/<database_name
 - Base path `/api/v1/`
 - A sample get route `http://127.0.0.1:5000/api/v1/projects`
 - Refer [Docs](https://github.com/my-conservation-life/Conservation360/tree/dev/db/docs) to learn more about api's
+=======
+# Conservation360 db/api
+
+### Install dependencies
+```npm install -s ```
+
+### To run the node server
+```npm start```
+the node app will be served at localhost:8080
+>>>>>>> 67905d6bad5633a01052853b72bc3b1d66cd452e
