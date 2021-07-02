@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Conservation360 api's
 
 ## Development
