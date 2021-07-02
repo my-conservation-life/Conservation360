@@ -10,7 +10,6 @@ const find = async () => {
 
     const db = await global.dbPool.query(query);
     
-    console.log(db.rows)
     return db.rows;
 };
 
