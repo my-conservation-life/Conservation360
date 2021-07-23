@@ -1,7 +1,5 @@
-import requests, zipfile, io
-import json
-import pandas as pd
-import uuid
+import requests, zipfile, io, json, uuid
+import pandas as pd 
 
 central_url = "https://senecaparkzoo.getodk.cloud"
 central_email = "email"
@@ -21,12 +19,12 @@ def get_email_token():
 
 #gets json list of forms and form IDs - may be useful for future data imports
 #xmlFormId contains the form ID to put into form_response path for retrieving form submissions
-# def get_forms(email_token):
-#     get_forms_response = requests.get(
-#         central_url + "/v1/projects/1/forms/",
-#         headers={"Authorization": "Bearer " + email_token},
-#     ) 
-#     print(get_forms_response.json())
+def get_forms(email_token):
+    get_forms_response = requests.get(
+        central_url + "/v1/projects/1/forms/",
+        headers={"Authorization": "Bearer " + email_token},
+    ) 
+    print(get_forms_response.json())
 
 #retrieves planting form submission data and saves it as a csv
 def get_planting_form(email_token):
