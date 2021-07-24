@@ -1,4 +1,4 @@
-import requests, zipfile, io, json, uuid
+import requests, zipfile, io, json, uuid, csv
 import pandas as pd 
 
 if __name__ == "__main__":
@@ -32,15 +32,17 @@ if __name__ == "__main__":
         )
         print(get_forms_response.json())
 
-    #retrieves planting form submission data from API
+    #retrieves planting form submission data from API and writes to csv
     def get_planting_form(email_token):
         form_response = requests.get(
-            central_url + "/v1/projects/1/forms/build_Tree-planting_1625058144/submissions.csv.zip",
+            central_url + "/v1/projects/1/forms/build_Tree-planting_1625058144/submissions.csv",
             headers={"Authorization": "Bearer " + email_token},
             stream=True
         )
-        z = zipfile.ZipFile(io.BytesIO(form_response.content))
-        z.extractall()
+        text=form_response.content.decode()
+        f = open("build_Tree-planting_1625058144.csv", "w")
+        f.write(text)
+        f.close()
 
     #logs in to API, calls get_planting_form
     def get_planting_csv():
